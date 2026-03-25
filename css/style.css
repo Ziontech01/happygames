@@ -409,6 +409,68 @@ tr:hover td{background:#fafbff}
 @keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}
   100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
 
+/* ── Multiplayer Lobby & Game ──────────────────────── */
+.multi-lobby{text-align:center;padding:36px 28px;max-width:440px;margin:0 auto}
+.multi-lobby-title{font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:6px;color:var(--dark)}
+.multi-lobby-sub{color:var(--gray);font-weight:700;font-size:.92rem;margin-bottom:20px;line-height:1.6}
+.multi-lobby-actions{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.multi-or{color:#aaa;font-weight:700;font-size:.85rem;text-align:center}
+.multi-code-input{text-transform:uppercase;letter-spacing:4px;text-align:center;
+  font-size:1.1rem;font-weight:900;padding:12px}
+.multi-join-row{display:flex;gap:8px}
+.multi-join-row input{flex:1}
+.multi-err{color:#ef4444;font-weight:700;font-size:.85rem;min-height:18px;text-align:center}
+.multi-back-btn{font-size:.82rem;margin-top:4px;align-self:center}
+
+.multi-waiting{text-align:center;padding:36px 28px;max-width:440px;margin:0 auto}
+.multi-waiting-icon{font-size:2.5rem;margin-bottom:6px}
+.multi-waiting-title{font-family:'Fredoka One',cursive;font-size:1.8rem;margin-bottom:6px}
+.multi-waiting-spinner{margin-top:24px}
+.multi-copy-btn{margin-top:4px}
+.room-code-display{font-family:'Fredoka One',cursive;font-size:2.8rem;letter-spacing:8px;
+  background:var(--bg);border:3px dashed #667eea;border-radius:16px;
+  padding:16px 24px;margin:12px 0;color:#667eea;cursor:pointer;transition:background .2s}
+
+.multi-players-bar{display:flex;align-items:center;justify-content:center;gap:16px;
+  background:#fff;border:2px solid var(--border);border-radius:16px;
+  padding:14px 20px;margin-bottom:14px}
+.multi-player{flex:1;text-align:center;padding:8px;border-radius:12px;
+  transition:background .25s,transform .2s;border:2px solid transparent}
+.multi-player.active{background:linear-gradient(135deg,#f0f4ff,#e8f5e9);
+  border-color:#667eea;transform:scale(1.04)}
+.multi-player-sym{font-size:1.6rem;margin-bottom:2px}
+.multi-player-name{font-weight:800;font-size:.88rem;overflow:hidden;
+  white-space:nowrap;text-overflow:ellipsis;max-width:100px;margin:0 auto}
+.multi-player-label{font-size:.72rem;font-weight:700;color:#aaa;margin-top:2px}
+.multi-vs{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#ccc;
+  flex-shrink:0;padding:0 4px}
+
+/* ── Stale-opponent banner ─────────────────────────── */
+/* Fixed to the bottom; slides up when the opponent's heartbeat
+   hasn't been seen for > 35 s. Hidden via display:none by default. */
+.stale-banner{
+  position:fixed;bottom:0;left:0;right:0;z-index:400;
+  background:linear-gradient(135deg,#f97316,#ef4444);
+  color:#fff;padding:14px 20px;
+  display:flex;align-items:center;justify-content:center;
+  gap:16px;flex-wrap:wrap;text-align:center;
+  box-shadow:0 -4px 20px rgba(0,0,0,.3);
+  animation:slideUpBanner .3s ease
+}
+.stale-msg{font-weight:800;font-size:.9rem}
+.stale-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.stale-dismiss{
+  background:rgba(255,255,255,.18);color:#fff;
+  border:2px solid rgba(255,255,255,.55);
+  border-radius:50px;padding:8px 18px;
+  font-size:.85rem;font-weight:800;cursor:pointer
+}
+.stale-dismiss:hover{background:rgba(255,255,255,.28)}
+@keyframes slideUpBanner{
+  from{transform:translateY(100%);opacity:0}
+  to  {transform:translateY(0);   opacity:1}
+}
+
 /* ── Footer ────────────────────────────────────────── */
 .footer{background:var(--dark);color:rgba(255,255,255,.7);text-align:center;
   padding:28px 20px;font-size:.88rem;font-weight:600}
