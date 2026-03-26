@@ -15,11 +15,12 @@ let xmGameId = null, xmRef = null, xmUnsub = null, xmState = null;
 let xmUid = null, xmName = null;
 
 // ── Flags / intervals ─────────────────────────────────────────────
-let xmResultSaved  = false;   // prevents saving the same result twice
+let xmResultSaved   = false;  // prevents saving the same result twice
 let xmLastRenderKey = '';     // skips board re-render on heartbeat-only snapshots
-let xmHbInt        = null;    // heartbeat setInterval id
-let xmStaleInt     = null;    // staleness-check setInterval id
-let xmIsHbRunning  = false;   // guard – prevents duplicate heartbeat starts
+let xmPrevStatus    = null;   // tracks status transitions for sound cues
+let xmHbInt         = null;   // heartbeat setInterval id
+let xmStaleInt      = null;   // staleness-check setInterval id
+let xmIsHbRunning   = false;  // guard – prevents duplicate heartbeat starts
 
 requireAuth((user, profile) => {
   xmUid  = user.uid;
@@ -58,7 +59,7 @@ function renderXMLobby() {
   hideStaleBanner();
   if (xmUnsub) { xmUnsub(); xmUnsub = null; }
   xmGameId = null; xmRef = null; xmState = null;
-  xmResultSaved = false; xmLastRenderKey = '';
+  xmResultSaved = false; xmLastRenderKey = ''; xmPrevStatus = null;
 
   document.getElementById('multi-root').innerHTML = `
     <div class="multi-lobby card">
@@ -174,7 +175,9 @@ function xmListen() {
   xmUnsub = db.collection('xo_games').doc(xmGameId).onSnapshot(snap => {
     if (!snap.exists) { renderXMLobby(); return; }
     xmState = snap.data();
-    const s = xmState.status;
+    const s    = xmState.status;
+    const prev = xmPrevStatus;
+    xmPrevStatus = s;   // update before any async work
 
     if (s === 'waiting') {
       /* stay on waiting screen */
@@ -183,9 +186,24 @@ function xmListen() {
       xmStartHeartbeat();   // idempotent — only starts once per session
       xmStartStaleCheck();  // idempotent
 
-      // Skip full re-render if only heartbeat timestamps changed
+      // ── Transition sounds ──────────────────────────────────────
+      if (prev !== 'playing') {
+        // null/'waiting' → 'playing'  : game starting for first time
+        // 'finished'     → 'playing'  : rematch starting
+        window.SFX?.play(prev === 'finished' ? 'rematch' : 'join');
+      }
+
+      // Skip re-render if only heartbeat timestamps changed
       const rk = JSON.stringify([xmState.board, xmState.currentTurn]);
       if (rk !== xmLastRenderKey) {
+        // ── Opponent-move sound ─────────────────────────────────
+        // My turn now + board has at least one move + this is not
+        // the first render → opponent just placed a piece.
+        const opponentMoved = xmLastRenderKey !== ''
+          && xmState.currentTurn === xmUid
+          && xmState.board.some(c => c !== '');
+        if (opponentMoved) window.SFX?.play('opponent_move');
+
         xmLastRenderKey = rk;
         renderXMBoard(xmState, false);
       }
@@ -200,6 +218,10 @@ function xmListen() {
       if (!xmResultSaved) {
         xmResultSaved = true;
         xmSaveMyResult(xmState);
+        // Outcome sound (gated by xmResultSaved — plays exactly once)
+        if      (xmState.winner === xmUid)   window.SFX?.play('win');
+        else if (xmState.winner === 'draw')  window.SFX?.play('draw');
+        else                                 window.SFX?.play('lose');
       }
 
       xmLastRenderKey = '';  // always re-render the finished state
@@ -266,8 +288,10 @@ function xmCheckStale() {
   const banner = document.getElementById('stale-banner');
   if (!banner) return;
   if (age > 35000) {
-    // Only show if not already visible
-    if (banner.style.display === 'none') banner.style.display = 'flex';
+    if (banner.style.display === 'none') {
+      banner.style.display = 'flex';
+      window.SFX?.play('disconnect'); // alert sound once when banner first appears
+    }
   } else {
     banner.style.display = 'none';
   }
@@ -354,8 +378,9 @@ function renderXMBoard(data, finished) {
 async function xmCell(i) {
   if (!xmRef || !xmState)             return;
   if (xmState.status   !== 'playing') return;
-  if (xmState.currentTurn !== xmUid)  return; // not my turn
-  if (xmState.board[i] !== '')        return; // cell taken
+  if (xmState.currentTurn !== xmUid)  { window.SFX?.play('error'); return; } // not my turn
+  if (xmState.board[i] !== '')        { window.SFX?.play('error'); return; } // cell taken
+  window.SFX?.play('click'); // immediate local feedback before Firestore write
 
   const sym      = xmMySymbol();
   const newBoard = [...xmState.board];
@@ -387,6 +412,7 @@ async function xmRematch() {
   if (!xmRef || !xmState) return;
   xmResultSaved   = false;  // allow saving for the new game
   xmLastRenderKey = '';
+  xmPrevStatus    = xmState.status; // will be 'finished' → triggers 'rematch' sound in listener
   const firstUid  = xmState.player2?.uid || xmState.player1.uid; // O goes first
   await xmRef.update({
     board:       Array(9).fill(''),

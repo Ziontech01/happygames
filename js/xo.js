@@ -40,12 +40,17 @@ function setStatus(t,cls){
 }
 
 function cellClick(i){
-  if(!active||board[i]!=='') return;
+  if(!active||board[i]!==''){
+    // Cell is already taken — give the player an error sound
+    if(active && board[i]!=='') window.SFX?.play('error');
+    return;
+  }
   if(!startTime){startTime=Date.now();timerInt=setInterval(()=>{
     const e=Math.floor((Date.now()-startTime)/1000);
     document.getElementById('st-timer').textContent=fmt(e);
   },1000);}
   place(i,pSym); moves++;
+  window.SFX?.play('click');
   document.getElementById('st-moves').textContent=moves;
   const r=check(); if(r){end(r);return;}
   active=false; setStatus('🤖 Thinking…','cpu-turn');
@@ -64,6 +69,7 @@ function cpuMove(){
   const i = diff==='easy' ? rndMove() : diff==='medium' ? midMove() : hardMove();
   if(i<0) return;
   place(i,cSym); moves++;
+  window.SFX?.play('opponent_move');
   document.getElementById('st-moves').textContent=moves;
   const r=check(); if(r){end(r);return;}
   active=true;
@@ -141,6 +147,9 @@ async function end(result){
     sL++;document.getElementById('sc-l').textContent=sL;
     winCombo(board)?.forEach(i=>document.getElementById('c'+i).classList.add('winning'));
   }
+  if      (outcome==='win')  window.SFX?.play('win');
+  else if (outcome==='lose') window.SFX?.play('lose');
+  else                       window.SFX?.play('draw');
   await saveResult({gameType:'xo',outcome,moves,duration:elapsed,timeStr,difficulty:diff,playerSymbol:pSym});
   document.getElementById('r-emoji').textContent=emoji;
   const t=document.getElementById('r-title'); t.textContent=title; t.className='result-title '+cls;

@@ -471,11 +471,124 @@ tr:hover td{background:#fafbff}
   to  {transform:translateY(0);   opacity:1}
 }
 
+/* ── Times Tables ──────────────────────────────────── */
+.tt-wrap{flex:1;padding:24px;max-width:680px;margin:0 auto;width:100%}
+.tt-selector{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:4px}
+.tt-table-btn{width:56px;height:56px;border-radius:50%;border:3px solid var(--border);
+  background:var(--bg);font-family:'Fredoka One',cursive;font-size:1.1rem;cursor:pointer;
+  transition:all .2s;color:var(--dark)}
+.tt-table-btn:hover{border-color:#667eea;background:#f0f4ff;transform:scale(1.1)}
+.tt-table-btn.active{border-color:#667eea;background:linear-gradient(135deg,#667eea,#764ba2);
+  color:#fff;box-shadow:0 4px 15px rgba(102,126,234,.4)}
+.tt-visual{background:#f0f4ff;border-radius:14px;padding:16px;margin-top:14px;text-align:center}
+.tt-dot-group{display:inline-flex;flex-wrap:wrap;gap:3px;padding:6px 8px;
+  border:2px dashed #667eea44;border-radius:10px;margin:3px}
+.tt-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+/* ── Matching Game ──────────────────────────────────── */
+.matching-cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;max-width:800px;margin:0 auto}
+.matching-cat-card{background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);
+  padding:24px 18px;text-align:center;cursor:pointer;transition:all .25s}
+.matching-cat-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(0,0,0,.15)}
+.matching-wrap{padding:20px 16px;max-width:860px;margin:0 auto}
+.matching-header{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;gap:12px;flex-wrap:wrap}
+.matching-hint-bar{background:#fff;border-radius:12px;padding:10px 18px;text-align:center;
+  font-weight:700;font-size:.9rem;color:#667eea;box-shadow:0 2px 12px rgba(0,0,0,.08);
+  margin-bottom:16px;min-height:40px;transition:all .3s}
+.matching-board{display:grid;grid-template-columns:1fr 40px 1fr;gap:10px;align-items:start}
+.match-col{display:flex;flex-direction:column;gap:10px}
+.match-col-title{font-family:'Fredoka One',cursive;font-size:1rem;color:#6B7280;
+  text-align:center;padding:6px;margin-bottom:4px}
+.match-item{background:#fff;border:3px solid var(--border);border-radius:14px;
+  padding:14px 16px;font-weight:700;font-size:.92rem;color:var(--dark);cursor:pointer;
+  transition:all .2s;text-align:center;line-height:1.3}
+.match-item:hover:not(.matched):not(.wrong){border-color:#667eea;background:#f0f4ff;transform:scale(1.02)}
+.match-item.selected{border-color:#667eea;background:linear-gradient(135deg,#667eea15,#764ba215);
+  box-shadow:0 4px 15px rgba(102,126,234,.2)}
+.match-item.matched{border-color:#22c55e;background:#d1fae5;color:#065f46;
+  cursor:default;animation:matchPop .3s ease}
+.match-item.wrong{border-color:#ef4444;background:#fee2e2;animation:shake .4s ease}
+@keyframes matchPop{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.match-divider{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding-top:52px}
+.match-divider-line{width:2px;flex:1;background:linear-gradient(to bottom,transparent,#ddd,transparent)}
+.match-divider-icon{font-size:1.4rem;color:#ccc}
+
+/* ── Memory Game ────────────────────────────────────── */
+.memory-wrap{padding:20px 16px;max-width:700px;margin:0 auto}
+.memory-grid{display:grid;grid-template-columns:repeat(var(--cols,4),1fr);gap:12px;margin-top:16px}
+.memory-card{aspect-ratio:1;perspective:600px;cursor:pointer}
+.memory-card-inner{position:relative;width:100%;height:100%;transition:transform .5s;
+  transform-style:preserve-3d}
+.memory-card.flipped .memory-card-inner{transform:rotateY(180deg)}
+.memory-card.matched .memory-card-inner{transform:rotateY(180deg)}
+.memory-card-front,.memory-card-back{position:absolute;inset:0;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;backface-visibility:hidden;
+  font-size:2rem;font-weight:800;font-family:'Fredoka One',cursive}
+.memory-card-back{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;
+  box-shadow:0 4px 15px rgba(102,126,234,.3);border:3px solid rgba(255,255,255,.2);font-size:2.4rem}
+.memory-card-front{background:#fff;border:3px solid var(--border);transform:rotateY(180deg);
+  color:var(--dark);padding:8px;text-align:center;font-size:1.3rem;line-height:1.2}
+.memory-card.matched .memory-card-front{border-color:#22c55e;background:#d1fae5}
+.memory-card:hover:not(.flipped):not(.matched) .memory-card-back{transform:scale(1.04);
+  box-shadow:0 8px 25px rgba(102,126,234,.5)}
+
+/* ── Smart Life Hero ────────────────────────────────── */
+.slh-cat-grid{display:flex;flex-direction:column;gap:12px;max-width:640px;margin:0 auto;text-align:left}
+.slh-cat-card{background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);
+  padding:18px 20px;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:16px}
+.slh-cat-card:hover{transform:translateX(6px);box-shadow:0 8px 25px rgba(0,0,0,.15)}
+.slh-cat-emoji{font-size:2.4rem;flex-shrink:0}
+.slh-cat-name{font-family:'Fredoka One',cursive;font-size:1.1rem;color:#1A1A2E;margin-bottom:2px}
+.slh-cat-desc{font-size:.82rem;color:#6B7280;font-weight:600}
+.slh-answers{display:flex;flex-direction:column;gap:10px}
+.slh-answer-btn{background:#fff;border:3px solid var(--border);border-radius:14px;
+  padding:14px 18px;text-align:left;font-family:'Nunito',sans-serif;font-weight:700;
+  font-size:.95rem;color:var(--dark);cursor:pointer;transition:all .2s;
+  display:flex;align-items:flex-start;gap:12px}
+.slh-answer-btn:hover:not(:disabled){border-color:#667eea;background:#f0f4ff}
+.slh-answer-letter{width:28px;height:28px;min-width:28px;border-radius:50%;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;
+  flex-shrink:0;transition:all .2s}
+.slh-answer-btn.slh-correct{border-color:var(--green);background:#d1fae5}
+.slh-answer-btn.slh-correct .slh-answer-letter{background:var(--green);color:#fff}
+.slh-answer-btn.slh-wrong{border-color:var(--red);background:#fee2e2}
+.slh-answer-btn.slh-wrong .slh-answer-letter{background:var(--red);color:#fff}
+.slh-answer-btn:disabled{cursor:default}
+
+/* ── Badge colours for history ─────────────────────── */
+.badge-grammar{background:#fdf4ff;color:#7e22ce}
+.badge-spelling{background:#f0f9ff;color:#0369a1}
+.badge-times-tables{background:#fff7ed;color:#b45309}
+.badge-matching{background:#f0fdf4;color:#166534}
+.badge-memory{background:#fdf4ff;color:#86198f}
+.badge-smart-life{background:#faf5ff;color:#5b21b6}
+
 /* ── Footer ────────────────────────────────────────── */
 .footer{background:var(--dark);color:rgba(255,255,255,.7);text-align:center;
   padding:28px 20px;font-size:.88rem;font-weight:600}
 .footer a{color:var(--teal)}
 .footer-logo{font-family:'Fredoka One',cursive;font-size:1.4rem;color:#fff;margin-bottom:8px}
+
+/* ── Memory grid responsive cols ──────────────────── */
+@media(max-width:600px){
+  .memory-grid{--cols:3}
+  .memory-card-front{font-size:1rem}
+  .memory-card-back{font-size:1.8rem}
+}
+@media(min-width:601px){
+  .memory-grid{--cols:4}
+}
+
+/* ── Matching responsive ───────────────────────────── */
+@media(max-width:560px){
+  .matching-board{grid-template-columns:1fr 30px 1fr}
+  .match-item{font-size:.78rem;padding:10px 10px}
+  .match-divider-icon{font-size:1rem}
+}
 
 /* ── Responsive ────────────────────────────────────── */
 @media(max-width:960px){

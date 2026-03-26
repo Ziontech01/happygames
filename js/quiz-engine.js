@@ -170,6 +170,7 @@ const QuizEngine = (() => {
 
   function _timeUp() {
     state.answered = true;
+    window.SFX?.play('quiz_timeout');
     showFeedback(false, '⏰ Time\'s up! The answer was: ' + getCorrectText());
     disableAnswers();
     setTimeout(nextQuestion, 2000);
@@ -192,8 +193,11 @@ const QuizEngine = (() => {
       if (correctBtn) correctBtn.classList.add('correct');
     }
     disableAnswers();
-    showFeedback(correct, correct ? '🎉 Correct! Well done!' : '❌ Wrong! ' + (q.explanation || 'The correct answer was: ' + q.answers[q.correct]));
-    setTimeout(nextQuestion, correct ? 1500 : 2500);
+    window.SFX?.play(correct ? 'quiz_correct' : 'quiz_wrong');
+    const _correctMsg = q.explanation ? '🎉 ' + q.explanation : '🎉 Correct! Well done!';
+    const _wrongMsg   = '❌ Wrong! ' + (q.explanation || 'The correct answer was: ' + q.answers[q.correct]);
+    showFeedback(correct, correct ? _correctMsg : _wrongMsg);
+    setTimeout(nextQuestion, correct ? 1800 : 2800);
   }
 
   function _submitTyped() {
@@ -210,6 +214,7 @@ const QuizEngine = (() => {
     if (correct) state.score++;
     document.getElementById('q-score').textContent = state.score;
     input.disabled = true;
+    window.SFX?.play(correct ? 'quiz_correct' : 'quiz_wrong');
     showFeedback(correct, correct ? '🎉 Correct! Well done!' : '❌ Wrong! The answer was: ' + q.answers[q.correct]);
     setTimeout(nextQuestion, correct ? 1500 : 2500);
   }
@@ -276,6 +281,7 @@ const QuizEngine = (() => {
     // Save to Firebase
     await saveResult({
       gameType:  state.config.gameType,
+      outcome:   'quiz',
       level:     state.level,
       score:     state.score,
       total:     QUESTION_COUNT,

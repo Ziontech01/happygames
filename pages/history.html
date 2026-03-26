@@ -28,13 +28,19 @@
     <div class="page-subtitle" id="results-subtitle">Loading…</div>
   </div>
   <!-- Filter tabs -->
-  <div style="display:flex;gap:10px;justify-content:center;margin-bottom:24px;flex-wrap:wrap">
-    <button class="btn btn-primary"  id="filter-all"     onclick="filterResults('all')">All Games</button>
-    <button class="btn btn-ghost"    id="filter-xo"      onclick="filterResults('xo')">❌⭕ XO</button>
-    <button class="btn btn-ghost"    id="filter-chess"   onclick="filterResults('chess')">♟️ Chess</button>
-    <button class="btn btn-ghost"    id="filter-maths"   onclick="filterResults('maths')">🔢 Maths</button>
-    <button class="btn btn-ghost"    id="filter-english" onclick="filterResults('english')">📚 English</button>
-    <button class="btn btn-ghost"    id="filter-general" onclick="filterResults('general')">🌍 GK</button>
+  <div style="display:flex;gap:8px;justify-content:center;margin-bottom:24px;flex-wrap:wrap">
+    <button class="btn btn-primary"  id="filter-all"         onclick="filterResults('all')">All Games</button>
+    <button class="btn btn-ghost"    id="filter-xo"          onclick="filterResults('xo')">❌⭕ XO</button>
+    <button class="btn btn-ghost"    id="filter-chess"       onclick="filterResults('chess')">♟️ Chess</button>
+    <button class="btn btn-ghost"    id="filter-maths"       onclick="filterResults('maths')">🔢 Maths</button>
+    <button class="btn btn-ghost"    id="filter-times-tables" onclick="filterResults('times-tables')">✖️ Tables</button>
+    <button class="btn btn-ghost"    id="filter-grammar"     onclick="filterResults('grammar')">📝 Grammar</button>
+    <button class="btn btn-ghost"    id="filter-spelling"    onclick="filterResults('spelling')">🔤 Spelling</button>
+    <button class="btn btn-ghost"    id="filter-english"     onclick="filterResults('english')">📚 English</button>
+    <button class="btn btn-ghost"    id="filter-general"     onclick="filterResults('general')">🌍 GK</button>
+    <button class="btn btn-ghost"    id="filter-matching"    onclick="filterResults('matching')">🎯 Matching</button>
+    <button class="btn btn-ghost"    id="filter-memory"      onclick="filterResults('memory')">🃏 Memory</button>
+    <button class="btn btn-ghost"    id="filter-smart-life"  onclick="filterResults('smart-life')">🦸 Life Skills</button>
   </div>
   <div class="summary-grid">
     <div class="summary-card total"> <div class="summary-icon">🎮</div><div class="summary-value" id="s-total">0</div><div class="summary-label">Games Played</div></div>
@@ -85,7 +91,8 @@ function filterResults(type) {
 function renderResults(data) {
   const wins   = data.filter(r=>r.outcome==='win').length;
   const losses = data.filter(r=>r.outcome==='lose').length;
-  const other  = data.filter(r=>r.outcome==='draw'||r.outcome==='quiz').length;
+  // Count draws, quiz results, and any legacy results without outcome but with a score
+  const other  = data.filter(r=>r.outcome==='draw'||r.outcome==='quiz'||(!r.outcome&&r.score!=null)).length;
   document.getElementById('s-total').textContent  = data.length;
   document.getElementById('s-wins').textContent   = wins;
   document.getElementById('s-losses').textContent = losses;
@@ -100,7 +107,16 @@ function renderResults(data) {
     return;
   }
 
-  const gameIcons={xo:'❌⭕',chess:'♟️',maths:'🔢',english:'📚',general:'🌍'};
+  const gameIcons={
+    xo:'❌⭕', chess:'♟️', maths:'🔢', english:'📚', general:'🌍',
+    grammar:'📝', spelling:'🔤', 'times-tables':'✖️',
+    matching:'🎯', memory:'🃏', 'smart-life':'🦸'
+  };
+  const gameNames={
+    xo:'XO', chess:'Chess', maths:'Maths', english:'English', general:'GK Quiz',
+    grammar:'Grammar', spelling:'Spelling', 'times-tables':'Times Tables',
+    matching:'Matching', memory:'Memory', 'smart-life':'Life Hero'
+  };
   const rows = data.map((r,i)=>{
     const d = r.date?.toDate?.() || new Date();
     const dateStr=d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
@@ -109,15 +125,27 @@ function renderResults(data) {
                          r.outcome==='lose' ? `<span class="badge badge-lose">💔 Loss</span>` :
                          r.score!=null      ? `<span class="badge badge-draw">⭐ ${r.score}/${r.total}</span>` :
                                               `<span class="badge badge-draw">🤝 Draw</span>`;
-    const gameBadge=`<span class="badge badge-${r.gameType}">${gameIcons[r.gameType]||'🎮'} ${(r.gameType||'').charAt(0).toUpperCase()+(r.gameType||'').slice(1)}</span>`;
-    const levelBadge=r.level?`<span class="badge badge-easy">${r.level.replace('year','Y').replace('reception','Rec')}</span>`:'—';
+    const gType = r.gameType || 'unknown';
+    const gBadgeCls = gType.replace(/[^a-z0-9]/gi,'-');
+    const gameBadge=`<span class="badge badge-${gBadgeCls}">${gameIcons[gType]||'🎮'} ${gameNames[gType]||gType}</span>`;
+    // Level: show table number for times-tables, category for matching/memory/smart-life
+    let levelText = '—';
+    if (r.level && r.level !== 'all') {
+      if (r.level.startsWith('table-')) levelText = `×${r.level.replace('table-','')} Table`;
+      else levelText = r.level.replace('year','Yr ').replace('reception','Rec');
+    } else if (r.category) {
+      levelText = r.category.charAt(0).toUpperCase() + r.category.slice(1);
+    } else if (r.table) {
+      levelText = `×${r.table} Table`;
+    }
+    const levelBadge=`<span class="badge badge-easy">${levelText}</span>`;
     return `<tr>
       <td><strong>#${data.length-i}</strong></td>
       <td>${outcomeBadge}</td>
       <td>${gameBadge}</td>
       <td>${levelBadge}</td>
       <td><strong>${r.timeStr||'--:--'}</strong></td>
-      <td>${r.moves!=null?r.moves+' moves':'—'}</td>
+      <td>${r.moves!=null?r.moves+' moves':r.mistakes!=null?r.mistakes+' mistakes':'—'}</td>
       <td style="color:#aaa;font-size:.85rem">${dateStr}<br><span style="font-size:.8rem">${timeStr}</span></td>
     </tr>`;
   }).join('');

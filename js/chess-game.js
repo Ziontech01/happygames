@@ -141,6 +141,7 @@ function makeMove(from, to) {
   const isPromo = piece && piece.type==='p' && to.endsWith(promoRank);
   const move = chess.move({from, to, promotion: isPromo ? 'q' : undefined});
   if(!move) return;
+  window.SFX?.play('click');
   chessMoves++;
   document.getElementById('chs-m').textContent=chessMoves;
   selectedSq=null; legalMoves=[];
@@ -172,6 +173,7 @@ function cpuChessMove() {
 
   const move = chess.move(chosen);
   if(!move) return;
+  window.SFX?.play('opponent_move');
   chessMoves++;
   document.getElementById('chs-m').textContent=chessMoves;
   updateHistory(move);
@@ -284,6 +286,9 @@ function checkGameEnd() {
           chess.insufficient_material() ? 'Insufficient material.' : 'Draw!';
     sessD++; document.getElementById('chs-d').textContent=sessD;
   }
+  if      (outcome==='win')  window.SFX?.play('win');
+  else if (outcome==='lose') window.SFX?.play('lose');
+  else                       window.SFX?.play('draw');
   saveResult({ gameType:'chess', outcome, moves:chessMoves, duration:elapsed, timeStr, difficulty:chessDiff });
 
   document.getElementById('cr-emoji').textContent=emoji;

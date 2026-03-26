@@ -23,6 +23,7 @@ let cmChess=null, cmSelSq=null, cmLegal=[];
 // ── Flags / intervals ─────────────────────────────────────────────
 let cmResultSaved   = false;
 let cmLastRenderKey = '';
+let cmPrevStatus    = null;  // tracks status transitions for sound cues
 let cmHbInt         = null;
 let cmStaleInt      = null;
 let cmIsHbRunning   = false;
@@ -54,7 +55,7 @@ function renderCMLobby(){
   hideStaleBannerC();
   if (cmUnsub){ cmUnsub(); cmUnsub=null; }
   cmGameId=null; cmRef=null; cmState=null; cmChess=null; cmSelSq=null; cmLegal=[];
-  cmResultSaved=false; cmLastRenderKey='';
+  cmResultSaved=false; cmLastRenderKey=''; cmPrevStatus=null;
 
   document.getElementById('multi-root').innerHTML=`
     <div class="multi-lobby card" style="background:#1e293b;border:1px solid #334155">
@@ -173,7 +174,9 @@ function cmListen(){
   cmUnsub=db.collection('chess_games').doc(cmGameId).onSnapshot(snap=>{
     if(!snap.exists){ renderCMLobby(); return; }
     cmState=snap.data();
-    const s=cmState.status;
+    const s    = cmState.status;
+    const prev = cmPrevStatus;
+    cmPrevStatus = s;   // update before any async work
 
     if (s==='waiting') {
       /* stay on waiting screen */
@@ -182,9 +185,23 @@ function cmListen(){
       cmStartHeartbeat();   // idempotent
       cmStartStaleCheck();  // idempotent
 
+      // ── Transition sounds ──────────────────────────────────────
+      if (prev !== 'playing') {
+        window.SFX?.play(prev === 'finished' ? 'rematch' : 'join');
+      }
+
       // Skip re-render if only heartbeat timestamps changed
       const rk = `${cmState.fen}|${cmState.currentTurn}`;
       if (rk !== cmLastRenderKey) {
+        // ── Opponent-move sound ─────────────────────────────────
+        // My color's turn now + FEN changed + not the first render
+        // → opponent just moved.
+        const myCol = cmMyColor();
+        const opponentMoved = cmLastRenderKey !== ''
+          && cmState.currentTurn === myCol
+          && cmState.moves?.length > 0;
+        if (opponentMoved) window.SFX?.play('opponent_move');
+
         cmLastRenderKey = rk;
         renderCMGame(cmState, false);
       }
@@ -198,6 +215,10 @@ function cmListen(){
       if (!cmResultSaved) {
         cmResultSaved = true;
         cmSaveMyResult(cmState);
+        // Outcome sound (gated — plays exactly once per game)
+        if      (cmState.winner === cmUid)   window.SFX?.play('win');
+        else if (cmState.winner === 'draw')  window.SFX?.play('draw');
+        else                                 window.SFX?.play('lose');
       }
 
       cmLastRenderKey = '';
@@ -259,7 +280,10 @@ function cmCheckStale(){
   const banner = document.getElementById('stale-banner-c');
   if(!banner) return;
   if(age > 35000) {
-    if(banner.style.display === 'none') banner.style.display = 'flex';
+    if(banner.style.display === 'none'){
+      banner.style.display = 'flex';
+      window.SFX?.play('disconnect'); // alert sound once when banner first appears
+    }
   } else {
     banner.style.display = 'none';
   }
@@ -440,6 +464,7 @@ function cmSqClick(sq){
 // both players when the snapshot arrives with status:'finished'.
 async function cmMakeMove(from, to){
   if(!cmChess||!cmRef) return;
+  window.SFX?.play('click'); // immediate local feedback
   const myCol=cmMyColor();
   const promoRank=myCol==='w'?'8':'1';
   const piece=cmChess.get(from);
@@ -470,6 +495,7 @@ async function cmRematch(){
   if(!cmRef||!cmState) return;
   cmResultSaved   = false;
   cmLastRenderKey = '';
+  cmPrevStatus    = cmState.status; // 'finished' → triggers 'rematch' sound in listener
   const p1WasWhite = cmState.player1.color==='w';
   await cmRef.update({
     fen:             CM_INIT_FEN,
