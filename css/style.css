@@ -777,3 +777,170 @@ tr:hover td{background:#fafbff}
   .ludo-board{width:calc(100vw - 16px)}
   .lc{font-size:.4rem}
 }
+
+/* ═══════════════════════════════════════════════════════
+   PHASE 3 IMPROVEMENTS
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Times Tables: difficulty groups + explanation ─────── */
+.tt-difficulty-group{margin-bottom:14px}
+.tt-difficulty-group:last-child{margin-bottom:0}
+.tt-selector{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.tt-table-btn{min-width:44px;padding:8px 10px;border-radius:10px;border:2px solid var(--border);
+  background:#fff;font-family:'Fredoka One',cursive;font-size:1rem;font-weight:700;
+  color:var(--dark);cursor:pointer;transition:all .18s}
+.tt-table-btn:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 12px rgba(102,126,234,.25)}
+.tt-table-btn.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;
+  border-color:transparent;box-shadow:0 4px 14px rgba(102,126,234,.45)}
+.tt-explain{font-size:.82rem;margin-top:6px;font-weight:600;opacity:.85}
+.feedback-bar .tt-explain{display:block;margin-top:6px;font-style:italic;font-size:.8rem}
+
+/* ── Snakes & Ladders: per-player dice + colorful board ── */
+.sl-players-bar{display:flex;align-items:stretch;justify-content:space-between;gap:8px;
+  background:#fff;border-radius:var(--radius-sm);padding:12px;
+  box-shadow:var(--shadow);margin-bottom:10px}
+.sl-you-card,.sl-comp-card{display:flex;flex-direction:column;align-items:center;
+  gap:4px;padding:8px 10px;border-radius:12px;min-width:80px;transition:background .3s}
+.sl-you-card{background:#eff6ff}
+.sl-comp-card{background:#fff1f2}
+.sl-center-ctrl{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;flex:1}
+.sl-dice-sm{font-size:2.2rem;line-height:1;min-height:2.4rem;text-align:center}
+.sl-last-roll-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--gray);font-weight:700}
+.sl-last-roll{font-size:1rem;font-weight:800;color:var(--dark);min-height:1.4rem}
+.sl-status{text-align:center;font-weight:700;font-size:.88rem;padding:6px 10px;
+  background:#f9fafb;border-radius:8px;min-height:32px;width:100%}
+/* Colorful board cells */
+.sl-has-snake{background:#fff1f0 !important;border-color:#fca5a5 !important}
+.sl-has-ladder{background:#f0fdf4 !important;border-color:#86efac !important}
+.sl-num{font-size:.58rem;font-weight:800;color:rgba(0,0,0,.55);position:absolute;
+  top:1px;left:2px;line-height:1}
+.sl-icon{font-size:1rem;margin-top:2px}
+.sl-cell:hover{filter:brightness(.93);cursor:default}
+
+/* ── Bible Quiz: new BQ classes ───────────────────────── */
+.bq-wrap{max-width:640px;margin:0 auto;padding:0 16px 40px}
+.bq-title{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--dark);margin-bottom:6px}
+.bq-subtitle{color:var(--gray);font-size:.95rem;font-weight:600;margin-bottom:8px}
+.bq-topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:14px;max-width:620px;margin:0 auto;padding:0 16px 32px}
+.bq-topic-btn{border:none;border-radius:16px;padding:20px 12px;text-align:center;cursor:pointer;
+  background:var(--tc,#667eea);color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.18);
+  transition:all .22s;font-family:'Nunito',sans-serif}
+.bq-topic-btn:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.bq-topic-icon{font-size:2.4rem;display:block;margin-bottom:8px}
+.bq-topic-name{font-weight:800;font-size:1rem;margin-bottom:4px}
+.bq-topic-count{font-size:.78rem;opacity:.82}
+/* Question layout */
+.bq-q-wrap{max-width:660px;margin:0 auto;padding-bottom:40px}
+.bq-q-header{color:#fff;display:flex;align-items:center;gap:12px;padding:14px 20px;
+  flex-wrap:wrap;position:sticky;top:56px;z-index:10}
+.bq-q-topic-icon{font-size:2rem;flex-shrink:0}
+.bq-q-topic-name{font-family:'Fredoka One',cursive;font-size:1.15rem}
+.bq-q-meta{font-size:.78rem;opacity:.88}
+.bq-q-progress-wrap{margin-left:auto;width:100px;flex-shrink:0}
+.bq-q-progress-bar{background:rgba(255,255,255,.3);border-radius:99px;height:6px}
+.bq-q-progress-fill{background:#fff;border-radius:99px;height:6px;transition:width .4s}
+.bq-q-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);
+  margin:16px 16px 0;padding:24px 20px}
+.bq-verse-badge{display:inline-block;background:#f3f4f6;border-radius:8px;
+  padding:3px 10px;font-size:.78rem;color:#6b7280;font-style:italic;margin-bottom:12px}
+.bq-q-text{font-family:'Nunito',sans-serif;font-size:1.2rem;font-weight:800;
+  color:var(--dark);line-height:1.45}
+.bq-answers{display:flex;flex-direction:column;gap:10px;padding:16px 16px 0}
+.bq-ans-btn{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;
+  border:2px solid var(--border);background:#fff;cursor:pointer;text-align:left;
+  font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:700;color:var(--dark);
+  transition:all .18s;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bq-ans-btn:hover:not(:disabled){border-color:var(--primary);transform:translateX(4px);
+  box-shadow:0 4px 14px rgba(102,126,234,.2)}
+.bq-ans-letter{width:30px;height:30px;border-radius:50%;color:#fff;font-size:.85rem;
+  font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bq-ans-text{flex:1}
+.bq-ans-btn.bq-correct{border-color:#22c55e;background:#f0fdf4}
+.bq-ans-btn.bq-wrong{border-color:#ef4444;background:#fff1f2}
+.bq-feedback-box{margin:14px 16px 0}
+.bq-feedback{display:flex;gap:14px;padding:16px;border-radius:14px;align-items:flex-start}
+.bq-fb-correct{background:#f0fdf4;border:2px solid #bbf7d0}
+.bq-fb-wrong{background:#fff1f2;border:2px solid #fecdd3}
+.bq-fb-icon{font-size:2rem;flex-shrink:0;margin-top:2px}
+.bq-fb-body strong{font-size:.95rem;display:block;margin-bottom:6px}
+.bq-fb-why{font-size:.88rem;color:#374151;line-height:1.55;margin:0}
+
+/* ── Language Game: new LG classes ────────────────────── */
+.lg-select-wrap{max-width:680px;margin:0 auto;padding:0 16px 40px}
+.lg-title{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--dark);margin-bottom:6px}
+.lg-subtitle{color:var(--gray);font-size:.92rem;font-weight:600;margin-bottom:20px}
+/* Language selection buttons */
+.lg-lang-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:16px;margin-bottom:28px}
+.lg-lang-btn{background:#fff;border:2px solid var(--border);border-radius:var(--radius);
+  padding:24px 12px;text-align:center;cursor:pointer;transition:all .22s;
+  box-shadow:var(--shadow);font-family:'Nunito',sans-serif}
+.lg-lang-btn:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:var(--primary)}
+.lg-lang-flag{font-size:3rem;display:block;margin-bottom:6px}
+.lg-lang-abbr{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--primary);margin-bottom:2px}
+.lg-lang-name{font-weight:800;font-size:.95rem;color:var(--dark)}
+.lg-lang-native{font-size:.78rem;color:var(--gray);margin-top:2px}
+/* Category selection */
+.lg-cat-label{font-weight:800;font-size:.95rem;color:var(--dark);margin-bottom:12px;
+  text-align:center}
+.lg-cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;margin-bottom:20px}
+.lg-cat-btn{background:#fff;border:2px solid var(--border);border-radius:14px;
+  padding:16px 10px;text-align:center;cursor:pointer;transition:all .2s;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);font-family:'Nunito',sans-serif}
+.lg-cat-btn:hover{border-color:var(--primary);transform:translateY(-3px);
+  box-shadow:0 6px 16px rgba(102,126,234,.2)}
+.lg-cat-icon{font-size:2rem;display:block;margin-bottom:6px}
+.lg-cat-name{font-weight:800;font-size:.9rem;color:var(--dark)}
+.lg-cat-count{font-size:.75rem;color:var(--gray);margin-top:2px}
+/* Flashcard + quiz wrapper */
+.lg-game-wrap{max-width:600px;margin:0 auto;padding:16px 16px 40px}
+.lg-game-header{display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.lg-game-header-left{display:flex;align-items:center;gap:10px}
+/* Flashcard */
+.lg-flash-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:28px 24px;text-align:center;margin-bottom:16px}
+.lg-flash-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--gray);margin-bottom:8px}
+.lg-flash-word{font-size:2.2rem;font-weight:900;color:var(--dark);margin-bottom:20px}
+.lg-flash-divider{border-top:2px dashed var(--border);margin:16px 0}
+.lg-flash-target{font-size:2.4rem;font-weight:900;color:var(--primary);margin-bottom:10px;
+  word-break:break-word}
+.lg-flash-phonetic{font-size:1rem;color:var(--gray);margin-top:6px;
+  background:#f0f4ff;border-radius:10px;padding:8px 14px;display:inline-block}
+.lg-flash-reveal{margin:8px 0}
+/* Quiz answer options */
+.lg-quiz-q-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:20px;text-align:center;margin-bottom:16px}
+.lg-quiz-q-label{font-size:.82rem;color:var(--gray);font-weight:700;margin-bottom:8px;
+  text-transform:uppercase;letter-spacing:.04em}
+.lg-quiz-q-word{font-size:1.8rem;font-weight:900;color:var(--dark)}
+.lg-quiz-opts{display:flex;flex-direction:column;gap:10px}
+.lg-quiz-opt{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;
+  border:2px solid var(--border);background:#fff;cursor:pointer;text-align:left;
+  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;color:var(--dark);
+  transition:all .18s;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.lg-quiz-opt:hover:not(:disabled){border-color:var(--primary);transform:translateX(4px)}
+.lg-opt-letter{width:30px;height:30px;border-radius:50%;background:var(--primary);
+  color:#fff;font-size:.85rem;font-weight:800;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0}
+.lg-opt-text{flex:1}
+.lg-quiz-opt.lg-opt-correct{border-color:#22c55e;background:#f0fdf4}
+.lg-quiz-opt.lg-opt-wrong{border-color:#ef4444;background:#fff1f2}
+/* Feedback */
+.lg-ans-fb{padding:14px 16px;border-radius:12px;margin-top:14px}
+.lg-ans-fb-correct{background:#f0fdf4;border:2px solid #bbf7d0}
+.lg-ans-fb-wrong{background:#fff1f2;border:2px solid #fecdd3}
+.lg-ans-fb-title{font-weight:800;font-size:.95rem;margin-bottom:6px}
+.lg-ans-fb-phonetic{font-size:.9rem;color:#374151}
+
+@media(max-width:500px){
+  .bq-topics{grid-template-columns:repeat(2,1fr)}
+  .lg-lang-grid{grid-template-columns:repeat(2,1fr)}
+  .bq-q-header{position:static}
+  .lg-flash-word{font-size:1.7rem}
+  .lg-flash-target{font-size:1.9rem}
+}

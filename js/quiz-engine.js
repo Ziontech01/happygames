@@ -110,6 +110,8 @@ const QuizEngine = (() => {
   function showQuestion() {
     clearTimers();
     const q         = state.questions[state.current];
+    // Normalise: some question banks use {q:'...'} instead of {question:'...'}
+    if (!q.question && q.q) q.question = q.q;
     state.answered  = false;
     const pct       = (state.current / QUESTION_COUNT) * 100;
 

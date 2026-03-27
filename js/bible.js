@@ -179,19 +179,20 @@ const BibleQuiz = (() => {
   /* ── Topic selection ───────────────────────────────────────── */
   function renderTopicScreen() {
     getContainer().innerHTML = `
-      <div class="slh-wrap">
-        <div class="page-header" style="padding-top:0">
-          <div class="page-title">📖 Bible Quiz</div>
-          <div class="page-subtitle">Choose a topic to explore!</div>
+      <div class="bq-wrap">
+        <div style="text-align:center;padding:28px 20px 20px">
+          <div style="font-size:3.2rem;margin-bottom:10px">📖</div>
+          <div class="bq-title">Bible Quiz</div>
+          <div class="bq-subtitle">Choose a topic to explore!</div>
         </div>
-        <div class="slh-cats" style="max-width:580px;margin:0 auto">
+        <div class="bq-topics">
           ${TOPICS.map(t => `
-            <button class="slh-cat-btn" style="--cat-color:${t.color}" onclick="BibleQuiz._selectTopic('${t.id}')">
-              <span class="slh-cat-icon">${t.emoji}</span>
-              <div class="slh-cat-name">${t.name}</div>
-              <div class="slh-cat-count" style="font-size:.8rem;color:#888;margin-top:2px">
-                ${t.id==='mix' ? ALL_QUESTIONS.length+' questions' :
-                  ALL_QUESTIONS.filter(q=>q.topic===t.id).length+' questions'}
+            <button class="bq-topic-btn" style="--tc:${t.color}"
+              onclick="BibleQuiz._selectTopic('${t.id}')">
+              <span class="bq-topic-icon">${t.emoji}</span>
+              <div class="bq-topic-name">${t.name}</div>
+              <div class="bq-topic-count">
+                ${t.id==='mix' ? ALL_QUESTIONS.length : ALL_QUESTIONS.filter(q=>q.topic===t.id).length} questions
               </div>
             </button>`).join('')}
         </div>
@@ -219,29 +220,36 @@ const BibleQuiz = (() => {
     const q = state.questions[state.idx];
     const topicObj = TOPICS.find(t => t.id === state.topic) || TOPICS[5];
     getContainer().innerHTML = `
-      <div class="quiz-wrap" style="max-width:640px;margin:0 auto;padding:0 16px 32px">
-        <div class="quiz-header">
-          <div class="quiz-meta">
-            <span>${topicObj.emoji} ${topicObj.name}</span>
-            <span>Question ${state.idx + 1} / ${state.questions.length}</span>
-            <span>⭐ ${state.score} pts</span>
+      <div class="bq-q-wrap">
+        <!-- Coloured topic header -->
+        <div class="bq-q-header" style="background:${topicObj.color}">
+          <span class="bq-q-topic-icon">${topicObj.emoji}</span>
+          <div>
+            <div class="bq-q-topic-name">${topicObj.name}</div>
+            <div class="bq-q-meta">Question ${state.idx + 1} / ${state.questions.length} &nbsp;·&nbsp; ⭐ ${state.score} pts</div>
           </div>
-          <div class="quiz-progress-bar">
-            <div class="quiz-progress-fill" style="width:${((state.idx)/state.questions.length)*100}%"></div>
+          <div class="bq-q-progress-wrap">
+            <div class="bq-q-progress-bar">
+              <div class="bq-q-progress-fill" style="width:${(state.idx/state.questions.length)*100}%"></div>
+            </div>
           </div>
         </div>
-        <div class="quiz-question-box">
-          <div class="bible-verse-tag" style="font-size:.78rem;color:#888;margin-bottom:8px;font-style:italic">📜 ${q.verse}</div>
-          <div class="quiz-q">${q.q}</div>
+
+        <!-- Question card -->
+        <div class="bq-q-card">
+          <div class="bq-verse-badge">📜 ${q.verse}</div>
+          <div class="bq-q-text">${q.q}</div>
         </div>
-        <div class="quiz-answers">
+
+        <!-- Answers -->
+        <div class="bq-answers">
           ${q.answers.map((a,i) => `
-            <button class="quiz-ans-btn" id="ans-${i}" onclick="BibleQuiz._answer(${i})">
-              <span class="ans-letter">${['A','B','C','D'][i]}</span>
-              <span>${a}</span>
+            <button class="bq-ans-btn" id="ans-${i}" onclick="BibleQuiz._answer(${i})">
+              <span class="bq-ans-letter" style="background:${topicObj.color}">${['A','B','C','D'][i]}</span>
+              <span class="bq-ans-text">${a}</span>
             </button>`).join('')}
         </div>
-        <div class="quiz-feedback-box" id="feedback-box" style="display:none"></div>
+        <div class="bq-feedback-box" id="feedback-box" style="display:none"></div>
       </div>`;
   }
 
@@ -259,19 +267,19 @@ const BibleQuiz = (() => {
       const btn = document.getElementById(`ans-${i}`);
       if (!btn) return;
       btn.disabled = true;
-      if (i === q.correct) btn.classList.add('correct');
-      else if (i === chosen && !correct) btn.classList.add('wrong');
+      if (i === q.correct) btn.classList.add('bq-correct');
+      else if (i === chosen && !correct) btn.classList.add('bq-wrong');
     });
 
     // Show explanation
     const fb = document.getElementById('feedback-box');
     fb.style.display = 'block';
     fb.innerHTML = `
-      <div class="bible-feedback ${correct ? 'fb-correct' : 'fb-wrong'}">
-        <div class="fb-icon">${correct ? '🙌' : '📖'}</div>
-        <div>
-          <strong>${correct ? 'Brilliant!' : 'The answer was: ' + q.answers[q.correct]}</strong><br>
-          <span class="fb-explain">${q.why}</span>
+      <div class="bq-feedback ${correct ? 'bq-fb-correct' : 'bq-fb-wrong'}">
+        <div class="bq-fb-icon">${correct ? '🙌' : '📖'}</div>
+        <div class="bq-fb-body">
+          <strong>${correct ? '✅ Brilliant!' : '❌ The answer was: ' + q.answers[q.correct]}</strong>
+          <p class="bq-fb-why">${q.why}</p>
         </div>
       </div>
       <div style="text-align:center;margin-top:16px">

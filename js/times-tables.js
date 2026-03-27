@@ -27,31 +27,42 @@
     if (ov) ov.classList.add('hidden');
   }
 
+  // ── Difficulty Groups ──────────────────────────────────────
+  const DIFFICULTY_GROUPS = [
+    { label:'🌱 Beginner',      color:'#16a34a', bg:'#f0fdf4', border:'#bbf7d0', range:[1,2,3,4,5] },
+    { label:'🔥 Intermediate',  color:'#d97706', bg:'#fffbeb', border:'#fde68a', range:[6,7,8,9,10,11,12] },
+    { label:'🚀 Advanced',      color:'#7c3aed', bg:'#faf5ff', border:'#ddd6fe', range:[13,14,15,16,17,18,19,20] }
+  ];
+
   // ── Table Selector Screen ────────────────────────────────────
   function renderTableSelector() {
     const root = document.getElementById('tt-root');
     root.innerHTML = `
-      <div style="text-align:center;padding:36px 20px;max-width:680px;margin:0 auto">
+      <div style="text-align:center;padding:36px 20px;max-width:720px;margin:0 auto">
         <div style="font-size:3.5rem;margin-bottom:12px">✖️</div>
         <div style="font-family:'Fredoka One',cursive;font-size:2.2rem;color:#1A1A2E;margin-bottom:8px">Times Tables Quiz</div>
-        <p style="color:#6B7280;font-weight:600;margin-bottom:28px">Choose your times table and answer 10 questions!</p>
+        <p style="color:#6B7280;font-weight:600;margin-bottom:28px">Choose your times table — tables go all the way to 20×!</p>
 
         <div style="background:#fff;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.08);padding:24px;margin-bottom:28px">
-          <div style="font-weight:800;color:#1A1A2E;margin-bottom:16px;font-size:1.05rem">🎯 Choose Your Table</div>
-          <div class="tt-selector">
-            ${[1,2,3,4,5,6,7,8,9,10,11,12].map(n => `
-              <button class="tt-table-btn ${n === selectedTable ? 'active' : ''}"
-                      id="tt-btn-${n}" onclick="TimesTablesGame.selectTable(${n})">
-                ${n}×
-              </button>`).join('')}
-          </div>
+          <div style="font-weight:800;color:#1A1A2E;margin-bottom:20px;font-size:1.05rem">🎯 Choose Your Table</div>
+          ${DIFFICULTY_GROUPS.map(g => `
+            <div class="tt-difficulty-group" style="background:${g.bg};border:2px solid ${g.border};border-radius:14px;padding:14px 12px;margin-bottom:14px">
+              <div style="font-weight:800;color:${g.color};margin-bottom:12px;font-size:.95rem">${g.label}</div>
+              <div class="tt-selector">
+                ${g.range.map(n => `
+                  <button class="tt-table-btn ${n === selectedTable ? 'active' : ''}"
+                          id="tt-btn-${n}" onclick="TimesTablesGame.selectTable(${n})">
+                    ${n}×
+                  </button>`).join('')}
+              </div>
+            </div>`).join('')}
         </div>
 
-        <div style="background:#f0f4ff;border-radius:16px;padding:16px;margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto">
+        <div style="background:#f0f4ff;border-radius:16px;padding:16px;margin-bottom:24px;max-width:460px;margin-left:auto;margin-right:auto">
           <div style="font-weight:800;color:#667eea;margin-bottom:8px">📋 Preview: ${selectedTable}× Table</div>
-          <div id="tt-preview" style="display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;font-size:.9rem;font-weight:700;color:#1A1A2E;text-align:left">
-            ${[1,2,3,4,5,6,7,8,9,10,11,12].map(n =>
-              `<span>${selectedTable} × ${n} = ${selectedTable * n}</span>`
+          <div id="tt-preview" style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px 8px;font-size:.85rem;font-weight:700;color:#1A1A2E;text-align:left">
+            ${Array.from({length:20},(_,i)=>i+1).map(n =>
+              `<span style="color:${n<=5?'#16a34a':n<=12?'#d97706':'#7c3aed'}">${selectedTable} × ${n} = ${selectedTable * n}</span>`
             ).join('')}
           </div>
         </div>
@@ -65,15 +76,15 @@
   function selectTable(n) {
     selectedTable = n;
     // Update button styles
-    for (let i = 1; i <= 12; i++) {
+    for (let i = 1; i <= 20; i++) {
       const btn = document.getElementById(`tt-btn-${i}`);
       if (btn) btn.className = `tt-table-btn ${i === n ? 'active' : ''}`;
     }
     // Update preview
     const preview = document.getElementById('tt-preview');
     if (preview) {
-      preview.innerHTML = [1,2,3,4,5,6,7,8,9,10,11,12].map(m =>
-        `<span>${n} × ${m} = ${n * m}</span>`
+      preview.innerHTML = Array.from({length:20},(_,i)=>i+1).map(m =>
+        `<span style="color:${m<=5?'#16a34a':m<=12?'#d97706':'#7c3aed'}">${n} × ${m} = ${n * m}</span>`
       ).join('');
     }
     // Update button text
@@ -84,9 +95,9 @@
 
   // ── Generate Questions ────────────────────────────────────────
   function generateQuestions() {
-    // Pick QUESTIONS_PER_ROUND multipliers from 1-12 (no repeats if possible)
+    // Pick QUESTIONS_PER_ROUND multipliers from 1-20 (no repeats if possible)
     const multipliers = [];
-    const pool = [1,2,3,4,5,6,7,8,9,10,11,12].sort(() => Math.random() - 0.5);
+    const pool = Array.from({length:20},(_,i)=>i+1).sort(() => Math.random() - 0.5);
     for (let i = 0; i < QUESTIONS_PER_ROUND; i++) {
       multipliers.push(pool[i % pool.length]);
     }
@@ -214,9 +225,10 @@
     // Feedback
     const fb = document.getElementById('tt-feedback');
     if (fb) {
-      fb.textContent = correct
-        ? `🎉 Correct! ${q.a} × ${q.b} = ${q.correct}`
-        : `❌ Not quite! ${q.a} × ${q.b} = ${q.correct}`;
+      fb.innerHTML = (correct
+        ? `🎉 Correct! <strong>${q.a} × ${q.b} = ${q.correct}</strong>`
+        : `❌ Not quite! <strong>${q.a} × ${q.b} = ${q.correct}</strong>`)
+        + `<div class="tt-explain">💡 Think: <em>${q.a} groups of ${q.b} objects = ${q.correct} total</em></div>`;
       fb.className = 'feedback-bar show ' + (correct ? 'correct' : 'wrong');
     }
 
@@ -233,7 +245,8 @@
     const q = questions[current];
     const fb = document.getElementById('tt-feedback');
     if (fb) {
-      fb.textContent = `⏰ Time's up! ${q.a} × ${q.b} = ${q.correct}`;
+      fb.innerHTML = `⏰ Time's up! <strong>${q.a} × ${q.b} = ${q.correct}</strong>`
+        + `<div class="tt-explain">💡 Think: <em>${q.a} groups of ${q.b} objects = ${q.correct} total</em></div>`;
       fb.className = 'feedback-bar show wrong';
     }
     document.querySelectorAll('[id^="tt-ans-"]').forEach(btn => btn.disabled = true);
@@ -302,10 +315,10 @@
         </div>
 
         <div style="background:#f0f4ff;border-radius:14px;padding:16px;margin-bottom:24px">
-          <div style="font-weight:800;color:#667eea;margin-bottom:10px">📋 Full ${selectedTable}× Table</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 24px;font-size:.92rem;font-weight:700;color:#1A1A2E;text-align:left">
-            ${[1,2,3,4,5,6,7,8,9,10,11,12].map(n =>
-              `<span style="color:${n <= 6 ? '#667eea':'#764ba2'}">${selectedTable} × ${n} = ${selectedTable * n}</span>`
+          <div style="font-weight:800;color:#667eea;margin-bottom:10px">📋 Full ${selectedTable}× Table (1–20)</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px 8px;font-size:.82rem;font-weight:700;color:#1A1A2E;text-align:left">
+            ${Array.from({length:20},(_,i)=>i+1).map(n =>
+              `<span style="color:${n<=5?'#16a34a':n<=12?'#d97706':'#7c3aed'}">${selectedTable} × ${n} = ${selectedTable * n}</span>`
             ).join('')}
           </div>
         </div>

@@ -26,21 +26,25 @@ const LanguageGame = (() => {
 
   /* ── Language selection ────────────────────────────────────── */
   function renderLanguageSelect() {
-    const langs = Object.values(LANGUAGE_DATA);
+    const keys = Object.keys(LANGUAGE_DATA);
     getContainer().innerHTML = `
-      <div class="slh-wrap">
-        <div class="page-header" style="padding-top:0">
-          <div class="page-title">🌍 Language Game</div>
-          <div class="page-subtitle">Choose a language to learn!</div>
+      <div class="lg-select-wrap">
+        <div style="text-align:center;padding:28px 16px 20px">
+          <div style="font-size:3rem;margin-bottom:10px">🌍</div>
+          <div class="lg-title">Language Game</div>
+          <div class="lg-subtitle">Choose a language to learn!</div>
         </div>
-        <div class="lang-grid">
-          ${langs.map(l => `
-            <button class="lang-card" onclick="LanguageGame._selectLang('${
-              Object.keys(LANGUAGE_DATA).find(k=>LANGUAGE_DATA[k]===l) }')">
-              <span class="lang-flag">${l.flag}</span>
-              <div class="lang-name">${l.name}</div>
-              <div class="lang-native">${l.nativeName}</div>
-            </button>`).join('')}
+        <div class="lg-lang-grid">
+          ${keys.map(k => {
+            const l = LANGUAGE_DATA[k];
+            return `
+            <button class="lg-lang-btn" onclick="LanguageGame._selectLang('${k}')">
+              <span class="lg-lang-flag">${l.flag}</span>
+              <div class="lg-lang-abbr">${k.substring(0,2).toUpperCase()}</div>
+              <div class="lg-lang-name">${l.name}</div>
+              <div class="lg-lang-native">${l.nativeName}</div>
+            </button>`;
+          }).join('')}
         </div>
       </div>`;
     hideLoading();
@@ -52,26 +56,25 @@ const LanguageGame = (() => {
     state.lang = langId;
     const lang = LANGUAGE_DATA[langId];
     getContainer().innerHTML = `
-      <div class="slh-wrap">
-        <div class="page-header" style="padding-top:0">
-          <div class="page-title">${lang.flag} ${lang.name}</div>
-          <div class="page-subtitle">${lang.funFact}</div>
+      <div class="lg-select-wrap">
+        <div style="text-align:center;padding:24px 16px 16px">
+          <div style="font-size:3rem;margin-bottom:8px">${lang.flag}</div>
+          <div class="lg-title">${lang.name}</div>
+          <div class="lg-subtitle" style="max-width:440px;margin:0 auto">${lang.funFact}</div>
         </div>
-        <div class="page-subtitle" style="margin-bottom:16px;font-weight:700;color:var(--dark)">
-          Choose a category:
-        </div>
-        <div class="slh-cats">
+        <div class="lg-cat-label">Choose a category:</div>
+        <div class="lg-cat-grid">
           ${CATEGORIES.map(c => {
             const phrases = lang.categories[c.id] || [];
             return phrases.length ? `
-              <button class="slh-cat-btn" onclick="LanguageGame._selectCat('${c.id}')">
-                <span class="slh-cat-icon">${c.emoji}</span>
-                <div class="slh-cat-name">${c.name}</div>
-                <div style="font-size:.8rem;color:#888;margin-top:2px">${phrases.length} phrases</div>
+              <button class="lg-cat-btn" onclick="LanguageGame._selectCat('${c.id}')">
+                <span class="lg-cat-icon">${c.emoji}</span>
+                <div class="lg-cat-name">${c.name}</div>
+                <div class="lg-cat-count">${phrases.length} phrases</div>
               </button>` : '';
           }).join('')}
         </div>
-        <div style="text-align:center;margin-top:16px">
+        <div style="text-align:center;margin-top:20px">
           <button class="btn btn-secondary" onclick="LanguageGame.init()">← Back to Languages</button>
         </div>
       </div>`;
@@ -98,30 +101,50 @@ const LanguageGame = (() => {
     const lang = LANGUAGE_DATA[state.lang];
     const cat = CATEGORIES.find(c => c.id === state.cat);
     getContainer().innerHTML = `
-      <div class="lang-wrap">
-        <div class="lang-header">
-          <div>${lang.flag} ${lang.name} — ${cat.emoji} ${cat.name}</div>
-          <div>Card ${state.idx + 1} / ${state.phrases.length}</div>
-        </div>
-        <div class="lang-card-big" id="lang-flashcard">
-          <div class="lang-card-en">
-            <div class="lang-label">🇬🇧 English</div>
-            <div class="lang-phrase-en">${p.en}</div>
+      <div class="lg-game-wrap">
+        <div class="lg-game-header">
+          <div class="lg-game-header-left">
+            <span style="font-size:1.6rem">${lang.flag}</span>
+            <div>
+              <div style="font-weight:800;color:#1a1a2e">${lang.name} — ${cat.emoji} ${cat.name}</div>
+              <div style="font-size:.78rem;color:#888">Flashcard ${state.idx + 1} of ${state.phrases.length}</div>
+            </div>
           </div>
-          <div class="lang-reveal-hint" id="reveal-hint">
-            <button class="btn btn-primary" onclick="LanguageGame._revealFlash()">
-              👀 Show ${lang.name} translation
+          <button class="btn btn-secondary" style="font-size:.82rem" onclick="LanguageGame.init()">← Back</button>
+        </div>
+
+        <!-- Progress bar -->
+        <div style="background:#e5e7eb;border-radius:99px;height:6px;margin-bottom:20px">
+          <div style="background:#667eea;border-radius:99px;height:6px;
+            width:${((state.idx+1)/state.phrases.length)*100}%;transition:width .3s"></div>
+        </div>
+
+        <div class="lg-flash-card" id="lang-flashcard">
+          <!-- English side -->
+          <div class="lg-flash-en">
+            <div class="lg-flash-label">🇬🇧 English</div>
+            <div class="lg-flash-word">${p.en}</div>
+          </div>
+
+          <!-- Reveal button -->
+          <div class="lg-flash-reveal" id="reveal-hint">
+            <button class="btn btn-primary btn-lg" onclick="LanguageGame._revealFlash()">
+              👀 Show ${lang.name} Translation
             </button>
           </div>
-          <div class="lang-card-target" id="lang-target" style="display:none">
-            <div class="lang-label">${lang.flag} ${lang.name}</div>
-            <div class="lang-phrase-target">${p.target}</div>
-            <div class="lang-phonetic">🔊 Say it: <em>${p.phonetic}</em></div>
+
+          <!-- Translation side (hidden until revealed) -->
+          <div id="lang-target" style="display:none">
+            <div class="lg-flash-divider"></div>
+            <div class="lg-flash-label">${lang.flag} ${lang.name}</div>
+            <div class="lg-flash-target">${p.target}</div>
+            <div class="lg-flash-phonetic">🔊 <strong>Say it:</strong> <em>${p.phonetic}</em></div>
           </div>
         </div>
+
         <div id="flash-nav" style="display:none;text-align:center;margin-top:20px">
           <button class="btn btn-primary btn-lg" onclick="LanguageGame._nextFlash()">
-            ${state.idx + 1 < state.phrases.length ? 'Next Card →' : '🎯 Now take the Quiz!'}
+            ${state.idx + 1 < state.phrases.length ? 'Next Card →' : '🎯 Start Quiz!'}
           </button>
         </div>
       </div>`;
@@ -174,21 +197,34 @@ const LanguageGame = (() => {
     const correctIdx = opts.indexOf(p.target);
 
     getContainer().innerHTML = `
-      <div class="lang-wrap">
-        <div class="lang-header">
-          <div>${lang.flag} ${lang.name} — ${cat.emoji} ${cat.name} Quiz</div>
-          <div>Q${state.idx + 1} / ${state.phrases.length} | ⭐ ${state.score}</div>
+      <div class="lg-game-wrap">
+        <div class="lg-game-header">
+          <div class="lg-game-header-left">
+            <span style="font-size:1.6rem">${lang.flag}</span>
+            <div>
+              <div style="font-weight:800;color:#1a1a2e">${lang.name} — ${cat.emoji} Quiz</div>
+              <div style="font-size:.78rem;color:#888">Q${state.idx + 1} / ${state.phrases.length} &nbsp;·&nbsp; ⭐ ${state.score} pts</div>
+            </div>
+          </div>
         </div>
-        <div class="quiz-question-box" style="margin-bottom:20px">
-          <div class="lang-quiz-label">What does this mean in ${lang.name}?</div>
-          <div class="lang-quiz-en">${p.en}</div>
+
+        <!-- Progress bar -->
+        <div style="background:#e5e7eb;border-radius:99px;height:6px;margin-bottom:20px">
+          <div style="background:#667eea;border-radius:99px;height:6px;
+            width:${((state.idx)/state.phrases.length)*100}%;transition:width .3s"></div>
         </div>
-        <div class="quiz-answers">
+
+        <div class="lg-quiz-q-card">
+          <div class="lg-quiz-q-label">What is the ${lang.name} translation?</div>
+          <div class="lg-quiz-q-word">🇬🇧 ${p.en}</div>
+        </div>
+
+        <div class="lg-quiz-opts">
           ${opts.map((o, i) => `
-            <button class="quiz-ans-btn" id="lang-ans-${i}"
+            <button class="lg-quiz-opt" id="lang-ans-${i}"
               onclick="LanguageGame._answerQuiz(${i}, ${correctIdx})">
-              <span class="ans-letter">${['A','B','C','D'][i]}</span>
-              <span>${o}</span>
+              <span class="lg-opt-letter">${['A','B','C','D'][i]}</span>
+              <span class="lg-opt-text">${o}</span>
             </button>`).join('')}
         </div>
         <div id="lang-feedback" style="display:none"></div>
@@ -208,16 +244,15 @@ const LanguageGame = (() => {
     const p = state.phrases[state.idx];
     const lang = LANGUAGE_DATA[state.lang];
 
-    document.getElementById(`lang-ans-${correctIdx}`)?.classList.add('correct');
-    if (!correct) document.getElementById(`lang-ans-${chosen}`)?.classList.add('wrong');
+    document.getElementById(`lang-ans-${correctIdx}`)?.classList.add('lg-opt-correct');
+    if (!correct) document.getElementById(`lang-ans-${chosen}`)?.classList.add('lg-opt-wrong');
 
     const fb = document.getElementById('lang-feedback');
     fb.style.display = '';
     fb.innerHTML = `
-      <div class="lang-fb ${correct ? 'fb-correct' : 'fb-wrong'}" style="margin-top:16px;padding:14px;border-radius:12px;
-        background:${correct?'#f0fdf4':'#fff1f2'};border:2px solid ${correct?'#bbf7d0':'#fecdd3'}">
-        <strong>${correct ? '🎉 Correct!' : '❌ The answer was: ' + p.target}</strong><br>
-        <span style="font-size:.9rem">${lang.flag} ${p.target} = 🔊 <em>${p.phonetic}</em></span>
+      <div class="lg-ans-fb ${correct ? 'lg-ans-fb-correct' : 'lg-ans-fb-wrong'}">
+        <div class="lg-ans-fb-title">${correct ? '🎉 Correct!' : '❌ The answer was: ' + p.target}</div>
+        <div class="lg-ans-fb-phonetic">${lang.flag} <strong>${p.target}</strong> &nbsp;🔊 <em>${p.phonetic}</em></div>
       </div>
       <div style="text-align:center;margin-top:14px">
         <button class="btn btn-primary" onclick="LanguageGame._nextQuiz()">

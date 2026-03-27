@@ -29,6 +29,9 @@ const SnakesLadders = (() => {
     hideLoading();
   }
 
+  // Colorful tile palette (6 colours cycling by square number)
+  const CELL_COLORS = ['#ffd6e7','#ffecd1','#fff9c4','#d4f4dd','#cce8ff','#ead4ff'];
+
   /* ── Board rendering ───────────────────────────────────────── */
   function renderBoard() {
     const board = document.getElementById('sl-board');
@@ -42,15 +45,20 @@ const SnakesLadders = (() => {
         cell.id = `sq-${n}`;
         cell.className = 'sl-cell';
 
-        // Colour by type
-        if (n in SNAKES)       cell.classList.add('sl-has-snake');
-        else if (n in LADDERS) cell.classList.add('sl-has-ladder');
-        else if ((gridRow + gridCol) % 2 === 0) cell.classList.add('sl-light');
-        else cell.classList.add('sl-dark');
+        // Colour by type — snakes/ladders override the base palette
+        if (n in SNAKES)       { cell.classList.add('sl-has-snake'); }
+        else if (n in LADDERS) { cell.classList.add('sl-has-ladder'); }
+        else                   { cell.style.background = CELL_COLORS[(n - 1) % CELL_COLORS.length]; }
+
+        // Square 1 and 100 special styles
+        if (n === 1)   cell.style.background = '#e0f7fa';
+        if (n === 100) cell.style.background = '#fffde7';
 
         cell.innerHTML = `<span class="sl-num">${n}</span>` +
-          (n in SNAKES  ? `<span class="sl-icon" title="Snake! → ${SNAKES[n]}">🐍</span>` : '') +
-          (n in LADDERS ? `<span class="sl-icon" title="Ladder! → ${LADDERS[n]}">🪜</span>` : '') +
+          (n in SNAKES  ? `<span class="sl-icon">🐍</span>` : '') +
+          (n in LADDERS ? `<span class="sl-icon">🪜</span>` : '') +
+          (n === 1   ? `<span class="sl-icon">🏁</span>` : '') +
+          (n === 100 ? `<span class="sl-icon">🏆</span>` : '') +
           `<div class="sl-pieces" id="pieces-${n}"></div>`;
         board.appendChild(cell);
       }
@@ -90,11 +98,9 @@ const SnakesLadders = (() => {
     rolling = true;
     totalMoves++;
 
-    // Animate dice
-    const die = await animateDice();
-    const diceEl = document.getElementById('sl-dice-val');
-    if (diceEl) diceEl.textContent = die;
-
+    // Animate player's dice
+    const die = await animateDice('sl-dice-you');
+    setLastRoll('you', die);
     await movePlayer('player', die);
 
     if (!gameOver) {
@@ -107,9 +113,8 @@ const SnakesLadders = (() => {
   async function computerTurn() {
     if (gameOver) return;
     setStatus('🤖 Computer\'s turn…', 'red');
-    const die = await animateDice();
-    const diceEl = document.getElementById('sl-dice-val');
-    if (diceEl) diceEl.textContent = die;
+    const die = await animateDice('sl-dice-comp');
+    setLastRoll('comp', die);
     await movePlayer('computer', die);
     if (!gameOver) {
       myTurn = true;
@@ -118,9 +123,9 @@ const SnakesLadders = (() => {
     }
   }
 
-  function animateDice() {
+  function animateDice(elId) {
     return new Promise(resolve => {
-      const diceEl = document.getElementById('sl-dice-val');
+      const diceEl = document.getElementById(elId);
       const faces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
       let count = 0;
       const final = Math.floor(Math.random() * 6) + 1;
@@ -130,6 +135,12 @@ const SnakesLadders = (() => {
         if (count >= 8) { clearInterval(iv); if (diceEl) diceEl.textContent = faces[final-1]; resolve(final); }
       }, 80);
     });
+  }
+
+  function setLastRoll(who, val) {
+    const faces = ['','⚀','⚁','⚂','⚃','⚄','⚅'];
+    const el = document.getElementById(who === 'you' ? 'sl-you-roll' : 'sl-comp-roll');
+    if (el) el.textContent = `${faces[val]} ${val}`;
   }
 
   async function movePlayer(who, die) {
@@ -253,8 +264,14 @@ const SnakesLadders = (() => {
     window.SFX?.play('click');
     const overlay = document.getElementById('sl-end');
     if (overlay) overlay.style.display = 'none';
-    const diceEl = document.getElementById('sl-dice-val');
-    if (diceEl) diceEl.textContent = '🎲';
+    ['sl-dice-you','sl-dice-comp'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = '🎲';
+    });
+    ['sl-you-roll','sl-comp-roll'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = '—';
+    });
     init();
   }
 

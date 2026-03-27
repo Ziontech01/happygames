@@ -29,25 +29,37 @@
 <!-- Main layout -->
 <div class="sl-page">
 
-  <!-- Status bar -->
+  <!-- Player cards + controls -->
   <div class="sl-top">
     <div class="sl-players-bar">
-      <div class="sl-player-card" id="sl-pc-you">
+
+      <!-- You (left) -->
+      <div class="sl-player-card sl-you-card" id="sl-pc-you">
         <span class="sl-piece-big">🔵</span>
         <span class="sl-pc-label">You</span>
+        <div class="sl-dice-sm" id="sl-dice-you">🎲</div>
+        <div class="sl-last-roll-label">Last roll</div>
+        <div class="sl-last-roll" id="sl-you-roll">—</div>
       </div>
-      <div class="sl-dice-area">
-        <div class="sl-dice" id="sl-dice-val">🎲</div>
+
+      <!-- Center control -->
+      <div class="sl-center-ctrl">
         <button class="btn btn-primary btn-lg sl-roll-btn" id="sl-roll-btn" onclick="SnakesLadders.rollDice()">
-          Roll Dice 🎲
+          🎲 Roll Dice
         </button>
+        <div class="sl-status" id="sl-status">Loading…</div>
       </div>
-      <div class="sl-player-card" id="sl-pc-comp">
+
+      <!-- Computer (right) -->
+      <div class="sl-player-card sl-comp-card" id="sl-pc-comp">
         <span class="sl-piece-big">🔴</span>
         <span class="sl-pc-label">Computer</span>
+        <div class="sl-dice-sm" id="sl-dice-comp">🎲</div>
+        <div class="sl-last-roll-label">Last roll</div>
+        <div class="sl-last-roll" id="sl-comp-roll">—</div>
       </div>
+
     </div>
-    <div class="sl-status" id="sl-status">Loading…</div>
   </div>
 
   <!-- Game board (10×10 CSS grid) -->
@@ -55,9 +67,10 @@
 
   <!-- Legend -->
   <div class="sl-legend">
-    <span><span class="sl-leg-snake">🐍</span> Snake = go down</span>
-    <span><span class="sl-leg-ladder">🪜</span> Ladder = go up</span>
+    <span>🐍 Snake = go down</span>
+    <span>🪜 Ladder = go up</span>
     <span>🔵 You &nbsp; 🔴 Computer</span>
+    <span>🏁 Start &nbsp; 🏆 Win!</span>
   </div>
 
 </div>
