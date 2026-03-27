@@ -38,9 +38,15 @@
     <button class="btn btn-ghost"    id="filter-spelling"    onclick="filterResults('spelling')">🔤 Spelling</button>
     <button class="btn btn-ghost"    id="filter-english"     onclick="filterResults('english')">📚 English</button>
     <button class="btn btn-ghost"    id="filter-general"     onclick="filterResults('general')">🌍 GK</button>
-    <button class="btn btn-ghost"    id="filter-matching"    onclick="filterResults('matching')">🎯 Matching</button>
-    <button class="btn btn-ghost"    id="filter-memory"      onclick="filterResults('memory')">🃏 Memory</button>
-    <button class="btn btn-ghost"    id="filter-smart-life"  onclick="filterResults('smart-life')">🦸 Life Skills</button>
+    <button class="btn btn-ghost"    id="filter-matching"       onclick="filterResults('matching')">🎯 Matching</button>
+    <button class="btn btn-ghost"    id="filter-memory"         onclick="filterResults('memory')">🃏 Memory</button>
+    <button class="btn btn-ghost"    id="filter-smart-life"     onclick="filterResults('smart-life')">🦸 Life Skills</button>
+    <button class="btn btn-ghost"    id="filter-science"        onclick="filterResults('science')">🔬 Science</button>
+    <button class="btn btn-ghost"    id="filter-bible"          onclick="filterResults('bible')">📖 Bible</button>
+    <button class="btn btn-ghost"    id="filter-language"       onclick="filterResults('language')">🌍 Language</button>
+    <button class="btn btn-ghost"    id="filter-snakes-ladders" onclick="filterResults('snakes-ladders')">🐍🪜 S&amp;L</button>
+    <button class="btn btn-ghost"    id="filter-spot-diff"      onclick="filterResults('spot-diff')">🔍 Spot Diff</button>
+    <button class="btn btn-ghost"    id="filter-ludo"           onclick="filterResults('ludo')">🎲 Ludo</button>
   </div>
   <div class="summary-grid">
     <div class="summary-card total"> <div class="summary-icon">🎮</div><div class="summary-value" id="s-total">0</div><div class="summary-label">Games Played</div></div>
@@ -110,12 +116,16 @@ function renderResults(data) {
   const gameIcons={
     xo:'❌⭕', chess:'♟️', maths:'🔢', english:'📚', general:'🌍',
     grammar:'📝', spelling:'🔤', 'times-tables':'✖️',
-    matching:'🎯', memory:'🃏', 'smart-life':'🦸'
+    matching:'🎯', memory:'🃏', 'smart-life':'🦸',
+    science:'🔬', bible:'📖', language:'🌍',
+    'snakes-ladders':'🐍🪜', 'spot-diff':'🔍', ludo:'🎲'
   };
   const gameNames={
     xo:'XO', chess:'Chess', maths:'Maths', english:'English', general:'GK Quiz',
     grammar:'Grammar', spelling:'Spelling', 'times-tables':'Times Tables',
-    matching:'Matching', memory:'Memory', 'smart-life':'Life Hero'
+    matching:'Matching', memory:'Memory', 'smart-life':'Life Hero',
+    science:'Science', bible:'Bible', language:'Language',
+    'snakes-ladders':'Snakes & Ladders', 'spot-diff':'Spot Diff', ludo:'Ludo'
   };
   const rows = data.map((r,i)=>{
     const d = r.date?.toDate?.() || new Date();
@@ -128,11 +138,22 @@ function renderResults(data) {
     const gType = r.gameType || 'unknown';
     const gBadgeCls = gType.replace(/[^a-z0-9]/gi,'-');
     const gameBadge=`<span class="badge badge-${gBadgeCls}">${gameIcons[gType]||'🎮'} ${gameNames[gType]||gType}</span>`;
-    // Level: show table number for times-tables, category for matching/memory/smart-life
+    // Level display — handle all game types
     let levelText = '—';
     if (r.level && r.level !== 'all') {
       if (r.level.startsWith('table-')) levelText = `×${r.level.replace('table-','')} Table`;
-      else levelText = r.level.replace('year','Yr ').replace('reception','Rec');
+      else if (['spanish','french','mandarin','yoruba'].includes(r.level)) {
+        const langFlags = {spanish:'🇪🇸',french:'🇫🇷',mandarin:'🇨🇳',yoruba:'🇳🇬'};
+        levelText = (langFlags[r.level]||'🌍') + ' ' + r.level.charAt(0).toUpperCase()+r.level.slice(1);
+      } else levelText = r.level.replace('year','Yr ').replace('reception','Rec');
+    } else if (r.language) {
+      const langFlags = {spanish:'🇪🇸',french:'🇫🇷',mandarin:'🇨🇳',yoruba:'🇳🇬'};
+      levelText = (langFlags[r.language]||'🌍') + ' ' + r.language.charAt(0).toUpperCase()+r.language.slice(1);
+    } else if (r.topic) {
+      const topicEmoji = {old:'🌍',new:'✝️',parable:'📖',jesus:'⭐',facts:'💡',mix:'🎲'};
+      levelText = (topicEmoji[r.topic]||'📖') + ' ' + r.topic.charAt(0).toUpperCase()+r.topic.slice(1);
+    } else if (r.scene) {
+      levelText = r.scene.replace(/[^\w\s]/gu, '').trim().slice(0,14);
     } else if (r.category) {
       levelText = r.category.charAt(0).toUpperCase() + r.category.slice(1);
     } else if (r.table) {

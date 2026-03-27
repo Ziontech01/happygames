@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Happy Games – Ludo</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body style="background:linear-gradient(135deg,#fff1f2,#f0f9ff);min-height:100vh">
+
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-spinner">
+    <div style="font-size:3rem;margin-bottom:12px">🎲</div>
+    <div class="spinner"></div>
+    <div class="loading-title">Ludo</div>
+  </div>
+</div>
+
+<nav class="navbar">
+  <a class="nav-logo" href="../index.html"><span class="logo-emoji">🎮</span> Happy Games</a>
+  <div class="nav-links">
+    <span class="nav-user" id="nav-username" style="display:none">👤</span>
+    <a href="../login.html" class="btn btn-secondary" id="nav-login-btn" style="font-size:.85rem">🔑 Login</a>
+    <a href="../index.html" class="btn btn-secondary" style="font-size:.85rem">🏠 Home</a>
+    <button class="btn btn-outline" id="nav-logout-btn" style="display:none;font-size:.85rem" onclick="logout()">🚪 Logout</button>
+  </div>
+</nav>
+
+<!-- Ludo layout -->
+<div class="ludo-page">
+
+  <!-- Controls bar -->
+  <div class="ludo-controls">
+    <div class="ludo-player-info">
+      <span>🔵 <strong>You (Blue)</strong></span>
+      <span style="color:#d97706">🟡 <strong>Computer (Yellow)</strong></span>
+    </div>
+    <div class="ludo-dice-area">
+      <div class="ludo-dice" id="ludo-dice-val">🎲</div>
+      <button class="btn btn-primary btn-lg" id="ludo-roll-btn" onclick="LudoGame.rollDice()">
+        Roll Dice 🎲
+      </button>
+    </div>
+    <div class="ludo-finished" id="ludo-finished">
+      🔵 Home: ⬜⬜⬜⬜ &nbsp; 🟡 Home: ⬜⬜⬜⬜
+    </div>
+  </div>
+
+  <!-- Status message -->
+  <div class="ludo-status" id="ludo-status">Loading…</div>
+
+  <!-- 15×15 board grid -->
+  <div class="ludo-board" id="ludo-board"></div>
+
+  <!-- Legend -->
+  <div class="ludo-legend">
+    <span>🔵 Your pieces</span>
+    <span>🟡 Computer pieces</span>
+    <span>⭐ Safe squares</span>
+    <span>Roll 6 to enter the board!</span>
+  </div>
+
+</div>
+
+<!-- End overlay -->
+<div class="sl-end-overlay" id="ludo-end" style="display:none">
+  <div class="sl-end-card">
+    <div class="sl-end-icon" id="ludo-end-icon">🏆</div>
+    <div class="sl-end-title" id="ludo-end-title">You Win!</div>
+    <div class="sl-end-msg" id="ludo-end-msg"></div>
+    <div class="sl-end-stats" id="ludo-end-stats"></div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">
+      <button class="btn btn-primary btn-lg" onclick="LudoGame.restartGame()">🔄 Play Again</button>
+      <a href="../index.html" class="btn btn-secondary">🏠 Home</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/sound.js"></script>
+<script src="../js/ludo.js"></script>
+<script>
+softAuth(() => { LudoGame.init(); });
+</script>
+</body>
+</html>
