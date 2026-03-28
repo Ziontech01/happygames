@@ -173,9 +173,10 @@ const QuizEngine = (() => {
   function _timeUp() {
     state.answered = true;
     window.SFX?.play('quiz_timeout');
-    showFeedback(false, '⏰ Time\'s up! The answer was: ' + getCorrectText());
+    const tq = state.questions[state.current];
+    const explainT = tq.explanation ? ` &nbsp;💡 ${tq.explanation}` : '';
+    showFeedback(false, `⏰ Time's up! The answer was: <strong>${getCorrectText()}</strong>${explainT}`);
     disableAnswers();
-    setTimeout(nextQuestion, 2000);
   }
 
   // ── Answer Handling ─────────────────────────────────────────
@@ -196,10 +197,11 @@ const QuizEngine = (() => {
     }
     disableAnswers();
     window.SFX?.play(correct ? 'quiz_correct' : 'quiz_wrong');
-    const _correctMsg = q.explanation ? '🎉 ' + q.explanation : '🎉 Correct! Well done!';
-    const _wrongMsg   = '❌ Wrong! ' + (q.explanation || 'The correct answer was: ' + q.answers[q.correct]);
+    const correctAns = q.answers[q.correct];
+    const explainPart = q.explanation ? ` &nbsp;💡 ${q.explanation}` : '';
+    const _correctMsg = q.explanation ? `🎉 Correct! &nbsp;💡 ${q.explanation}` : '🎉 Correct! Well done!';
+    const _wrongMsg   = `❌ Wrong! The correct answer was: <strong>${correctAns}</strong>${explainPart}`;
     showFeedback(correct, correct ? _correctMsg : _wrongMsg);
-    setTimeout(nextQuestion, correct ? 1800 : 2800);
   }
 
   function _submitTyped() {
@@ -217,8 +219,12 @@ const QuizEngine = (() => {
     document.getElementById('q-score').textContent = state.score;
     input.disabled = true;
     window.SFX?.play(correct ? 'quiz_correct' : 'quiz_wrong');
-    showFeedback(correct, correct ? '🎉 Correct! Well done!' : '❌ Wrong! The answer was: ' + q.answers[q.correct]);
-    setTimeout(nextQuestion, correct ? 1500 : 2500);
+    const correctAns2 = q.answers[q.correct];
+    const explainPart2 = q.explanation ? ` &nbsp;💡 ${q.explanation}` : '';
+    const msg2 = correct
+      ? (q.explanation ? `🎉 Correct! &nbsp;💡 ${q.explanation}` : '🎉 Correct! Well done!')
+      : `❌ Wrong! The answer was: <strong>${correctAns2}</strong>${explainPart2}`;
+    showFeedback(correct, msg2);
   }
 
   function getCorrectText() {
@@ -233,8 +239,18 @@ const QuizEngine = (() => {
   function showFeedback(correct, msg) {
     const fb = document.getElementById('feedback');
     if (!fb) return;
-    fb.textContent = msg;
     fb.className = 'feedback-bar show ' + (correct ? 'correct' : 'wrong');
+    fb.style.display = 'flex';
+    fb.style.alignItems = 'center';
+    fb.style.flexWrap = 'wrap';
+    fb.style.gap = '8px';
+    fb.innerHTML =
+      `<span style="flex:1;min-width:0">${msg}</span>` +
+      `<button onclick="QuizEngine._next()" ` +
+      `style="flex-shrink:0;padding:8px 22px;border:none;border-radius:22px;` +
+      `background:rgba(255,255,255,.3);color:inherit;font-weight:800;` +
+      `font-size:.95rem;cursor:pointer;letter-spacing:.02em;white-space:nowrap">` +
+      `Next ➜</button>`;
   }
 
   // ── Next Question ───────────────────────────────────────────
@@ -306,5 +322,5 @@ const QuizEngine = (() => {
   }
   function formatTime(s) { return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
 
-  return { init, _selectLevel, _startQuiz, _answer, _submitTyped, _changeLevel };
+  return { init, _selectLevel, _startQuiz, _answer, _submitTyped, _changeLevel, _next: nextQuestion };
 })();

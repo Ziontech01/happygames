@@ -4,7 +4,7 @@
 
 const LanguageGame = (() => {
 
-  const PHRASES_PER_ROUND = 8; // flashcard + quiz for each
+  const PHRASES_PER_ROUND = 8;
 
   let state = {};
 
@@ -17,6 +17,14 @@ const LanguageGame = (() => {
     { id:'school',    name:'School',                emoji:'🎒' }
   ];
 
+  // Accent colour per language (used in buttons, headers, badges)
+  const LANG_COLORS = {
+    spanish:  '#dc2626',   // Spanish red
+    french:   '#2563eb',   // French blue
+    mandarin: '#b91c1c',   // Mandarin red
+    yoruba:   '#15803d'    // Nigerian green
+  };
+
   /* ── Public init ───────────────────────────────────────────── */
   function init() {
     state = { step:'language', lang:null, cat:null, phrases:[], idx:0,
@@ -24,25 +32,46 @@ const LanguageGame = (() => {
     renderLanguageSelect();
   }
 
-  /* ── Language selection ────────────────────────────────────── */
+  /* ─────────────────────────────────────────────────────────────
+     SCREEN 1 — Language selection
+  ───────────────────────────────────────────────────────────── */
   function renderLanguageSelect() {
     const keys = Object.keys(LANGUAGE_DATA);
     getContainer().innerHTML = `
-      <div class="lg-select-wrap">
-        <div style="text-align:center;padding:28px 16px 20px">
-          <div style="font-size:3rem;margin-bottom:10px">🌍</div>
-          <div class="lg-title">Language Game</div>
-          <div class="lg-subtitle">Choose a language to learn!</div>
+      <div style="max-width:680px;margin:0 auto;padding:0 16px 48px">
+
+        <!-- Header -->
+        <div style="text-align:center;padding:36px 16px 28px">
+          <div style="font-size:4rem;margin-bottom:12px">🌍</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:2.4rem;color:#1a1a2e;margin-bottom:8px">
+            Language Game
+          </div>
+          <div style="color:#6b7280;font-size:1rem;font-weight:600">
+            Choose a language to start learning!
+          </div>
         </div>
-        <div class="lg-lang-grid">
+
+        <!-- Language cards -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px">
           ${keys.map(k => {
             const l = LANGUAGE_DATA[k];
+            const col = LANG_COLORS[k] || '#667eea';
             return `
-            <button class="lg-lang-btn" onclick="LanguageGame._selectLang('${k}')">
-              <span class="lg-lang-flag">${l.flag}</span>
-              <div class="lg-lang-abbr">${k.substring(0,2).toUpperCase()}</div>
-              <div class="lg-lang-name">${l.name}</div>
-              <div class="lg-lang-native">${l.nativeName}</div>
+            <button onclick="LanguageGame._selectLang('${k}')"
+              style="background:#fff;border:3px solid ${col};border-radius:20px;
+                     padding:24px 12px;text-align:center;cursor:pointer;
+                     box-shadow:0 4px 16px rgba(0,0,0,.1);transition:all .22s;
+                     font-family:'Nunito',sans-serif;width:100%"
+              onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 10px 28px rgba(0,0,0,.18)';this.style.background='${col}';this.querySelector('.lg-lname').style.color='#fff';this.querySelector('.lg-lnative').style.color='rgba(255,255,255,.8)'"
+              onmouseout="this.style.transform='';this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)';this.style.background='#fff';this.querySelector('.lg-lname').style.color='#1a1a2e';this.querySelector('.lg-lnative').style.color='#6b7280'">
+              <div style="font-size:3.2rem;margin-bottom:8px">${l.flag}</div>
+              <div style="font-family:'Fredoka One',cursive;font-size:1.6rem;color:${col};margin-bottom:4px">
+                ${k.substring(0,2).toUpperCase()}
+              </div>
+              <div class="lg-lname" style="font-weight:800;font-size:1rem;color:#1a1a2e;margin-bottom:3px">
+                ${l.name}
+              </div>
+              <div class="lg-lnative" style="font-size:.8rem;color:#6b7280">${l.nativeName}</div>
             </button>`;
           }).join('')}
         </div>
@@ -50,32 +79,59 @@ const LanguageGame = (() => {
     hideLoading();
   }
 
-  /* ── Category selection ────────────────────────────────────── */
+  /* ─────────────────────────────────────────────────────────────
+     SCREEN 2 — Category selection
+  ───────────────────────────────────────────────────────────── */
   function _selectLang(langId) {
     window.SFX?.play('click');
     state.lang = langId;
     const lang = LANGUAGE_DATA[langId];
+    const col  = LANG_COLORS[langId] || '#667eea';
     getContainer().innerHTML = `
-      <div class="lg-select-wrap">
-        <div style="text-align:center;padding:24px 16px 16px">
+      <div style="max-width:680px;margin:0 auto;padding:0 16px 48px">
+
+        <!-- Language header banner -->
+        <div style="background:${col};color:#fff;padding:24px 20px;border-radius:0 0 20px 20px;
+                    margin-bottom:24px;text-align:center">
           <div style="font-size:3rem;margin-bottom:8px">${lang.flag}</div>
-          <div class="lg-title">${lang.name}</div>
-          <div class="lg-subtitle" style="max-width:440px;margin:0 auto">${lang.funFact}</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:4px">${lang.name}</div>
+          <div style="font-size:.88rem;opacity:.9;max-width:440px;margin:0 auto">${lang.funFact}</div>
         </div>
-        <div class="lg-cat-label">Choose a category:</div>
-        <div class="lg-cat-grid">
+
+        <div style="font-weight:800;font-size:1rem;color:#1a1a2e;text-align:center;margin-bottom:16px">
+          Choose a category to practise:
+        </div>
+
+        <!-- Category grid -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px">
           ${CATEGORIES.map(c => {
             const phrases = lang.categories[c.id] || [];
-            return phrases.length ? `
-              <button class="lg-cat-btn" onclick="LanguageGame._selectCat('${c.id}')">
-                <span class="lg-cat-icon">${c.emoji}</span>
-                <div class="lg-cat-name">${c.name}</div>
-                <div class="lg-cat-count">${phrases.length} phrases</div>
-              </button>` : '';
+            if (!phrases.length) return '';
+            return `
+            <button onclick="LanguageGame._selectCat('${c.id}')"
+              style="background:#fff;border:2px solid #e5e7eb;border-radius:16px;
+                     padding:18px 10px;text-align:center;cursor:pointer;
+                     box-shadow:0 2px 10px rgba(0,0,0,.06);transition:all .2s;
+                     font-family:'Nunito',sans-serif;width:100%"
+              onmouseover="this.style.borderColor='${col}';this.style.transform='translateY(-4px)';this.style.boxShadow='0 6px 18px rgba(0,0,0,.14)'"
+              onmouseout="this.style.borderColor='#e5e7eb';this.style.transform='';this.style.boxShadow='0 2px 10px rgba(0,0,0,.06)'">
+              <div style="font-size:2rem;margin-bottom:8px">${c.emoji}</div>
+              <div style="font-weight:800;font-size:.92rem;color:#1a1a2e;margin-bottom:4px">${c.name}</div>
+              <div style="background:${col};color:#fff;border-radius:20px;padding:2px 10px;
+                          font-size:.75rem;font-weight:700;display:inline-block">
+                ${phrases.length} phrases
+              </div>
+            </button>`;
           }).join('')}
         </div>
-        <div style="text-align:center;margin-top:20px">
-          <button class="btn btn-secondary" onclick="LanguageGame.init()">← Back to Languages</button>
+
+        <div style="text-align:center">
+          <button onclick="LanguageGame.init()"
+            style="background:#f3f4f6;color:#374151;border:none;border-radius:50px;
+                   padding:10px 22px;font-family:'Nunito',sans-serif;font-size:.92rem;
+                   font-weight:800;cursor:pointer">
+            ← Back to Languages
+          </button>
         </div>
       </div>`;
   }
@@ -88,62 +144,102 @@ const LanguageGame = (() => {
     const pool = [...(lang.categories[catId] || [])].sort(() => Math.random() - 0.5);
     state.phrases = pool.slice(0, PHRASES_PER_ROUND);
     state.idx = 0;
-    state.phase = 'flash'; // first: flashcard for each phrase
+    state.phase = 'flash';
     state.score = 0;
     state.startTime = Date.now();
     renderFlashcard();
   }
 
-  /* ── Phase 1: Flashcard (show phrase, reveal answer) ───────── */
+  /* ─────────────────────────────────────────────────────────────
+     SCREEN 3 — Flashcard (learn first, then quiz)
+  ───────────────────────────────────────────────────────────── */
   function renderFlashcard() {
     state.showingAnswer = false;
-    const p = state.phrases[state.idx];
+    const p    = state.phrases[state.idx];
     const lang = LANGUAGE_DATA[state.lang];
-    const cat = CATEGORIES.find(c => c.id === state.cat);
+    const cat  = CATEGORIES.find(c => c.id === state.cat);
+    const col  = LANG_COLORS[state.lang] || '#667eea';
+    const pct  = ((state.idx + 1) / state.phrases.length) * 100;
+
     getContainer().innerHTML = `
-      <div class="lg-game-wrap">
-        <div class="lg-game-header">
-          <div class="lg-game-header-left">
-            <span style="font-size:1.6rem">${lang.flag}</span>
+      <div style="max-width:600px;margin:0 auto;padding:0 16px 48px">
+
+        <!-- Header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;
+                    padding:16px 0 12px;gap:12px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:1.8rem">${lang.flag}</span>
             <div>
-              <div style="font-weight:800;color:#1a1a2e">${lang.name} — ${cat.emoji} ${cat.name}</div>
-              <div style="font-size:.78rem;color:#888">Flashcard ${state.idx + 1} of ${state.phrases.length}</div>
+              <div style="font-weight:800;color:#1a1a2e;font-size:.95rem">
+                ${lang.name} — ${cat.emoji} ${cat.name}
+              </div>
+              <div style="font-size:.78rem;color:#6b7280">
+                Flashcard ${state.idx + 1} of ${state.phrases.length}
+              </div>
             </div>
           </div>
-          <button class="btn btn-secondary" style="font-size:.82rem" onclick="LanguageGame.init()">← Back</button>
+          <button onclick="LanguageGame.init()"
+            style="background:#f3f4f6;color:#374151;border:none;border-radius:50px;
+                   padding:8px 16px;font-family:'Nunito',sans-serif;font-size:.82rem;
+                   font-weight:800;cursor:pointer;flex-shrink:0">
+            ← Back
+          </button>
         </div>
 
         <!-- Progress bar -->
-        <div style="background:#e5e7eb;border-radius:99px;height:6px;margin-bottom:20px">
-          <div style="background:#667eea;border-radius:99px;height:6px;
-            width:${((state.idx+1)/state.phrases.length)*100}%;transition:width .3s"></div>
+        <div style="background:#e5e7eb;border-radius:99px;height:7px;margin-bottom:20px">
+          <div style="background:${col};border-radius:99px;height:7px;
+                      width:${pct}%;transition:width .35s"></div>
         </div>
 
-        <div class="lg-flash-card" id="lang-flashcard">
-          <!-- English side -->
-          <div class="lg-flash-en">
-            <div class="lg-flash-label">🇬🇧 English</div>
-            <div class="lg-flash-word">${p.en}</div>
+        <!-- Flashcard -->
+        <div style="background:#fff;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,.1);
+                    padding:32px 24px;text-align:center;margin-bottom:20px">
+
+          <!-- English -->
+          <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;
+                      color:#9ca3af;font-weight:700;margin-bottom:8px">🇬🇧 English</div>
+          <div style="font-size:2.2rem;font-weight:900;color:#1a1a2e;margin-bottom:24px;
+                      line-height:1.2">
+            ${p.en}
           </div>
 
           <!-- Reveal button -->
-          <div class="lg-flash-reveal" id="reveal-hint">
-            <button class="btn btn-primary btn-lg" onclick="LanguageGame._revealFlash()">
+          <div id="reveal-hint">
+            <button onclick="LanguageGame._revealFlash()"
+              style="background:linear-gradient(135deg,${col},${col}cc);color:#fff;
+                     border:none;border-radius:50px;padding:14px 28px;
+                     font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
+                     cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.2)">
               👀 Show ${lang.name} Translation
             </button>
           </div>
 
-          <!-- Translation side (hidden until revealed) -->
+          <!-- Translation (hidden until revealed) -->
           <div id="lang-target" style="display:none">
-            <div class="lg-flash-divider"></div>
-            <div class="lg-flash-label">${lang.flag} ${lang.name}</div>
-            <div class="lg-flash-target">${p.target}</div>
-            <div class="lg-flash-phonetic">🔊 <strong>Say it:</strong> <em>${p.phonetic}</em></div>
+            <div style="border-top:2px dashed #e5e7eb;margin:20px 0 16px"></div>
+            <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;
+                        color:#9ca3af;font-weight:700;margin-bottom:8px">
+              ${lang.flag} ${lang.name}
+            </div>
+            <div style="font-size:2.6rem;font-weight:900;color:${col};margin-bottom:12px;
+                        word-break:break-word;line-height:1.2">
+              ${p.target}
+            </div>
+            <div style="background:#f0f4ff;border-radius:12px;padding:10px 18px;
+                        display:inline-block;font-size:1rem;color:#374151">
+              🔊 <strong>Say it:</strong> <em>${p.phonetic}</em>
+            </div>
           </div>
         </div>
 
-        <div id="flash-nav" style="display:none;text-align:center;margin-top:20px">
-          <button class="btn btn-primary btn-lg" onclick="LanguageGame._nextFlash()">
+        <!-- Nav button (hidden until answer revealed) -->
+        <div id="flash-nav" style="display:none;text-align:center">
+          <button onclick="LanguageGame._nextFlash()"
+            style="background:linear-gradient(135deg,${col},${col}cc);color:#fff;
+                   border:none;border-radius:50px;padding:14px 32px;
+                   font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:800;
+                   cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2)">
             ${state.idx + 1 < state.phrases.length ? 'Next Card →' : '🎯 Start Quiz!'}
           </button>
         </div>
@@ -163,99 +259,144 @@ const LanguageGame = (() => {
     if (state.idx < state.phrases.length) {
       renderFlashcard();
     } else {
-      // Move to quiz phase
       state.idx = 0;
       state.phase = 'quiz';
       renderQuizQuestion();
     }
   }
 
-  /* ── Phase 2: MCQ Quiz ─────────────────────────────────────── */
+  /* ─────────────────────────────────────────────────────────────
+     SCREEN 4 — MCQ Quiz
+  ───────────────────────────────────────────────────────────── */
   function renderQuizQuestion() {
-    const p = state.phrases[state.idx];
+    const p    = state.phrases[state.idx];
     const lang = LANGUAGE_DATA[state.lang];
-    const cat = CATEGORIES.find(c => c.id === state.cat);
+    const cat  = CATEGORIES.find(c => c.id === state.cat);
+    const col  = LANG_COLORS[state.lang] || '#667eea';
+    const pct  = (state.idx / state.phrases.length) * 100;
 
-    // Build distractors from same category (other phrases in pool)
-    const allInCat = (LANGUAGE_DATA[state.lang].categories[state.cat] || []);
+    // Build distractors
+    const allInCat   = LANGUAGE_DATA[state.lang].categories[state.cat] || [];
     const distractors = allInCat
       .filter(x => x.target !== p.target)
       .sort(() => Math.random() - 0.5)
       .slice(0, 3)
       .map(x => x.target);
 
-    // If not enough distractors, pad from other categories
     while (distractors.length < 3) {
       const other = Object.values(lang.categories).flat()
         .filter(x => x.target !== p.target && !distractors.includes(x.target))
         .sort(() => Math.random() - 0.5);
-      if (other.length) distractors.push(other[0].target);
-      else distractors.push('???');
+      distractors.push(other.length ? other[0].target : '???');
     }
 
-    const opts = shuffle([p.target, ...distractors.slice(0,3)]);
+    const opts       = shuffle([p.target, ...distractors.slice(0, 3)]);
     const correctIdx = opts.indexOf(p.target);
 
     getContainer().innerHTML = `
-      <div class="lg-game-wrap">
-        <div class="lg-game-header">
-          <div class="lg-game-header-left">
-            <span style="font-size:1.6rem">${lang.flag}</span>
-            <div>
-              <div style="font-weight:800;color:#1a1a2e">${lang.name} — ${cat.emoji} Quiz</div>
-              <div style="font-size:.78rem;color:#888">Q${state.idx + 1} / ${state.phrases.length} &nbsp;·&nbsp; ⭐ ${state.score} pts</div>
+      <div style="max-width:600px;margin:0 auto;padding:0 16px 48px">
+
+        <!-- Header -->
+        <div style="display:flex;align-items:center;gap:10px;padding:16px 0 12px;flex-wrap:wrap">
+          <span style="font-size:1.8rem">${lang.flag}</span>
+          <div>
+            <div style="font-weight:800;color:#1a1a2e;font-size:.95rem">
+              ${lang.name} — ${cat.emoji} Quiz
+            </div>
+            <div style="font-size:.78rem;color:#6b7280">
+              Question ${state.idx + 1} / ${state.phrases.length} &nbsp;·&nbsp; ⭐ ${state.score} pts
             </div>
           </div>
         </div>
 
         <!-- Progress bar -->
-        <div style="background:#e5e7eb;border-radius:99px;height:6px;margin-bottom:20px">
-          <div style="background:#667eea;border-radius:99px;height:6px;
-            width:${((state.idx)/state.phrases.length)*100}%;transition:width .3s"></div>
+        <div style="background:#e5e7eb;border-radius:99px;height:7px;margin-bottom:20px">
+          <div style="background:${col};border-radius:99px;height:7px;
+                      width:${pct}%;transition:width .35s"></div>
         </div>
 
-        <div class="lg-quiz-q-card">
-          <div class="lg-quiz-q-label">What is the ${lang.name} translation?</div>
-          <div class="lg-quiz-q-word">🇬🇧 ${p.en}</div>
+        <!-- Question card -->
+        <div style="background:#fff;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,.1);
+                    padding:24px 20px;text-align:center;margin-bottom:16px">
+          <div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;
+                      color:#9ca3af;font-weight:700;margin-bottom:10px">
+            What is the ${lang.name} translation?
+          </div>
+          <div style="font-size:2rem;font-weight:900;color:#1a1a2e">🇬🇧 ${p.en}</div>
         </div>
 
-        <div class="lg-quiz-opts">
+        <!-- Answer options -->
+        <div style="display:flex;flex-direction:column;gap:10px">
           ${opts.map((o, i) => `
-            <button class="lg-quiz-opt" id="lang-ans-${i}"
-              onclick="LanguageGame._answerQuiz(${i}, ${correctIdx})">
-              <span class="lg-opt-letter">${['A','B','C','D'][i]}</span>
-              <span class="lg-opt-text">${o}</span>
+            <button id="lang-ans-${i}"
+              onclick="LanguageGame._answerQuiz(${i}, ${correctIdx})"
+              style="display:flex;align-items:center;gap:14px;padding:15px 16px;
+                     border-radius:14px;border:2px solid #e5e7eb;background:#fff;
+                     cursor:pointer;text-align:left;font-family:'Nunito',sans-serif;
+                     font-size:1rem;font-weight:700;color:#1a1a2e;
+                     box-shadow:0 2px 8px rgba(0,0,0,.05);transition:all .18s;width:100%"
+              onmouseover="this.style.borderColor='${col}';this.style.transform='translateX(4px)'"
+              onmouseout="if(!this.disabled){this.style.borderColor='#e5e7eb';this.style.transform=''}">
+              <span style="width:34px;height:34px;border-radius:50%;background:${col};
+                           color:#fff;font-size:.88rem;font-weight:800;display:flex;
+                           align-items:center;justify-content:center;flex-shrink:0">
+                ${'ABCD'[i]}
+              </span>
+              <span style="flex:1;font-size:1.05rem">${o}</span>
             </button>`).join('')}
         </div>
-        <div id="lang-feedback" style="display:none"></div>
+
+        <div id="lang-feedback" style="display:none;margin-top:14px"></div>
       </div>`;
   }
 
   function _answerQuiz(chosen, correctIdx) {
-    // Disable all buttons
     for (let i = 0; i < 4; i++) {
       const b = document.getElementById(`lang-ans-${i}`);
-      if (b) b.disabled = true;
+      if (b) { b.disabled = true; b.onmouseover = null; b.onmouseout = null; }
     }
     const correct = chosen === correctIdx;
     if (correct) { state.score++; window.SFX?.play('quiz_correct'); }
-    else { window.SFX?.play('quiz_wrong'); }
+    else          { window.SFX?.play('quiz_wrong'); }
 
-    const p = state.phrases[state.idx];
+    const p    = state.phrases[state.idx];
     const lang = LANGUAGE_DATA[state.lang];
+    const col  = LANG_COLORS[state.lang] || '#667eea';
 
-    document.getElementById(`lang-ans-${correctIdx}`)?.classList.add('lg-opt-correct');
-    if (!correct) document.getElementById(`lang-ans-${chosen}`)?.classList.add('lg-opt-wrong');
+    // Colour correct and wrong buttons inline
+    const correctBtn = document.getElementById(`lang-ans-${correctIdx}`);
+    if (correctBtn) {
+      correctBtn.style.borderColor = '#22c55e';
+      correctBtn.style.background  = '#f0fdf4';
+    }
+    if (!correct) {
+      const wrongBtn = document.getElementById(`lang-ans-${chosen}`);
+      if (wrongBtn) {
+        wrongBtn.style.borderColor = '#ef4444';
+        wrongBtn.style.background  = '#fff1f2';
+      }
+    }
 
     const fb = document.getElementById('lang-feedback');
     fb.style.display = '';
     fb.innerHTML = `
-      <div class="lg-ans-fb ${correct ? 'lg-ans-fb-correct' : 'lg-ans-fb-wrong'}">
-        <div class="lg-ans-fb-title">${correct ? '🎉 Correct!' : '❌ The answer was: ' + p.target}</div>
-        <div class="lg-ans-fb-phonetic">${lang.flag} <strong>${p.target}</strong> &nbsp;🔊 <em>${p.phonetic}</em></div>
+      <div style="padding:16px;border-radius:14px;
+                  background:${correct ? '#f0fdf4' : '#fff1f2'};
+                  border:2px solid ${correct ? '#bbf7d0' : '#fecdd3'}">
+        <div style="font-weight:800;font-size:.97rem;margin-bottom:8px;color:#1a1a2e">
+          ${correct ? '🎉 Correct!' : '❌ The answer was: <strong>' + p.target + '</strong>'}
+        </div>
+        <div style="font-size:.92rem;color:#374151">
+          ${lang.flag} <strong style="font-size:1.1rem;color:${col}">${p.target}</strong>
+          &nbsp; 🔊 <em>${p.phonetic}</em>
+        </div>
       </div>
       <div style="text-align:center;margin-top:14px">
-        <button class="btn btn-primary" onclick="LanguageGame._nextQuiz()">
+        <button onclick="LanguageGame._nextQuiz()"
+          style="background:linear-gradient(135deg,${col},${col}cc);color:#fff;
+                 border:none;border-radius:50px;padding:12px 28px;
+                 font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
+                 cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.2)">
           ${state.idx + 1 < state.phrases.length ? 'Next →' : '🏆 See Results'}
         </button>
       </div>`;
@@ -271,39 +412,85 @@ const LanguageGame = (() => {
     }
   }
 
-  /* ── Results ───────────────────────────────────────────────── */
+  /* ─────────────────────────────────────────────────────────────
+     SCREEN 5 — Results
+  ───────────────────────────────────────────────────────────── */
   async function endGame() {
-    const elapsed = Math.round((Date.now() - state.startTime) / 1000);
-    const mm = Math.floor(elapsed / 60), ss = String(elapsed % 60).padStart(2, '0');
-    const timeStr = `${mm}:${ss}`;
-    const pct = Math.round((state.score / state.phrases.length) * 100);
-    const lang = LANGUAGE_DATA[state.lang];
-    const cat = CATEGORIES.find(c => c.id === state.cat);
+    const elapsed  = Math.round((Date.now() - state.startTime) / 1000);
+    const mm       = Math.floor(elapsed / 60), ss = String(elapsed % 60).padStart(2, '0');
+    const timeStr  = `${mm}:${ss}`;
+    const pct      = Math.round((state.score / state.phrases.length) * 100);
+    const lang     = LANGUAGE_DATA[state.lang];
+    const cat      = CATEGORIES.find(c => c.id === state.cat);
+    const col      = LANG_COLORS[state.lang] || '#667eea';
 
     const grade = pct >= 90 ? '🏆 Language Star!' :
-                  pct >= 70 ? '⭐ Brilliant!' :
-                  pct >= 50 ? '👍 Good effort!' : '📚 Keep practising!';
+                  pct >= 70 ? '⭐ Brilliant!'       :
+                  pct >= 50 ? '👍 Good effort!'     : '📚 Keep practising!';
+    const msg   = pct >= 70 ? `You really know your ${lang.name}!` :
+                  pct >= 50 ? 'Good effort — keep using the flashcards!' :
+                              'Try the flashcards again then take the quiz!';
 
     window.SFX?.play(pct >= 70 ? 'win' : pct >= 50 ? 'draw' : 'lose');
 
     getContainer().innerHTML = `
-      <div class="quiz-end-wrap" style="max-width:540px;margin:0 auto;padding:24px 16px;text-align:center">
-        <div style="font-size:3.5rem;margin-bottom:8px">${lang.flag}</div>
-        <div class="quiz-end-title">${grade}</div>
-        <div class="quiz-score-big">${state.score}
-          <span style="font-size:1.4rem;color:#aaa"> / ${state.phrases.length}</span>
+      <div style="max-width:540px;margin:0 auto;padding:32px 20px 48px;text-align:center">
+
+        <!-- Coloured banner -->
+        <div style="background:${col};border-radius:20px 20px 0 0;padding:28px 20px;color:#fff">
+          <div style="font-size:3.5rem;margin-bottom:8px">${lang.flag}</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:4px">${grade}</div>
+          <div style="font-size:.88rem;opacity:.9">${lang.name} — ${cat.emoji} ${cat.name}</div>
         </div>
-        <div class="quiz-end-pct">${pct}% correct</div>
-        <div class="quiz-end-msg">${lang.name} — ${cat.name}</div>
-        <div class="quiz-end-stats">
-          <div class="qes"><span class="qes-val">${state.score}</span><span class="qes-lab">Correct</span></div>
-          <div class="qes"><span class="qes-val">${state.phrases.length - state.score}</span><span class="qes-lab">Missed</span></div>
-          <div class="qes"><span class="qes-val">${timeStr}</span><span class="qes-lab">Time</span></div>
+
+        <!-- Score card -->
+        <div style="background:#fff;border-radius:0 0 20px 20px;
+                    box-shadow:0 8px 24px rgba(0,0,0,.12);padding:24px;margin-bottom:20px">
+          <div style="font-family:'Fredoka One',cursive;font-size:3.5rem;color:${col}">
+            ${state.score}<span style="font-size:1.6rem;color:#aaa"> / ${state.phrases.length}</span>
+          </div>
+          <div style="font-size:1.2rem;font-weight:800;color:#6b7280;margin-bottom:6px">
+            ${pct}% correct
+          </div>
+          <div style="color:#6b7280;font-size:.9rem;margin-bottom:20px">${msg}</div>
+
+          <!-- Stats -->
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            ${[
+              ['✅', state.score,                    'Correct'],
+              ['❌', state.phrases.length - state.score, 'Missed'],
+              ['⏱️', timeStr,                         'Time']
+            ].map(([icon, val, lab]) => `
+              <div style="background:#f9fafb;border-radius:12px;padding:12px 16px;min-width:80px">
+                <div style="font-size:1.3rem">${icon}</div>
+                <div style="font-size:1.3rem;font-weight:800;color:#1a1a2e">${val}</div>
+                <div style="font-size:.72rem;color:#9ca3af;font-weight:600;text-transform:uppercase">
+                  ${lab}
+                </div>
+              </div>`).join('')}
+          </div>
         </div>
-        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px">
-          <button class="btn btn-primary btn-lg" onclick="LanguageGame._selectCat('${state.cat}')">🔄 Try Again</button>
-          <button class="btn btn-secondary" onclick="LanguageGame._selectLang('${state.lang}')">📂 Change Category</button>
-          <button class="btn btn-outline" onclick="LanguageGame.init()">🌍 Change Language</button>
+
+        <!-- Action buttons -->
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button onclick="LanguageGame._selectCat('${state.cat}')"
+            style="background:${col};color:#fff;border:none;border-radius:50px;
+                   padding:12px 22px;font-family:'Nunito',sans-serif;font-size:.95rem;
+                   font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.2)">
+            🔄 Try Again
+          </button>
+          <button onclick="LanguageGame._selectLang('${state.lang}')"
+            style="background:#4ecdc4;color:#fff;border:none;border-radius:50px;
+                   padding:12px 22px;font-family:'Nunito',sans-serif;font-size:.95rem;
+                   font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(78,205,196,.4)">
+            📂 New Category
+          </button>
+          <button onclick="LanguageGame.init()"
+            style="background:#f3f4f6;color:#374151;border:none;border-radius:50px;
+                   padding:12px 22px;font-family:'Nunito',sans-serif;font-size:.95rem;
+                   font-weight:800;cursor:pointer">
+            🌍 Change Language
+          </button>
         </div>
       </div>`;
 

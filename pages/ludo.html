@@ -26,48 +26,60 @@
   </div>
 </nav>
 
-<!-- Ludo layout -->
 <div class="ludo-page">
 
-  <!-- Controls bar -->
-  <div class="ludo-controls">
-    <div class="ludo-player-info">
-      <span>🔵 <strong>You (Blue)</strong></span>
-      <span style="color:#d97706">🟡 <strong>Computer (Yellow)</strong></span>
+  <!-- ── Setup screen (shown first) ── -->
+  <div id="ludo-setup"></div>
+
+  <!-- ── Game area (hidden until setup complete) ── -->
+  <div id="ludo-game-area" style="display:none">
+
+    <!-- Controls bar -->
+    <div class="ludo-controls">
+      <div class="ludo-player-info" id="ludo-player-info"></div>
+      <div class="ludo-dice-area">
+        <div class="ludo-dice" id="ludo-dice-val">🎲</div>
+        <button class="btn btn-primary btn-lg" id="ludo-roll-btn" onclick="LudoGame.rollDice()" disabled>
+          Roll Dice 🎲
+        </button>
+      </div>
+      <div class="ludo-finished" id="ludo-finished"></div>
     </div>
-    <div class="ludo-dice-area">
-      <div class="ludo-dice" id="ludo-dice-val">🎲</div>
-      <button class="btn btn-primary btn-lg" id="ludo-roll-btn" onclick="LudoGame.rollDice()">
-        Roll Dice 🎲
-      </button>
+
+    <!-- Status message -->
+    <div class="ludo-status" id="ludo-status">Get ready…</div>
+
+    <!-- Zone labels — top row (Green left, Yellow right) -->
+    <div class="ludo-corner-bar">
+      <div class="ludo-corner-tag ludo-tag-green"  id="ludo-label-green">🟢 Green</div>
+      <div class="ludo-corner-tag ludo-tag-yellow" id="ludo-label-yellow">🟡 Yellow</div>
     </div>
-    <div class="ludo-finished" id="ludo-finished">
-      🔵 Home: ⬜⬜⬜⬜ &nbsp; 🟡 Home: ⬜⬜⬜⬜
+
+    <!-- 15×15 board -->
+    <div class="ludo-board" id="ludo-board"></div>
+
+    <!-- Zone labels — bottom row (Blue left, Red right) -->
+    <div class="ludo-corner-bar">
+      <div class="ludo-corner-tag ludo-tag-blue" id="ludo-label-blue">🔵 Blue</div>
+      <div class="ludo-corner-tag ludo-tag-red"  id="ludo-label-red">🔴 Red</div>
     </div>
-  </div>
 
-  <!-- Status message -->
-  <div class="ludo-status" id="ludo-status">Loading…</div>
+    <!-- Legend -->
+    <div class="ludo-legend">
+      <span>★ Safe square — no captures</span>
+      <span>Roll 6 to enter the board!</span>
+    </div>
 
-  <!-- 15×15 board grid -->
-  <div class="ludo-board" id="ludo-board"></div>
+  </div><!-- end #ludo-game-area -->
 
-  <!-- Legend -->
-  <div class="ludo-legend">
-    <span>🔵 Your pieces</span>
-    <span>🟡 Computer pieces</span>
-    <span>⭐ Safe squares</span>
-    <span>Roll 6 to enter the board!</span>
-  </div>
+</div><!-- end .ludo-page -->
 
-</div>
-
-<!-- End overlay -->
+<!-- End-game overlay -->
 <div class="sl-end-overlay" id="ludo-end" style="display:none">
   <div class="sl-end-card">
-    <div class="sl-end-icon" id="ludo-end-icon">🏆</div>
+    <div class="sl-end-icon"  id="ludo-end-icon">🏆</div>
     <div class="sl-end-title" id="ludo-end-title">You Win!</div>
-    <div class="sl-end-msg" id="ludo-end-msg"></div>
+    <div class="sl-end-msg"   id="ludo-end-msg"></div>
     <div class="sl-end-stats" id="ludo-end-stats"></div>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">
       <button class="btn btn-primary btn-lg" onclick="LudoGame.restartGame()">🔄 Play Again</button>

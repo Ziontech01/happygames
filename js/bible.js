@@ -179,22 +179,42 @@ const BibleQuiz = (() => {
   /* ── Topic selection ───────────────────────────────────────── */
   function renderTopicScreen() {
     getContainer().innerHTML = `
-      <div class="bq-wrap">
-        <div style="text-align:center;padding:28px 20px 20px">
-          <div style="font-size:3.2rem;margin-bottom:10px">📖</div>
-          <div class="bq-title">Bible Quiz</div>
-          <div class="bq-subtitle">Choose a topic to explore!</div>
+      <div style="max-width:680px;margin:0 auto;padding:0 16px 48px">
+
+        <!-- Header -->
+        <div style="text-align:center;padding:36px 20px 28px">
+          <div style="font-size:4rem;margin-bottom:12px">📖</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:2.4rem;color:#1a1a2e;margin-bottom:8px">
+            Bible Quiz
+          </div>
+          <div style="color:#6b7280;font-size:1rem;font-weight:600">
+            Choose a topic to explore!
+          </div>
         </div>
-        <div class="bq-topics">
-          ${TOPICS.map(t => `
-            <button class="bq-topic-btn" style="--tc:${t.color}"
-              onclick="BibleQuiz._selectTopic('${t.id}')">
-              <span class="bq-topic-icon">${t.emoji}</span>
-              <div class="bq-topic-name">${t.name}</div>
-              <div class="bq-topic-count">
-                ${t.id==='mix' ? ALL_QUESTIONS.length : ALL_QUESTIONS.filter(q=>q.topic===t.id).length} questions
+
+        <!-- Topic grid -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+                    gap:16px;justify-items:stretch">
+          ${TOPICS.map(t => {
+            const count = t.id==='mix' ? ALL_QUESTIONS.length
+                                       : ALL_QUESTIONS.filter(q=>q.topic===t.id).length;
+            return `
+            <button onclick="BibleQuiz._selectTopic('${t.id}')"
+              style="background:${t.color};color:#fff;border:none;border-radius:18px;
+                     padding:24px 14px;text-align:center;cursor:pointer;
+                     box-shadow:0 6px 20px rgba(0,0,0,.2);
+                     transition:transform .2s,box-shadow .2s;
+                     font-family:'Nunito',sans-serif;width:100%"
+              onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 10px 28px rgba(0,0,0,.3)'"
+              onmouseout="this.style.transform='';this.style.boxShadow='0 6px 20px rgba(0,0,0,.2)'">
+              <div style="font-size:2.6rem;margin-bottom:10px">${t.emoji}</div>
+              <div style="font-size:1.05rem;font-weight:800;margin-bottom:6px">${t.name}</div>
+              <div style="font-size:.82rem;opacity:.85;background:rgba(0,0,0,.15);
+                          border-radius:20px;padding:3px 10px;display:inline-block">
+                ${count} question${count!==1?'s':''}
               </div>
-            </button>`).join('')}
+            </button>`;
+          }).join('')}
         </div>
       </div>`;
     hideLoading();
@@ -219,37 +239,59 @@ const BibleQuiz = (() => {
     state.answered = false;
     const q = state.questions[state.idx];
     const topicObj = TOPICS.find(t => t.id === state.topic) || TOPICS[5];
+    const pct = (state.idx / state.questions.length) * 100;
     getContainer().innerHTML = `
-      <div class="bq-q-wrap">
+      <div style="max-width:660px;margin:0 auto;padding-bottom:40px">
+
         <!-- Coloured topic header -->
-        <div class="bq-q-header" style="background:${topicObj.color}">
-          <span class="bq-q-topic-icon">${topicObj.emoji}</span>
-          <div>
-            <div class="bq-q-topic-name">${topicObj.name}</div>
-            <div class="bq-q-meta">Question ${state.idx + 1} / ${state.questions.length} &nbsp;·&nbsp; ⭐ ${state.score} pts</div>
-          </div>
-          <div class="bq-q-progress-wrap">
-            <div class="bq-q-progress-bar">
-              <div class="bq-q-progress-fill" style="width:${(state.idx/state.questions.length)*100}%"></div>
+        <div style="background:${topicObj.color};color:#fff;display:flex;align-items:center;
+                    gap:14px;padding:16px 20px;flex-wrap:wrap">
+          <span style="font-size:2rem;flex-shrink:0">${topicObj.emoji}</span>
+          <div style="flex:1;min-width:140px">
+            <div style="font-family:'Fredoka One',cursive;font-size:1.2rem">${topicObj.name}</div>
+            <div style="font-size:.8rem;opacity:.9">
+              Question ${state.idx + 1} / ${state.questions.length} &nbsp;·&nbsp; ⭐ ${state.score} pts
             </div>
+          </div>
+          <!-- Progress bar -->
+          <div style="width:100%;background:rgba(255,255,255,.3);border-radius:99px;height:7px;margin-top:4px">
+            <div style="background:#fff;border-radius:99px;height:7px;width:${pct}%;transition:width .4s"></div>
           </div>
         </div>
 
         <!-- Question card -->
-        <div class="bq-q-card">
-          <div class="bq-verse-badge">📜 ${q.verse}</div>
-          <div class="bq-q-text">${q.q}</div>
+        <div style="background:#fff;border-radius:0 0 18px 18px;box-shadow:0 6px 24px rgba(0,0,0,.1);
+                    padding:24px 20px 20px;margin-bottom:16px">
+          <div style="display:inline-block;background:#f3f4f6;border-radius:8px;padding:3px 10px;
+                      font-size:.78rem;color:#6b7280;font-style:italic;margin-bottom:14px">
+            📜 ${q.verse}
+          </div>
+          <div style="font-size:1.2rem;font-weight:800;color:#1a1a2e;line-height:1.5">
+            ${q.q}
+          </div>
         </div>
 
-        <!-- Answers -->
-        <div class="bq-answers">
+        <!-- Answer buttons -->
+        <div style="display:flex;flex-direction:column;gap:10px;padding:0 16px">
           ${q.answers.map((a,i) => `
-            <button class="bq-ans-btn" id="ans-${i}" onclick="BibleQuiz._answer(${i})">
-              <span class="bq-ans-letter" style="background:${topicObj.color}">${['A','B','C','D'][i]}</span>
-              <span class="bq-ans-text">${a}</span>
+            <button id="ans-${i}" onclick="BibleQuiz._answer(${i})"
+              style="display:flex;align-items:center;gap:14px;padding:14px 16px;
+                     border-radius:14px;border:2px solid #e5e7eb;background:#fff;
+                     cursor:pointer;text-align:left;font-family:'Nunito',sans-serif;
+                     font-size:.97rem;font-weight:700;color:#1a1a2e;
+                     box-shadow:0 2px 8px rgba(0,0,0,.05);transition:all .18s;width:100%"
+              onmouseover="this.style.borderColor='${topicObj.color}';this.style.transform='translateX(4px)'"
+              onmouseout="if(!this.disabled){this.style.borderColor='#e5e7eb';this.style.transform=''}">
+              <span style="width:32px;height:32px;border-radius:50%;background:${topicObj.color};
+                           color:#fff;font-size:.85rem;font-weight:800;display:flex;
+                           align-items:center;justify-content:center;flex-shrink:0">
+                ${'ABCD'[i]}
+              </span>
+              <span style="flex:1">${a}</span>
             </button>`).join('')}
         </div>
-        <div class="bq-feedback-box" id="feedback-box" style="display:none"></div>
+
+        <div id="feedback-box" style="display:none;padding:0 16px;margin-top:14px"></div>
       </div>`;
   }
 
@@ -262,28 +304,43 @@ const BibleQuiz = (() => {
     if (correct) { state.score++; window.SFX?.play('quiz_correct'); }
     else { window.SFX?.play('quiz_wrong'); }
 
-    // Colour buttons
+    // Colour buttons inline (no CSS class dependency)
     q.answers.forEach((_, i) => {
       const btn = document.getElementById(`ans-${i}`);
       if (!btn) return;
       btn.disabled = true;
-      if (i === q.correct) btn.classList.add('bq-correct');
-      else if (i === chosen && !correct) btn.classList.add('bq-wrong');
+      btn.onmouseover = null; btn.onmouseout = null;
+      if (i === q.correct) {
+        btn.style.borderColor = '#22c55e';
+        btn.style.background = '#f0fdf4';
+      } else if (i === chosen && !correct) {
+        btn.style.borderColor = '#ef4444';
+        btn.style.background = '#fff1f2';
+      }
     });
 
     // Show explanation
+    const topicObj = TOPICS.find(t => t.id === state.topic) || TOPICS[5];
     const fb = document.getElementById('feedback-box');
     fb.style.display = 'block';
     fb.innerHTML = `
-      <div class="bq-feedback ${correct ? 'bq-fb-correct' : 'bq-fb-wrong'}">
-        <div class="bq-fb-icon">${correct ? '🙌' : '📖'}</div>
-        <div class="bq-fb-body">
-          <strong>${correct ? '✅ Brilliant!' : '❌ The answer was: ' + q.answers[q.correct]}</strong>
-          <p class="bq-fb-why">${q.why}</p>
+      <div style="display:flex;gap:14px;padding:16px;border-radius:14px;
+                  background:${correct?'#f0fdf4':'#fff1f2'};
+                  border:2px solid ${correct?'#bbf7d0':'#fecdd3'}">
+        <div style="font-size:2rem;flex-shrink:0">${correct ? '🙌' : '📖'}</div>
+        <div>
+          <div style="font-weight:800;font-size:.95rem;margin-bottom:6px;color:#1a1a2e">
+            ${correct ? '✅ Brilliant!' : '❌ The answer was: <em>' + q.answers[q.correct] + '</em>'}
+          </div>
+          <div style="font-size:.88rem;color:#374151;line-height:1.6">${q.why}</div>
         </div>
       </div>
       <div style="text-align:center;margin-top:16px">
-        <button class="btn btn-primary" onclick="BibleQuiz._next()">
+        <button onclick="BibleQuiz._next()"
+          style="background:linear-gradient(135deg,${topicObj.color},${topicObj.color}dd);
+                 color:#fff;border:none;border-radius:50px;padding:12px 28px;
+                 font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;
+                 box-shadow:0 4px 14px rgba(0,0,0,.2)">
           ${state.idx + 1 < state.questions.length ? 'Next Question →' : 'See Results 🏆'}
         </button>
       </div>`;
@@ -316,22 +373,56 @@ const BibleQuiz = (() => {
 
     window.SFX?.play(pct >= 70 ? 'win' : pct >= 50 ? 'draw' : 'lose');
 
+    const btnStyle = `background:${topicObj.color};color:#fff;border:none;border-radius:50px;
+      padding:12px 24px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
+      cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.2)`;
+
     getContainer().innerHTML = `
-      <div class="quiz-end-wrap" style="max-width:540px;margin:0 auto;padding:24px 16px;text-align:center">
-        <div style="font-size:3.5rem;margin-bottom:8px">${topicObj.emoji}</div>
-        <div class="quiz-end-title">${grade}</div>
-        <div class="quiz-score-big">${state.score}<span style="font-size:1.4rem;color:#aaa"> / ${state.questions.length}</span></div>
-        <div class="quiz-end-pct">${pct}% correct</div>
-        <div class="quiz-end-msg">${msg}</div>
-        <div class="quiz-end-stats">
-          <div class="qes"><span class="qes-val">${state.score}</span><span class="qes-lab">Correct</span></div>
-          <div class="qes"><span class="qes-val">${state.questions.length - state.score}</span><span class="qes-lab">Missed</span></div>
-          <div class="qes"><span class="qes-val">${timeStr}</span><span class="qes-lab">Time</span></div>
+      <div style="max-width:540px;margin:0 auto;padding:32px 20px 48px;text-align:center">
+
+        <!-- Topic colour banner -->
+        <div style="background:${topicObj.color};border-radius:18px 18px 0 0;padding:24px;
+                    color:#fff;margin-bottom:0">
+          <div style="font-size:3.5rem;margin-bottom:8px">${topicObj.emoji}</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:2rem">${grade}</div>
         </div>
-        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px">
-          <button class="btn btn-primary btn-lg" onclick="BibleQuiz._selectTopic('${state.topic}')">🔄 Play Again</button>
-          <button class="btn btn-secondary" onclick="BibleQuiz.init()">📖 Choose Topic</button>
-          <a href="history.html" class="btn btn-outline">📊 My Results</a>
+
+        <!-- Score card -->
+        <div style="background:#fff;border-radius:0 0 18px 18px;box-shadow:0 8px 24px rgba(0,0,0,.12);
+                    padding:24px;margin-bottom:20px">
+          <div style="font-family:'Fredoka One',cursive;font-size:3.5rem;color:${topicObj.color}">
+            ${state.score}<span style="font-size:1.6rem;color:#aaa"> / ${state.questions.length}</span>
+          </div>
+          <div style="font-size:1.2rem;font-weight:800;color:#6b7280;margin-bottom:8px">${pct}% correct</div>
+          <div style="color:#6b7280;font-size:.92rem;margin-bottom:20px">${msg}</div>
+
+          <!-- Stats row -->
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            ${[
+              ['✅', state.score, 'Correct'],
+              ['❌', state.questions.length - state.score, 'Missed'],
+              ['⏱️', timeStr, 'Time']
+            ].map(([icon,val,lab]) => `
+              <div style="background:#f9fafb;border-radius:12px;padding:12px 16px;min-width:80px">
+                <div style="font-size:1.3rem">${icon}</div>
+                <div style="font-size:1.3rem;font-weight:800;color:#1a1a2e">${val}</div>
+                <div style="font-size:.75rem;color:#9ca3af;font-weight:600">${lab}</div>
+              </div>`).join('')}
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button style="${btnStyle}" onclick="BibleQuiz._selectTopic('${state.topic}')">🔄 Play Again</button>
+          <button style="background:#4ecdc4;color:#fff;border:none;border-radius:50px;
+            padding:12px 24px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
+            cursor:pointer;box-shadow:0 4px 14px rgba(78,205,196,.4)"
+            onclick="BibleQuiz.init()">📖 Choose Topic</button>
+          <a href="history.html" style="background:#f3f4f6;color:#374151;border:none;
+            border-radius:50px;padding:12px 24px;font-family:'Nunito',sans-serif;
+            font-size:1rem;font-weight:800;text-decoration:none;display:inline-block">
+            📊 My Results
+          </a>
         </div>
       </div>`;
 

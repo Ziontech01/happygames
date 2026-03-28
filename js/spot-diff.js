@@ -143,20 +143,20 @@ const SpotDiff = (() => {
   /* ── Scene selection ───────────────────────────────────────── */
   function renderSceneSelect() {
     getContainer().innerHTML = `
-      <div class="slh-wrap">
+      <div style="max-width:700px;margin:0 auto;padding:24px 16px">
         <div class="page-header" style="padding-top:0">
           <div class="page-title">🔍 Spot the Difference</div>
           <div class="page-subtitle">Find all 5 differences in the right picture!</div>
         </div>
-        <div class="slh-cats" style="max-width:580px;margin:0 auto">
+        <div class="sd-scene-select">
           ${SCENES.map((s, i) => `
-            <button class="slh-cat-btn" onclick="SpotDiff._startScene(${i})">
-              <span class="slh-cat-icon">${s.name.split(' ').pop()}</span>
-              <div class="slh-cat-name">${s.name.replace(/[🏖️🌻🐄🚀🍳]/u, '').trim()}</div>
-              <div style="font-size:.8rem;color:#888;margin-top:2px">5 differences to find</div>
+            <button class="sd-scene-btn" onclick="SpotDiff._startScene(${i})">
+              <span class="sd-scene-icon">${s.name.split(' ').pop()}</span>
+              <div class="sd-scene-name">${s.name.replace(/[\u{1F3D6}\u{1F33B}\u{1F404}\u{1F680}\u{1F373}]/u, '').trim()}</div>
+              <div class="sd-scene-sub">5 differences to find</div>
             </button>`).join('')}
         </div>
-        <div style="text-align:center;margin-top:20px">
+        <div style="text-align:center;margin-top:8px">
           <button class="btn btn-primary btn-lg" onclick="SpotDiff._startScene(${Math.floor(Math.random()*SCENES.length)})">
             🎲 Random Scene
           </button>

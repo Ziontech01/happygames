@@ -225,19 +225,28 @@
     // Feedback
     const fb = document.getElementById('tt-feedback');
     if (fb) {
-      fb.innerHTML = (correct
-        ? `🎉 Correct! <strong>${q.a} × ${q.b} = ${q.correct}</strong>`
-        : `❌ Not quite! <strong>${q.a} × ${q.b} = ${q.correct}</strong>`)
-        + `<div class="tt-explain">💡 Think: <em>${q.a} groups of ${q.b} objects = ${q.correct} total</em></div>`;
       fb.className = 'feedback-bar show ' + (correct ? 'correct' : 'wrong');
+      fb.style.display = 'flex';
+      fb.style.alignItems = 'center';
+      fb.style.flexWrap = 'wrap';
+      fb.style.gap = '8px';
+      fb.innerHTML =
+        `<span style="flex:1;min-width:0">` +
+        (correct
+          ? `🎉 Correct! <strong>${q.a} × ${q.b} = ${q.correct}</strong>`
+          : `❌ Not quite! <strong>${q.a} × ${q.b} = ${q.correct}</strong>`) +
+        `<div class="tt-explain">💡 Think: <em>${q.a} groups of ${q.b} objects = ${q.correct} total</em></div></span>` +
+        `<button onclick="TimesTablesGame._next()" ` +
+        `style="flex-shrink:0;padding:8px 22px;border:none;border-radius:22px;` +
+        `background:rgba(255,255,255,.3);color:inherit;font-weight:800;` +
+        `font-size:.95rem;cursor:pointer;letter-spacing:.02em;white-space:nowrap">` +
+        `Next ➜</button>`;
     }
 
     window.SFX?.play(correct ? 'quiz_correct' : 'quiz_wrong');
 
     // Show visual dot groups
     showDotVisual(q.a, q.b);
-
-    setTimeout(() => nextQuestion(), correct ? 2000 : 3000);
   }
 
   function timeUp() {
@@ -245,16 +254,25 @@
     const q = questions[current];
     const fb = document.getElementById('tt-feedback');
     if (fb) {
-      fb.innerHTML = `⏰ Time's up! <strong>${q.a} × ${q.b} = ${q.correct}</strong>`
-        + `<div class="tt-explain">💡 Think: <em>${q.a} groups of ${q.b} objects = ${q.correct} total</em></div>`;
       fb.className = 'feedback-bar show wrong';
+      fb.style.display = 'flex';
+      fb.style.alignItems = 'center';
+      fb.style.flexWrap = 'wrap';
+      fb.style.gap = '8px';
+      fb.innerHTML =
+        `<span style="flex:1;min-width:0">⏰ Time's up! <strong>${q.a} × ${q.b} = ${q.correct}</strong>` +
+        `<div class="tt-explain">💡 Think: <em>${q.a} groups of ${q.b} objects = ${q.correct} total</em></div></span>` +
+        `<button onclick="TimesTablesGame._next()" ` +
+        `style="flex-shrink:0;padding:8px 22px;border:none;border-radius:22px;` +
+        `background:rgba(255,255,255,.3);color:inherit;font-weight:800;` +
+        `font-size:.95rem;cursor:pointer;letter-spacing:.02em;white-space:nowrap">` +
+        `Next ➜</button>`;
     }
     document.querySelectorAll('[id^="tt-ans-"]').forEach(btn => btn.disabled = true);
     const correctBtn = document.getElementById(`tt-ans-${q.correctIndex}`);
     if (correctBtn) correctBtn.classList.add('correct');
     window.SFX?.play('quiz_timeout');
     showDotVisual(q.a, q.b);
-    setTimeout(nextQuestion, 3000);
   }
 
   // ── Visual Dot Groups ─────────────────────────────────────────
@@ -351,5 +369,5 @@
     renderTableSelector();
   }
 
-  window.TimesTablesGame = { init, selectTable, startQuiz, answer, backToSelector };
+  window.TimesTablesGame = { init, selectTable, startQuiz, answer, backToSelector, _next: nextQuestion };
 })();
