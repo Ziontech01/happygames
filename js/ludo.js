@@ -5,10 +5,11 @@ const LudoGame = (() => {
 
   /* ── Board track (52 cells) ──────────────────────────────────────
      [col, row] zero-indexed. Clockwise from Blue entry at bottom-left.
-     Blue  entry = abs index  0  (local pos 0)
-     Green entry = abs index 13  (local pos 0)
-     Yellow entry= abs index 26  (local pos 0)
-     Red   entry = abs index 39  (local pos 0)
+     COLOR_ENTRY = movement loop offset (piece position 0 in MAIN_TRACK)
+     Blue  loop offset  0  → [6,13]
+     Green loop offset 13  → [0,7]   (ensures clean transition to GREEN_HOME[0]=[1,7])
+     Yellow loop offset 26 → [8,0]   (ensures clean transition to YELLOW_HOME[0]=[7,1])
+     Red   loop offset 39  → [14,8]  (ensures clean transition to RED_HOME[0]=[13,7])
   ─────────────────────────────────────────────────────────────────*/
   const MAIN_TRACK = [
     [6,13],[6,12],[6,11],[6,10],[6,9],[6,8],   //  0-5   Blue channel UP
@@ -32,9 +33,10 @@ const LudoGame = (() => {
   const RED_HOME    = [[13,7],[12,7],[11,7],[10,7],[9,7]];   // row 7 going LEFT
 
   const HOME_COLS   = { blue: BLUE_HOME, yellow: YELLOW_HOME, green: GREEN_HOME, red: RED_HOME };
-  // Entry points: where pieces appear when rolling a 6 from home base.
-  // FIXED: Green/Yellow/Red now enter at the coloured exit square (doorstep), matching Blue's pattern.
-  const COLOR_ENTRY = { blue: 0, green: 12, yellow: 25, red: 38 };
+  // Movement loop offsets: COLOR_ENTRY defines where position 0 starts on MAIN_TRACK for each color.
+  // This offset ensures the 52-cell loop ends cleanly at the home lane entrance.
+  // Note: COLOR_ENTRY ≠ visual doorstep square. Visual markers are in ENTRY_CLASS (see below).
+  const COLOR_ENTRY = { blue: 0, green: 13, yellow: 26, red: 39 };
 
   // Centred in the middle 2×2 of each zone's 4×4 inner white area
   const PIECE_STARTS = {
@@ -52,14 +54,14 @@ const LudoGame = (() => {
   // Also protect the actual entry landing cells for green/yellow/red (one step before doorstep)
   const SAFE = new Set([0, 12, 13, 25, 26, 38, 39]);
 
-  // Entry-point marker — the coloured square shown at the "doorstep" adjacent to each home column.
-  //   All 4 colours follow the SAME rule as Blue:
-  //   the coloured square sits in the same row/col as HOME[0], directly outside the home lane.
+  // Visual entry markers — the coloured squares shown at the doorstep adjacent to each home column.
+  // SEPARATE from COLOR_ENTRY. These are CSS classes for rendering, not movement logic.
+  // All 4 colours follow the SAME rule: coloured square sits in same row/col as HOME[0].
   //
-  //   Blue   abs  0 → [6,13]   same row 13  as BLUE_HOME[0]=[7,13]   ✓
-  //   Green  abs 12 → [0,7]    same row  7  as GREEN_HOME[0]=[1,7]   ✓
-  //   Yellow abs 25 → [7,0]    same col  7  as YELLOW_HOME[0]=[7,1]  ✓
-  //   Red    abs 38 → [14,7]   same row  7  as RED_HOME[0]=[13,7]    ✓
+  //   Blue   index  0 → [6,13]   same row 13  as BLUE_HOME[0]=[7,13]   ✓ (also COLOR_ENTRY)
+  //   Green  index 12 → [0,7]    same row  7  as GREEN_HOME[0]=[1,7]   ✓ (COLOR_ENTRY is 13)
+  //   Yellow index 25 → [7,0]    same col  7  as YELLOW_HOME[0]=[7,1]  ✓ (COLOR_ENTRY is 26)
+  //   Red    index 38 → [14,7]   same row  7  as RED_HOME[0]=[13,7]    ✓ (COLOR_ENTRY is 39)
   const ENTRY_CLASS = { 0:'lc-entry-blue', 12:'lc-entry-green', 25:'lc-entry-yellow', 38:'lc-entry-red' };
 
   const COLOR_CONFIG = {
@@ -77,6 +79,7 @@ const LudoGame = (() => {
   ════════════════════════════════════════════════════════════ */
   function init() {
     hideLoading();
+    console.log('🎲 LUDO RUNTIME VERIFICATION:', COLOR_ENTRY);
     // Reset dice display
     const diceEl = document.getElementById('ludo-dice-val');
     if (diceEl) diceEl.textContent = '🎲';

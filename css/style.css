@@ -304,7 +304,7 @@ button{cursor:pointer;font-family:'Nunito',sans-serif}
 .xo-controls{display:flex;gap:10px}
 
 /* ── Chess ─────────────────────────────────────────── */
-.chess-layout{max-width:1050px;margin:0 auto;padding:28px 20px;
+.chess-layout{max-width:1600px;margin:0 auto;padding:28px 20px;
   display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:start}
 .chess-info{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
 .chess-board-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
@@ -319,8 +319,8 @@ button{cursor:pointer;font-family:'Nunito',sans-serif}
   justify-content:center;font-weight:800;font-size:.78rem;color:var(--gray)}
 .file-label{width:48px;height:24px}
 .board-row{display:flex}
-.chess-sq{width:60px;height:60px;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:background .15s;position:relative;font-size:2.2rem;line-height:1}
+.chess-sq{width:100px;height:100px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .15s;position:relative;font-size:3.5rem;line-height:1}
 .chess-sq.light{background:#F0D9B5}
 .chess-sq.dark{background:#B58863}
 .chess-sq.selected{background:#F6F669!important}
@@ -471,6 +471,41 @@ tr:hover td{background:#fafbff}
   to  {transform:translateY(0);   opacity:1}
 }
 
+/* ── Memory Game Cards ─────────────────────────────── */
+.mem-card{
+  width:100%;aspect-ratio:1;border:3px solid #667eea;border-radius:12px;
+  background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;
+  font-size:2.5rem;font-weight:bold;cursor:pointer;
+  transition:all .2s;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(102,126,234,.3);user-select:none
+}
+.mem-card:hover:not(:disabled){
+  transform:scale(1.05);box-shadow:0 6px 16px rgba(102,126,234,.5)
+}
+.mem-card:disabled{cursor:not-allowed;opacity:.7}
+.mem-card.mem-card-open{
+  background:linear-gradient(135deg,#ffd700,#ffed4e);color:#333;
+  border-color:#ffb700;box-shadow:0 4px 12px rgba(255,183,0,.3)
+}
+
+/* ── Matching Game Items ────────────────────────────── */
+.match-item{
+  width:100%;aspect-ratio:1;border:3px solid #f59e0b;border-radius:12px;
+  background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;
+  font-size:2.5rem;font-weight:bold;cursor:pointer;
+  transition:all .2s;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(245,158,11,.3);user-select:none
+}
+.match-item:hover:not(:disabled){
+  transform:scale(1.05);box-shadow:0 6px 16px rgba(245,158,11,.5)
+}
+.match-item:disabled{cursor:not-allowed;opacity:.5}
+.match-item.match-matched{
+  background:linear-gradient(135deg,#10b981,#059669);
+  border-color:#10b981;box-shadow:0 4px 12px rgba(16,185,129,.3);
+  opacity:.6;cursor:default
+}
+
 /* ── Times Tables ──────────────────────────────────── */
 .tt-wrap{flex:1;padding:24px;max-width:680px;margin:0 auto;width:100%}
 .tt-selector{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:4px}
@@ -596,7 +631,7 @@ tr:hover td{background:#fafbff}
   .xo-sidebar,.chess-info{display:none}
   .xo-cell{width:90px;height:90px}
   .cell-sym{font-size:2.8rem}
-  .chess-sq{width:46px;height:46px;font-size:1.7rem}
+  .chess-sq{width:70px;height:70px;font-size:2.6rem}
 }
 @media(max-width:700px){
   .hero-title{font-size:2.4rem}
@@ -604,7 +639,7 @@ tr:hover td{background:#fafbff}
   .summary-grid{grid-template-columns:repeat(2,1fr)}
   .answers-grid{grid-template-columns:1fr}
   .xo-cell{width:90px;height:90px}
-  .chess-sq{width:42px;height:42px;font-size:1.5rem}
+  .chess-sq{width:54px;height:54px;font-size:2rem}
 }
 @media(max-width:480px){
   .games-grid{grid-template-columns:1fr}
@@ -682,16 +717,48 @@ tr:hover td{background:#fafbff}
   border:1px solid rgba(0,0,0,.08);padding:1px;overflow:hidden;user-select:none}
 .sl-light{background:#f8fafc}
 .sl-dark{background:#e2e8f0}
-.sl-has-snake{background:#fff1f0;border-color:#fca5a5}
-.sl-has-ladder{background:#f0fdf4;border-color:#86efac}
-.sl-num{font-size:.55rem;font-weight:700;color:#6b7280;position:absolute;
-  top:1px;left:2px;line-height:1}
-.sl-icon{font-size:.9rem;margin-top:4px}
+.sl-has-snake{background:#fee2e2;border-color:#dc2626;border-width:2px}
+.sl-has-ladder{background:#dcfce7;border-color:#16a34a;border-width:2px}
+.sl-num{font-size:.7rem;font-weight:800;color:#1f2937;position:absolute;
+  top:2px;left:2px;line-height:1;z-index:10}
+.sl-icon{font-size:1.4rem;margin-top:2px}
 .sl-pieces{display:flex;flex-wrap:wrap;justify-content:center;gap:1px;margin-top:1px}
 .sl-piece{font-size:.85rem;line-height:1}
 .sl-highlight{box-shadow:inset 0 0 0 3px #6366f1 !important}
 .sl-legend{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;
   margin-top:12px;font-size:.82rem;color:var(--gray)}
+
+/* Snakes & Ladders animations */
+@keyframes snakeWiggle {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+@keyframes ladderShake {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(1.1); }
+}
+
+@keyframes snakeSlide {
+  0% { transform: translateY(0); opacity: 1; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(120%); opacity: 0; }
+}
+
+@keyframes ladderClimb {
+  0% { transform: translateY(0); opacity: 1; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(-120%); opacity: 0; }
+}
+
+/* Animation trigger classes */
+.sl-has-snake .sl-icon { animation: snakeWiggle 1s ease-in-out infinite; }
+.sl-has-ladder .sl-icon { animation: ladderShake 1s ease-in-out infinite; }
+.sl-piece.sliding-snake { animation: snakeSlide 2s ease-in-out forwards; }
+.sl-piece.climbing-ladder { animation: ladderClimb 1.5s ease-in-out forwards; }
+
+.sl-has-snake .sl-num { color: #991b1b; font-weight: bold; }
+.sl-has-ladder .sl-num { color: #15803d; font-weight: bold; }
 
 /* End overlay (shared: S&L, SpotDiff, Ludo) */
 .sl-end-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);

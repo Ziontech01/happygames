@@ -172,14 +172,36 @@ const SnakesLadders = (() => {
       finalPos = SNAKES[newPos];
       extra = `🐍 Snake! Slid down to ${finalPos}.`;
       window.SFX?.play('lose');
-      await pause(400);
+
+      // Animate piece sliding down
+      const pieceSelector = isPlayer ? '.sl-piece-you' : '.sl-piece-comp';
+      const pieceEl = document.querySelector(`#pieces-${newPos} ${pieceSelector}`);
+      if (pieceEl) {
+        pieceEl.classList.add('sliding-snake');
+        await pause(2000); // Wait for animation to complete
+        pieceEl.classList.remove('sliding-snake');
+      } else {
+        await pause(400);
+      }
+
       if (isPlayer) playerPos = finalPos; else compPos = finalPos;
       updatePieces();
     } else if (LADDERS[newPos]) {
       finalPos = LADDERS[newPos];
       extra = `🪜 Ladder! Climbed up to ${finalPos}!`;
       window.SFX?.play('win');
-      await pause(400);
+
+      // Animate piece climbing up
+      const pieceSelector = isPlayer ? '.sl-piece-you' : '.sl-piece-comp';
+      const pieceEl = document.querySelector(`#pieces-${newPos} ${pieceSelector}`);
+      if (pieceEl) {
+        pieceEl.classList.add('climbing-ladder');
+        await pause(1500); // Wait for animation to complete
+        pieceEl.classList.remove('climbing-ladder');
+      } else {
+        await pause(400);
+      }
+
       if (isPlayer) playerPos = finalPos; else compPos = finalPos;
       updatePieces();
     }
