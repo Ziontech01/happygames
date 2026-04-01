@@ -99,12 +99,6 @@ const SpotDiff = (() => {
       '🫖':'☕','🍰':'🎂','🥝':'🍉','🍎':'🍐','🍓':'🍒'    // kitchen
     };
     scene.modified = [...scene.original];
-    let applied = 0;
-    for (let i = 0; i < 25 && applied < 5; i++) {
-      if (REPLACEMENTS[scene.original[i]] && !scene.diffs.includes(i)) {
-        // skip — only apply at the declared diff indices
-      }
-    }
     // Apply diffs reliably: at each diff index, replace original[i] with something different
     scene.diffs = [];
     let count = 0;
