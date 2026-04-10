@@ -83,14 +83,16 @@ async function handleLogin(e) {
   clearErrors(); clearAlert('auth-alert');
   const username = document.getElementById('login-username').value.trim().toLowerCase();
   const password = document.getElementById('login-password').value;
-  if (!username) { fieldErr('login-username', 'Please enter your username.'); return; }
-  if (!password) { fieldErr('login-password', 'Please enter your password.'); return; }
+  if (!username) { window.SFX?.play('error'); fieldErr('login-username', 'Please enter your username.'); return; }
+  if (!password) { window.SFX?.play('error'); fieldErr('login-password', 'Please enter your password.'); return; }
 
   setBtn('login-btn', true, '🚀 Let\'s Play!');
   try {
     await auth.signInWithEmailAndPassword(`${username}@happygames.app`, password);
+    window.SFX?.play('win');
     // onAuthStateChanged above handles the redirect
   } catch (err) {
+    window.SFX?.play('error');
     setBtn('login-btn', false, '🚀 Let\'s Play!');
     const notFound = ['auth/user-not-found', 'auth/invalid-credential', 'auth/invalid-email'];
     if (notFound.includes(err.code))
@@ -125,6 +127,7 @@ async function handleSignup(e) {
     // Check username availability first
     const taken = await db.collection('usernames').doc(username).get();
     if (taken.exists) {
+      window.SFX?.play('error');
       fieldErr('signup-username', 'That username is already taken!');
       setBtn('signup-btn', false, '🎉 Create Account!');
       return;
@@ -138,8 +141,10 @@ async function handleSignup(e) {
     });
     batch.set(db.collection('usernames').doc(username), { uid: cred.user.uid });
     await batch.commit();
+    window.SFX?.play('levelup'); // Welcome fanfare on successful signup!
     // onAuthStateChanged above handles the redirect
   } catch (err) {
+    window.SFX?.play('error');
     setBtn('signup-btn', false, '🎉 Create Account!');
     if (err.code === 'auth/email-already-in-use')
       fieldErr('signup-username', 'That username is already taken!');

@@ -14,6 +14,7 @@ const QuizEngine = (() => {
       questions:   [],
       current:     0,
       score:       0,
+      streak:      0,   // consecutive correct answers
       startTime:   null,
       qStartTime:  null,
       timers:      [],
@@ -62,6 +63,7 @@ const QuizEngine = (() => {
   function _selectLevel(level) {
     state.level = level;
     saveUserLevel(level);
+    window.SFX?.play('click');
     // Use data-level attribute to identify the button — no global event dependency
     document.querySelectorAll('.level-btn').forEach(b => {
       b.classList.toggle('active', b.getAttribute('data-level') === level);
@@ -73,8 +75,10 @@ const QuizEngine = (() => {
     state.questions  = shuffle(state.config.getQuestions(state.level)).slice(0, QUESTION_COUNT);
     state.current    = 0;
     state.score      = 0;
+    state.streak     = 0;
     state.startTime  = Date.now();
     state.answered   = false;
+    window.SFX?.play('whoosh');
     renderQuiz();
     showQuestion();
   }
@@ -169,6 +173,10 @@ const QuizEngine = (() => {
         fill.className = 'quiz-timer-fill' + (remaining <= 5 ? ' danger' : remaining <= 10 ? ' warning' : '');
       }
       if (txt) txt.textContent = remaining + 's';
+      // Urgent tick sound in last 5 seconds
+      if (remaining <= 5 && remaining > 0 && !state.answered) {
+        window.SFX?.play('countdown_tick');
+      }
       if (remaining <= 0) { clearInterval(interval); if (!state.answered) _timeUp(); }
     }, 1000);
     state.timers.push(interval);
@@ -192,7 +200,12 @@ const QuizEngine = (() => {
     clearTimers();
     const q       = state.questions[state.current];
     const correct = idx === q.correct;
-    if (correct) state.score++;
+    if (correct) {
+      state.score++;
+      state.streak = (state.streak || 0) + 1;
+    } else {
+      state.streak = 0;
+    }
     document.getElementById('q-score').textContent = state.score;
 
     const btn = document.getElementById('ans-' + idx);
@@ -202,7 +215,12 @@ const QuizEngine = (() => {
       if (correctBtn) correctBtn.classList.add('correct');
     }
     disableAnswers();
-    window.SFX?.play(correct ? 'quiz_correct' : 'quiz_wrong');
+    // Play streak sound on 3rd, 5th, 7th… consecutive correct answer
+    if (correct && state.streak >= 3 && state.streak % 2 === 1) {
+      window.SFX?.play('streak');
+    } else {
+      window.SFX?.play(correct ? 'quiz_correct' : 'quiz_wrong');
+    }
     const correctAns = q.answers[q.correct];
     const explainPart = q.explanation ? ` &nbsp;💡 ${q.explanation}` : '';
     const _correctMsg = q.explanation ? `🎉 Correct! &nbsp;💡 ${q.explanation}` : '🎉 Correct! Well done!';
@@ -221,10 +239,19 @@ const QuizEngine = (() => {
       : val === q.answers[q.correct].toLowerCase();
     state.answered = true;
     clearTimers();
-    if (correct) state.score++;
+    if (correct) {
+      state.score++;
+      state.streak = (state.streak || 0) + 1;
+    } else {
+      state.streak = 0;
+    }
     document.getElementById('q-score').textContent = state.score;
     input.disabled = true;
-    window.SFX?.play(correct ? 'quiz_correct' : 'quiz_wrong');
+    if (correct && state.streak >= 3 && state.streak % 2 === 1) {
+      window.SFX?.play('streak');
+    } else {
+      window.SFX?.play(correct ? 'quiz_correct' : 'quiz_wrong');
+    }
     const correctAns2 = q.answers[q.correct];
     const explainPart2 = q.explanation ? ` &nbsp;💡 ${q.explanation}` : '';
     const msg2 = correct
@@ -261,6 +288,7 @@ const QuizEngine = (() => {
 
   // ── Next Question ───────────────────────────────────────────
   function nextQuestion() {
+    window.SFX?.play('click');
     state.current++;
     if (state.current >= QUESTION_COUNT) { endQuiz(); return; }
     showQuestion();
@@ -271,6 +299,14 @@ const QuizEngine = (() => {
     clearTimers();
     const totalTime = Math.floor((Date.now() - state.startTime) / 1000);
     const pct       = Math.round((state.score / QUESTION_COUNT) * 100);
+    // End-of-quiz sound based on score
+    if (pct >= 70) {
+      window.SFX?.play('levelup');
+    } else if (pct >= 40) {
+      window.SFX?.play('win');
+    } else {
+      window.SFX?.play('lose');
+    }
     const msgs = [
       { min:90, emoji:'🏆', title:'Outstanding!',   msg:'You\'re a superstar! Amazing score!' },
       { min:70, emoji:'🎉', title:'Brilliant!',      msg:'Great work! You really know your stuff!' },
