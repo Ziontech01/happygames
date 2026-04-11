@@ -39,7 +39,7 @@
 <script>
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
-softAuth(() => {
+gameAuth('Science Quiz', () => {
   QuizEngine.init({
     gameType:     'science',
     title:        'Science Quiz',

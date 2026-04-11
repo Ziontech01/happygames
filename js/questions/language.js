@@ -1,5 +1,5 @@
 // Happy Games – Language Game Data
-// Languages: Spanish, French, Mandarin Chinese, Yoruba
+// Languages: Spanish, French, Mandarin Chinese, German, Japanese, Hindi
 // Categories: Greetings, Numbers, Food, Colours, Family, School
 'use strict';
 
@@ -241,81 +241,239 @@ const LANGUAGE_DATA = {
     }
   },
 
-  yoruba: {
-    name:'Yoruba', flag:'🇳🇬', nativeName:'Èdè Yorùbá',
-    funFact:'Yoruba is spoken by over 40 million people, mainly in Nigeria, Benin and Togo. It\'s a tonal language — the same word can mean different things depending on how you say it!',
+  german: {
+    name:'German', flag:'🇩🇪', nativeName:'Deutsch',
+    funFact:'German is spoken by over 100 million people across Europe. It\'s the most widely spoken native language in the European Union!',
     categories:{
       greetings:[
-        { en:'Good morning',   target:'Ẹ káàárọ̀',      phonetic:'Eh KAH-ah-roh' },
-        { en:'Good afternoon', target:'Ẹ káàsán',        phonetic:'Eh KAH-ah-sahn' },
-        { en:'Good evening',   target:'Ẹ káàlẹ̀',        phonetic:'Eh KAH-ah-leh' },
-        { en:'Welcome',        target:'Ẹ káàbọ̀',        phonetic:'Eh KAH-ah-boh' },
-        { en:'Thank you',      target:'Ẹ ṣéun',          phonetic:'Eh SHEH-oon' },
-        { en:'Please',         target:'Jọwọ',            phonetic:'JOH-woh' },
-        { en:'Goodbye',        target:'Ó dàbọ̀',         phonetic:'Oh DAH-boh' },
-        { en:'How are you?',   target:'Báwo ni?',        phonetic:'BAH-woh nee?' },
-        { en:'I am fine',      target:'Mo wà dáadáa',    phonetic:'Moh WAH dah-DAH' },
-        { en:'What is your name?', target:'Kí ni orúkọ rẹ?', phonetic:'Kee nee oh-ROO-koh reh?' }
+        { en:'Hello',               target:'Hallo',               phonetic:'HAH-loh' },
+        { en:'Good morning',        target:'Guten Morgen',         phonetic:'GOO-ten MOR-gen' },
+        { en:'Good afternoon',      target:'Guten Tag',            phonetic:'GOO-ten TAHK' },
+        { en:'Good evening',        target:'Guten Abend',          phonetic:'GOO-ten AH-bent' },
+        { en:'Goodbye',             target:'Auf Wiedersehen',      phonetic:'owf VEE-der-zay-en' },
+        { en:'Thank you',           target:'Danke',                phonetic:'DAHN-keh' },
+        { en:'Please',              target:'Bitte',                phonetic:'BIT-teh' },
+        { en:'Excuse me',           target:'Entschuldigung',       phonetic:'ent-SHOOL-di-goong' },
+        { en:'How are you?',        target:'Wie geht es dir?',     phonetic:'vee gayt es deer' },
+        { en:'My name is...',       target:'Ich heiße...',         phonetic:'ikh HY-seh' }
       ],
       numbers:[
-        { en:'One',   target:'Ọ̀kan',    phonetic:'OH-kahn' },
-        { en:'Two',   target:'Èjì',     phonetic:'EH-jee' },
-        { en:'Three', target:'Ẹ̀ta',    phonetic:'EH-tah' },
-        { en:'Four',  target:'Ẹ̀rin',   phonetic:'EH-reen' },
-        { en:'Five',  target:'Àrún',    phonetic:'AH-roon' },
-        { en:'Six',   target:'Ẹ̀fà',    phonetic:'EH-fah' },
-        { en:'Seven', target:'Èje',     phonetic:'EH-jeh' },
-        { en:'Eight', target:'Ẹ̀jọ',    phonetic:'EH-joh' },
-        { en:'Nine',  target:'Ẹ̀sàn',   phonetic:'EH-sahn' },
-        { en:'Ten',   target:'Ẹ̀wá',    phonetic:'EH-wah' }
+        { en:'One',   target:'Eins',   phonetic:'eynss' },
+        { en:'Two',   target:'Zwei',   phonetic:'tsvye' },
+        { en:'Three', target:'Drei',   phonetic:'dry' },
+        { en:'Four',  target:'Vier',   phonetic:'feer' },
+        { en:'Five',  target:'Fünf',   phonetic:'fewnf' },
+        { en:'Six',   target:'Sechs',  phonetic:'zeks' },
+        { en:'Seven', target:'Sieben', phonetic:'ZEE-ben' },
+        { en:'Eight', target:'Acht',   phonetic:'ahkt' },
+        { en:'Nine',  target:'Neun',   phonetic:'noyn' },
+        { en:'Ten',   target:'Zehn',   phonetic:'tsayn' }
       ],
       food:[
-        { en:'Water',  target:'Omi',       phonetic:'OH-mee' },
-        { en:'Food',   target:'Oúnjẹ',     phonetic:'oh-OON-jeh' },
-        { en:'Rice',   target:'Ìrẹsì',     phonetic:'ee-REH-see' },
-        { en:'Yam',    target:'Iyán',      phonetic:'ee-YAHN' },
-        { en:'Bread',  target:'Búrẹ́dì',   phonetic:'boo-REH-dee' },
-        { en:'Chicken',target:'Àdìẹ',      phonetic:'AH-dee-eh' },
-        { en:'Fish',   target:'Ẹja',       phonetic:'EH-jah' },
-        { en:'Soup',   target:'Obẹ̀',      phonetic:'oh-BEH' },
-        { en:'Fruit',  target:'Èso',       phonetic:'EH-soh' },
-        { en:'Milk',   target:'Wàrà',      phonetic:'WAH-rah' }
+        { en:'Water',   target:'Wasser',   phonetic:'VAH-ser' },
+        { en:'Bread',   target:'Brot',     phonetic:'broht' },
+        { en:'Milk',    target:'Milch',    phonetic:'milkh' },
+        { en:'Apple',   target:'Apfel',    phonetic:'AHP-fel' },
+        { en:'Chicken', target:'Hähnchen', phonetic:'HAYN-khen' },
+        { en:'Rice',    target:'Reis',     phonetic:'ryss' },
+        { en:'Egg',     target:'Ei',       phonetic:'eye' },
+        { en:'Fish',    target:'Fisch',    phonetic:'fish' },
+        { en:'Cake',    target:'Kuchen',   phonetic:'KOO-khen' },
+        { en:'Orange',  target:'Orange',   phonetic:'oh-RAHN-zheh' }
       ],
       colours:[
-        { en:'Red',    target:'Pupa',          phonetic:'POO-pah' },
-        { en:'Blue',   target:'Àwọ̀ ọ̀run',    phonetic:'AH-woh OH-roon' },
-        { en:'Yellow', target:'Àwo àgbàdo',    phonetic:'AH-woh ah-BAH-doh' },
-        { en:'Green',  target:'Ewé / Àwọ̀ ewé',phonetic:'EH-weh' },
-        { en:'Black',  target:'Dúdú',          phonetic:'DOO-doo' },
-        { en:'White',  target:'Funfun',        phonetic:'FOON-foon' },
-        { en:'Gold',   target:'Wúrà',          phonetic:'WOO-rah' },
-        { en:'Brown',  target:'Àwo ilẹ̀',      phonetic:'AH-woh EE-leh' },
-        { en:'Pink',   target:'Àwọ̀ òdòdó',    phonetic:'AH-woh oh-DOH-doh' },
-        { en:'Purple', target:'Àwọ̀ àjàrà',    phonetic:'AH-woh ah-JAH-rah' }
+        { en:'Red',    target:'Rot',    phonetic:'roht' },
+        { en:'Blue',   target:'Blau',   phonetic:'blow' },
+        { en:'Yellow', target:'Gelb',   phonetic:'gelp' },
+        { en:'Green',  target:'Grün',   phonetic:'grewn' },
+        { en:'Black',  target:'Schwarz',phonetic:'shvarts' },
+        { en:'White',  target:'Weiß',   phonetic:'vyce' },
+        { en:'Pink',   target:'Rosa',   phonetic:'ROH-zah' },
+        { en:'Purple', target:'Lila',   phonetic:'LEE-lah' },
+        { en:'Orange', target:'Orange', phonetic:'oh-RAHN-zheh' },
+        { en:'Brown',  target:'Braun',  phonetic:'brown' }
       ],
       family:[
-        { en:'Mother',      target:'Ìyá',         phonetic:'ee-YAH' },
-        { en:'Father',      target:'Bàbá',         phonetic:'BAH-bah' },
-        { en:'Older sibling',target:'Ẹgbọn',       phonetic:'EH-gbohn' },
-        { en:'Younger sibling',target:'Àbúrò',     phonetic:'ah-BOO-roh' },
-        { en:'Grandmother', target:'Ìyá àgbà',    phonetic:'ee-YAH AHG-bah' },
-        { en:'Grandfather', target:'Bàbá àgbà',   phonetic:'BAH-bah AHG-bah' },
-        { en:'Child',       target:'Ọmọ',          phonetic:'OH-moh' },
-        { en:'Friend',      target:'Ọ̀rẹ́',         phonetic:'oh-REH' },
-        { en:'Family',      target:'Ìdílé',        phonetic:'ee-DEE-leh' },
-        { en:'Baby',        target:'Ọmọ ikọ́lé',   phonetic:'OH-moh ee-KOH-leh' }
+        { en:'Mother',      target:'Mutter',          phonetic:'MOO-ter' },
+        { en:'Father',      target:'Vater',            phonetic:'FAH-ter' },
+        { en:'Brother',     target:'Bruder',           phonetic:'BROO-der' },
+        { en:'Sister',      target:'Schwester',        phonetic:'SHVES-ter' },
+        { en:'Grandmother', target:'Oma',              phonetic:'OH-mah' },
+        { en:'Grandfather', target:'Opa',              phonetic:'OH-pah' },
+        { en:'Baby',        target:'Baby',             phonetic:'BAY-bee' },
+        { en:'Friend',      target:'Freund / Freundin',phonetic:'froynt' },
+        { en:'Boy',         target:'Junge',            phonetic:'YOONG-eh' },
+        { en:'Girl',        target:'Mädchen',          phonetic:'MAYD-khen' }
       ],
       school:[
-        { en:'School',     target:'Ilé-ẹ̀kọ́',    phonetic:'ee-LEH eh-KOH' },
-        { en:'Book',       target:'Ìwé',          phonetic:'ee-WEH' },
-        { en:'Teacher',    target:'Olùkọ́',        phonetic:'oh-LOO-koh' },
-        { en:'Student',    target:'Akẹ́kọ̀ọ́',     phonetic:'ah-KEH-koh-oh' },
-        { en:'Write',      target:'Kọ',           phonetic:'KOH' },
-        { en:'Read',       target:'Ka',           phonetic:'KAH' },
-        { en:'Learn',      target:'Kọ́ ẹ̀kọ́',     phonetic:'KOH eh-KOH' },
-        { en:'Pencil',     target:'Pẹ́ńsẹ́lì',    phonetic:'PEN-seh-lee' },
-        { en:'Bag',        target:'Àpò',          phonetic:'AH-poh' },
-        { en:'Classroom',  target:'Yàrá ẹ̀kọ́',  phonetic:'YAH-rah EH-koh' }
+        { en:'School',    target:'Schule',         phonetic:'SHOO-leh' },
+        { en:'Book',      target:'Buch',           phonetic:'bookh' },
+        { en:'Pencil',    target:'Bleistift',      phonetic:'BLY-shtift' },
+        { en:'Teacher',   target:'Lehrer/in',      phonetic:'LAY-rer' },
+        { en:'Student',   target:'Schüler/in',     phonetic:'SHEW-ler' },
+        { en:'Write',     target:'Schreiben',      phonetic:'SHRY-ben' },
+        { en:'Read',      target:'Lesen',          phonetic:'LAY-zen' },
+        { en:'Learn',     target:'Lernen',         phonetic:'LAIR-nen' },
+        { en:'Bag',       target:'Tasche',         phonetic:'TAH-sheh' },
+        { en:'Classroom', target:'Klassenzimmer',  phonetic:'KLAS-en-tsim-er' }
+      ]
+    }
+  },
+
+  japanese: {
+    name:'Japanese', flag:'🇯🇵', nativeName:'日本語',
+    funFact:'Japanese has three writing systems — Hiragana, Katakana and Kanji — and over 125 million speakers. Manga and anime have made it one of the most popular languages to learn worldwide!',
+    categories:{
+      greetings:[
+        { en:'Hello',             target:'こんにちは',         phonetic:'kon-nee-chee-WAH' },
+        { en:'Good morning',      target:'おはようございます', phonetic:'oh-hah-YOH goh-zai-mahs' },
+        { en:'Good evening',      target:'こんばんは',         phonetic:'kon-bahn-WAH' },
+        { en:'Goodbye',           target:'さようなら',         phonetic:'sah-yoh-NAH-rah' },
+        { en:'Thank you',         target:'ありがとう',         phonetic:'ah-ree-GAH-toh' },
+        { en:'Please',            target:'おねがいします',     phonetic:'oh-neh-gai-shee-mahs' },
+        { en:'Excuse me',         target:'すみません',         phonetic:'soo-mee-MAH-sen' },
+        { en:'How are you?',      target:'お元気ですか？',     phonetic:'oh-GEN-kee des-KAH' },
+        { en:'I am fine',         target:'元気です',           phonetic:'GEN-kee des' },
+        { en:'Nice to meet you',  target:'はじめまして',       phonetic:'hah-jee-meh-MASH-teh' }
+      ],
+      numbers:[
+        { en:'One',   target:'いち', phonetic:'ee-chee' },
+        { en:'Two',   target:'に',   phonetic:'nee' },
+        { en:'Three', target:'さん', phonetic:'sahn' },
+        { en:'Four',  target:'よん', phonetic:'yohn' },
+        { en:'Five',  target:'ご',   phonetic:'goh' },
+        { en:'Six',   target:'ろく', phonetic:'roh-koo' },
+        { en:'Seven', target:'なな', phonetic:'nah-nah' },
+        { en:'Eight', target:'はち', phonetic:'hah-chee' },
+        { en:'Nine',  target:'きゅう',phonetic:'kyoo' },
+        { en:'Ten',   target:'じゅう',phonetic:'joo' }
+      ],
+      food:[
+        { en:'Water',   target:'みず',     phonetic:'mee-zoo' },
+        { en:'Rice',    target:'ごはん',   phonetic:'goh-hahn' },
+        { en:'Bread',   target:'パン',     phonetic:'pahn' },
+        { en:'Egg',     target:'たまご',   phonetic:'tah-mah-goh' },
+        { en:'Fish',    target:'さかな',   phonetic:'sah-kah-nah' },
+        { en:'Chicken', target:'とりにく', phonetic:'toh-ree-nee-koo' },
+        { en:'Milk',    target:'ぎゅうにゅう',phonetic:'gyoo-nyoo' },
+        { en:'Apple',   target:'りんご',   phonetic:'reen-goh' },
+        { en:'Cake',    target:'ケーキ',   phonetic:'kay-kee' },
+        { en:'Sushi',   target:'すし',     phonetic:'soo-shee' }
+      ],
+      colours:[
+        { en:'Red',    target:'あか',     phonetic:'ah-kah' },
+        { en:'Blue',   target:'あお',     phonetic:'ah-oh' },
+        { en:'Yellow', target:'きいろ',   phonetic:'kee-ee-roh' },
+        { en:'Green',  target:'みどり',   phonetic:'mee-doh-ree' },
+        { en:'Black',  target:'くろ',     phonetic:'koo-roh' },
+        { en:'White',  target:'しろ',     phonetic:'shee-roh' },
+        { en:'Pink',   target:'ピンク',   phonetic:'peen-koo' },
+        { en:'Purple', target:'むらさき', phonetic:'moo-rah-sah-kee' },
+        { en:'Orange', target:'オレンジ', phonetic:'oh-ren-jee' },
+        { en:'Brown',  target:'ちゃいろ', phonetic:'chah-ee-roh' }
+      ],
+      family:[
+        { en:'Mother',      target:'おかあさん', phonetic:'oh-kah-sahn' },
+        { en:'Father',      target:'おとうさん', phonetic:'oh-toh-sahn' },
+        { en:'Older brother',target:'おにいさん',phonetic:'oh-nee-sahn' },
+        { en:'Older sister', target:'おねえさん',phonetic:'oh-neh-sahn' },
+        { en:'Grandmother', target:'おばあさん', phonetic:'oh-bah-sahn' },
+        { en:'Grandfather', target:'おじいさん', phonetic:'oh-jee-sahn' },
+        { en:'Baby',        target:'あかちゃん', phonetic:'ah-kah-chahn' },
+        { en:'Friend',      target:'ともだち',   phonetic:'toh-moh-dah-chee' },
+        { en:'Child',       target:'こども',     phonetic:'koh-doh-moh' },
+        { en:'Family',      target:'かぞく',     phonetic:'kah-zoh-koo' }
+      ],
+      school:[
+        { en:'School',    target:'がっこう',   phonetic:'gahk-koh' },
+        { en:'Book',      target:'ほん',       phonetic:'hohn' },
+        { en:'Pencil',    target:'えんぴつ',   phonetic:'en-pee-tsoo' },
+        { en:'Teacher',   target:'せんせい',   phonetic:'sen-say' },
+        { en:'Student',   target:'せいと',     phonetic:'say-toh' },
+        { en:'Write',     target:'かく',       phonetic:'kah-koo' },
+        { en:'Read',      target:'よむ',       phonetic:'yoh-moo' },
+        { en:'Learn',     target:'まなぶ',     phonetic:'mah-nah-boo' },
+        { en:'Bag',       target:'かばん',     phonetic:'kah-bahn' },
+        { en:'Classroom', target:'きょうしつ', phonetic:'kyoh-shee-tsoo' }
+      ]
+    }
+  },
+
+  hindi: {
+    name:'Hindi', flag:'🇮🇳', nativeName:'हिन्दी',
+    funFact:'Hindi is spoken by over 600 million people and is one of the official languages of India. It\'s written in the beautiful Devanagari script, which reads from left to right!',
+    categories:{
+      greetings:[
+        { en:'Hello',         target:'नमस्ते',          phonetic:'nah-MAS-tay' },
+        { en:'Good morning',  target:'सुप्रभात',         phonetic:'soo-PRAH-baht' },
+        { en:'Good evening',  target:'शुभ संध्या',       phonetic:'shoobh SAHND-hyah' },
+        { en:'Goodbye',       target:'अलविदा',           phonetic:'al-VEE-dah' },
+        { en:'Thank you',     target:'धन्यवाद',          phonetic:'DHAN-yah-vahd' },
+        { en:'Please',        target:'कृपया',            phonetic:'KREE-pah-yah' },
+        { en:'Excuse me',     target:'माफ़ कीजिए',        phonetic:'maaf KEE-jee-yeh' },
+        { en:'How are you?',  target:'आप कैसे हैं?',     phonetic:'aap KAI-say hain' },
+        { en:'I am fine',     target:'मैं ठीक हूँ',      phonetic:'main THEEK hoon' },
+        { en:'My name is...', target:'मेरा नाम ... है',  phonetic:'MAY-rah naam ... hay' }
+      ],
+      numbers:[
+        { en:'One',   target:'एक',   phonetic:'ek' },
+        { en:'Two',   target:'दो',   phonetic:'doh' },
+        { en:'Three', target:'तीन',  phonetic:'teen' },
+        { en:'Four',  target:'चार',  phonetic:'chaar' },
+        { en:'Five',  target:'पाँच', phonetic:'paanch' },
+        { en:'Six',   target:'छह',   phonetic:'chhah' },
+        { en:'Seven', target:'सात',  phonetic:'saht' },
+        { en:'Eight', target:'आठ',   phonetic:'aath' },
+        { en:'Nine',  target:'नौ',   phonetic:'now' },
+        { en:'Ten',   target:'दस',   phonetic:'dahs' }
+      ],
+      food:[
+        { en:'Water',   target:'पानी',   phonetic:'PAH-nee' },
+        { en:'Rice',    target:'चावल',   phonetic:'CHAH-val' },
+        { en:'Bread',   target:'रोटी',   phonetic:'ROH-tee' },
+        { en:'Milk',    target:'दूध',    phonetic:'doodh' },
+        { en:'Apple',   target:'सेब',    phonetic:'seb' },
+        { en:'Chicken', target:'मुर्गी', phonetic:'MUR-gee' },
+        { en:'Fish',    target:'मछली',   phonetic:'MACH-lee' },
+        { en:'Egg',     target:'अंडा',   phonetic:'AN-dah' },
+        { en:'Mango',   target:'आम',     phonetic:'ahm' },
+        { en:'Sweet',   target:'मिठाई',  phonetic:'mee-THAI' }
+      ],
+      colours:[
+        { en:'Red',    target:'लाल',    phonetic:'laal' },
+        { en:'Blue',   target:'नीला',   phonetic:'NEE-lah' },
+        { en:'Yellow', target:'पीला',   phonetic:'PEE-lah' },
+        { en:'Green',  target:'हरा',    phonetic:'HAH-rah' },
+        { en:'Black',  target:'काला',   phonetic:'KAH-lah' },
+        { en:'White',  target:'सफ़ेद',  phonetic:'SAH-fed' },
+        { en:'Pink',   target:'गुलाबी', phonetic:'goo-LAH-bee' },
+        { en:'Purple', target:'बैंगनी', phonetic:'BAIN-gah-nee' },
+        { en:'Orange', target:'नारंगी', phonetic:'nah-RAN-gee' },
+        { en:'Brown',  target:'भूरा',   phonetic:'BHOO-rah' }
+      ],
+      family:[
+        { en:'Mother',      target:'माँ',      phonetic:'maa' },
+        { en:'Father',      target:'पिताजी',   phonetic:'pee-TAH-jee' },
+        { en:'Brother',     target:'भाई',      phonetic:'bhai' },
+        { en:'Sister',      target:'बहन',      phonetic:'BAH-hen' },
+        { en:'Grandmother', target:'दादी',     phonetic:'DAH-dee' },
+        { en:'Grandfather', target:'दादा',     phonetic:'DAH-dah' },
+        { en:'Baby',        target:'बच्चा',    phonetic:'BAH-chah' },
+        { en:'Friend',      target:'दोस्त',    phonetic:'dohst' },
+        { en:'Family',      target:'परिवार',   phonetic:'pah-ree-VAAR' },
+        { en:'Uncle',       target:'चाचा',     phonetic:'CHAH-chah' }
+      ],
+      school:[
+        { en:'School',    target:'विद्यालय',  phonetic:'vid-YAH-lay' },
+        { en:'Book',      target:'किताब',     phonetic:'kee-TAAB' },
+        { en:'Pencil',    target:'पेंसिल',    phonetic:'PEN-sil' },
+        { en:'Teacher',   target:'शिक्षक',    phonetic:'SHIK-shak' },
+        { en:'Student',   target:'छात्र',     phonetic:'CHHAH-trah' },
+        { en:'Write',     target:'लिखना',     phonetic:'LIKH-nah' },
+        { en:'Read',      target:'पढ़ना',      phonetic:'PARHD-nah' },
+        { en:'Learn',     target:'सीखना',     phonetic:'SEEKH-nah' },
+        { en:'Bag',       target:'बस्ता',     phonetic:'BAS-tah' },
+        { en:'Classroom', target:'कक्षा',     phonetic:'KAHK-shah' }
       ]
     }
   }

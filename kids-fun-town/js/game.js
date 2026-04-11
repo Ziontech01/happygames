@@ -33,6 +33,7 @@ function init() {
   const countBtns = document.querySelectorAll('.count-btn');
   countBtns.forEach(btn => {
     btn.addEventListener('click', () => {
+      window.SFX?.play('click');
       countBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       updatePlayerRowsVisibility(parseInt(btn.dataset.count));
@@ -43,6 +44,7 @@ function init() {
   document.querySelectorAll('.player-row').forEach(row => {
     row.querySelectorAll('.token-btn').forEach(btn => {
       btn.addEventListener('click', () => {
+        window.SFX?.play('click');
         row.querySelectorAll('.token-btn').forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
       });
@@ -81,6 +83,7 @@ function updatePlayerRowsVisibility(count) {
 
 // ─── onStartButtonClick() ────────────────────────────────────────────────────
 function onStartButtonClick() {
+  window.SFX?.play('whoosh');
   // Gather setup data from the form
   const activeCountBtn = document.querySelector('.count-btn.active');
   const count          = activeCountBtn ? parseInt(activeCountBtn.dataset.count) : 2;
@@ -220,7 +223,8 @@ async function handleRollForPlayer(player, isReroll = false) {
     await Animations.showMessage(`${player.token} ${player.name} rolled a ${roll}! 🎲`, 1200);
   }
 
-  // Animate dice
+  // Animate dice — click sound on each "tick" is handled by animateDice
+  window.SFX?.play('click');
   await Animations.rollDiceAnimation(roll);
 
   // Move token step-by-step
@@ -258,6 +262,7 @@ async function handleRollForPlayer(player, isReroll = false) {
  */
 async function onPassStart(player) {
   player.coins += 2;
+  window.SFX?.play('coin');
   await Animations.showMessage(`${player.token} Passed Start! +2 coins! 🏁`, 1500);
   Animations.coinBurstAnimation(0, 2);
   Players.updatePlayerPanel(player, GameState.gameTiles);
@@ -290,6 +295,7 @@ async function handleCorner(player, tile) {
   switch (tile.id) {
     case 0: // Start — already handled by onPassStart, but landing gives coins too
       player.coins += 2;
+      window.SFX?.play('coin');
       await Animations.showMessage(`${player.token} Back at Start! +2 coins! 🏁`, 1800);
       Animations.coinBurstAnimation(0, 2);
       Players.updatePlayerPanel(player, GameState.gameTiles);
@@ -300,6 +306,7 @@ async function handleCorner(player, tile) {
       break;
 
     case 10: // Free Coins — all players get +2
+      window.SFX?.play('streak');  // excited burst — everyone wins!
       await Animations.showMessage(`⭐ FREE COINS! Everyone gets +2 coins!`, 1000);
       GameState.players.forEach(p => {
         p.coins += 2;
@@ -311,6 +318,7 @@ async function handleCorner(player, tile) {
       break;
 
     case 15: // Silly Bench — sit out one turn
+      window.SFX?.play('error');
       player.skipTurns = 1;
       await Animations.showMessage(`${player.token} ${player.name} is sitting on the Silly Bench! 😴 Miss 1 turn!`, 2200);
       Players.updatePlayerPanel(player, GameState.gameTiles);
@@ -355,6 +363,7 @@ async function handleProperty(player, tile) {
 
 // ─── payRent() ────────────────────────────────────────────────────────────────
 async function payRent(player, owner, tile) {
+  window.SFX?.play('coin');   // coin clink as rent changes hands
   const rentAmount = tile.rent;
 
   // If player can't afford rent, apply helper bonus first
@@ -386,6 +395,7 @@ async function handleSpecial(player, tile) {
   switch (tile.action) {
     case 'treasure': {
       player.coins += 3;
+      window.SFX?.play('levelup');  // big fanfare — treasure found!
       await Animations.showMessage(`${tile.emoji} Treasure Chest! ${player.name} gets +3 coins! 💰`, 2000);
       Animations.coinBurstAnimation(tile.id, 3);
       Animations.sparkleAnimation(tile.id);
@@ -397,6 +407,7 @@ async function handleSpecial(player, tile) {
 
     case 'bonus': {
       player.coins += 2;
+      window.SFX?.play('coin');
       await Animations.showMessage(`${tile.emoji} Bonus Coins! ${player.name} gets +2 coins! 💰`, 2000);
       Animations.coinBurstAnimation(tile.id, 2);
       Players.updatePlayerPanel(player, GameState.gameTiles);
@@ -406,6 +417,7 @@ async function handleSpecial(player, tile) {
     }
 
     case 'card': {
+      window.SFX?.play('whoosh');  // swish as the card is drawn
       const card   = Cards.drawCard();
       const result = Cards.applySurpriseCard(card, player, GameState.players);
 
@@ -422,6 +434,7 @@ async function handleSpecial(player, tile) {
     }
 
     case 'spin': {
+      window.SFX?.play('rematch');  // rising jingle for the spin
       const result = Cards.applyLuckySpin(player, GameState.players);
 
       if (player.isAI) {
@@ -516,6 +529,7 @@ async function executeBuy(player, tile) {
   tile.ownedBy = player.id;
   player.ownedTiles.push(tile.id);
 
+  window.SFX?.play('purchase');
   Board.updateTileOwner(tile.id, player.id, player.color, player.token);
   await Animations.purchaseAnimation(tile.id, player.color);
   Players.updatePlayerPanel(player, GameState.gameTiles);
@@ -710,6 +724,7 @@ function endGame() {
 // ─── showWinScreen() ─────────────────────────────────────────────────────────
 function showWinScreen(rankings) {
   Animations.confettiAnimation();
+  window.SFX?.play('levelup');  // big fanfare for the winner!
 
   const titleEl    = document.getElementById('win-title');
   const subtitleEl = document.getElementById('win-subtitle');
@@ -754,6 +769,8 @@ function showWinScreen(rankings) {
 // ─── Top bar: toggles ────────────────────────────────────────────────────────
 function toggleMute() {
   GameState.muted = !GameState.muted;
+  // Keep window.SFX in sync so all synthesised sounds are muted too
+  if (window.SFX && window.SFX.isMuted() !== GameState.muted) window.SFX.toggle();
   const btn = document.getElementById('mute-btn');
   if (btn) btn.textContent = GameState.muted ? '🔇' : '🔊';
 }

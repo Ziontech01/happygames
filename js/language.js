@@ -22,7 +22,9 @@ const LanguageGame = (() => {
     spanish:  '#dc2626',   // Spanish red
     french:   '#2563eb',   // French blue
     mandarin: '#b91c1c',   // Mandarin red
-    yoruba:   '#15803d'    // Nigerian green
+    german:   '#d97706',   // German gold
+    japanese: '#be123c',   // Japanese crimson
+    hindi:    '#f97316'    // Indian saffron
   };
 
   /* ── Public init ───────────────────────────────────────────── */
@@ -136,6 +138,120 @@ const LanguageGame = (() => {
       </div>`;
   }
 
+  /* ─────────────────────────────────────────────────────────────
+     PRONUNCIATION SYSTEM
+     ──────────────────────────────────────────────────────────
+     3-tier approach, tried in order:
+       1. HTML5 Audio — phrase.audioUrl (pre-recorded MP3, perfect quality)
+       2. Web Speech API — for Spanish / French / Mandarin (good native voices)
+       3. Phonetic fallback — for Yoruba: speaks the phonetic guide via
+          English TTS since no browser has a native Yoruba voice.
+          This is far better than letting the browser mangle tonal characters.
+     ──────────────────────────────────────────────────────────
+     To upgrade Yoruba to perfect quality:
+       Option A: Record each word with a native speaker as an MP3 and set
+                 phrase.audioUrl = '../audio/yoruba/filename.mp3'
+       Option B: Use Google Cloud TTS (yo-NG voice) in a Firebase Function
+                 to pre-generate the MP3s once and host them in /audio/yoruba/
+  ───────────────────────────────────────────────────────────── */
+  const LANG_CODES = {
+    spanish:  'es-ES',
+    french:   'fr-FR',
+    mandarin: 'zh-CN',
+    german:   'de-DE',
+    japanese: 'ja-JP',
+    hindi:    'hi-IN'
+  };
+
+  // ── Tier 1: HTML5 Audio (pre-recorded files) ──────────────────
+  function _playAudio(url, btn) {
+    if (btn) {
+      btn.dataset.originalText = btn.dataset.originalText || btn.innerHTML;
+      btn.innerHTML  = '<span style="animation:lgSpeakPulse .5s infinite alternate">🔊</span> Playing…';
+      btn.disabled   = true;
+      btn.style.opacity = '.8';
+    }
+    const audio = new Audio(url);
+    const reset = () => {
+      if (btn) {
+        btn.innerHTML  = btn.dataset.originalText || '🔊 Hear it';
+        btn.disabled   = false;
+        btn.style.opacity = '1';
+      }
+    };
+    audio.onended = reset;
+    audio.onerror = reset;
+    audio.play().catch(reset);
+    window.SFX?.play('click');
+  }
+
+  // ── Tier 2 & 3: Web Speech API ───────────────────────────────
+  function _speakWithSynth(text, langCode, btn) {
+    const synth = window.speechSynthesis;
+    if (!synth) { if (btn) { btn.innerHTML = btn.dataset.originalText || '🔊 Hear it'; btn.disabled = false; } return; }
+    synth.cancel();
+
+    const utter  = new SpeechSynthesisUtterance(text);
+    utter.lang   = langCode;
+    utter.rate   = 0.82;
+    utter.pitch  = 1.0;
+
+    if (btn) {
+      btn.innerHTML  = '<span style="animation:lgSpeakPulse .5s infinite alternate">🔊</span> Speaking…';
+      btn.disabled   = true;
+      btn.style.opacity = '.75';
+    }
+    const reset = () => {
+      if (btn) {
+        btn.innerHTML  = btn.dataset.originalText || '🔊 Hear it';
+        btn.disabled   = false;
+        btn.style.opacity = '1';
+      }
+    };
+    utter.onend  = reset;
+    utter.onerror = reset;
+    synth.speak(utter);
+    window.SFX?.play('click');
+  }
+
+  // ── Main speak entry point ────────────────────────────────────
+  // _speak(text, langId, btnId, phonetic, audioUrl)
+  //   audioUrl – path to pre-recorded MP3 (highest quality, optional)
+  //   phonetic – kept in signature for compatibility but not needed for
+  //              the current languages (all have native browser voices)
+  function _speak(text, langId, btnId, phonetic, audioUrl) {
+    const btn = btnId ? document.getElementById(btnId) : null;
+    if (btn) btn.dataset.originalText = btn.dataset.originalText || btn.innerHTML;
+
+    // Tier 1: pre-recorded audio file
+    if (audioUrl) { _playAudio(audioUrl, btn); return; }
+
+    // Tier 2: Web Speech API — all current languages have native browser voices
+    const code = LANG_CODES[langId] || 'en-GB';
+    _speakWithSynth(text, code, btn);
+  }
+
+  // ── Button HTML factory ───────────────────────────────────────
+  // phonetic & audioUrl are optional — passed to _speak for Yoruba handling
+  function _speakBtn(text, langId, btnId, label, col, size, phonetic, audioUrl) {
+    const sz   = size || 'normal';
+    const pad  = sz === 'big' ? '14px 28px' : sz === 'small' ? '6px 14px' : '10px 20px';
+    const fs   = sz === 'big' ? '1.05rem'  : sz === 'small' ? '.78rem'   : '.9rem';
+    const safe  = text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    const safePh = (phonetic || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    const safeAu = audioUrl ? audioUrl.replace(/'/g, "\\'") : '';
+    return `<button id="${btnId}"
+      onclick="LanguageGame._speak('${safe}','${langId}','${btnId}','${safePh}','${safeAu}')"
+      style="display:inline-flex;align-items:center;gap:7px;
+             background:linear-gradient(135deg,${col},${col}bb);color:#fff;
+             border:none;border-radius:50px;padding:${pad};font-size:${fs};
+             font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;
+             box-shadow:0 3px 10px rgba(0,0,0,.2);transition:opacity .2s;
+             vertical-align:middle">
+      🔊 ${label}
+    </button>`;
+  }
+
   /* ── Start session ─────────────────────────────────────────── */
   function _selectCat(catId) {
     window.SFX?.play('click');
@@ -199,9 +315,13 @@ const LanguageGame = (() => {
           <!-- English -->
           <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;
                       color:#9ca3af;font-weight:700;margin-bottom:8px">🇬🇧 English</div>
-          <div style="font-size:2.2rem;font-weight:900;color:#1a1a2e;margin-bottom:24px;
+          <div style="font-size:2.2rem;font-weight:900;color:#1a1a2e;margin-bottom:10px;
                       line-height:1.2">
             ${p.en}
+          </div>
+          <!-- Hear the English word -->
+          <div style="margin-bottom:20px">
+            ${_speakBtn(p.en, 'english', 'speak-en-btn', 'Hear English', '#6b7280', 'small', '', '')}
           </div>
 
           <!-- Reveal button -->
@@ -222,13 +342,20 @@ const LanguageGame = (() => {
                         color:#9ca3af;font-weight:700;margin-bottom:8px">
               ${lang.flag} ${lang.name}
             </div>
-            <div style="font-size:2.6rem;font-weight:900;color:${col};margin-bottom:12px;
+            <div style="font-size:2.6rem;font-weight:900;color:${col};margin-bottom:16px;
                         word-break:break-word;line-height:1.2">
               ${p.target}
             </div>
+
+            <!-- BIG pronunciation button -->
+            <div style="margin-bottom:14px">
+              ${_speakBtn(p.target, state.lang, 'speak-target-btn', 'Hear Pronunciation', col, 'big', p.phonetic, p.audioUrl||'')}
+            </div>
+
+            <!-- Phonetic text guide -->
             <div style="background:#f0f4ff;border-radius:12px;padding:10px 18px;
-                        display:inline-block;font-size:1rem;color:#374151">
-              🔊 <strong>Say it:</strong> <em>${p.phonetic}</em>
+                        display:inline-block;font-size:.95rem;color:#374151;margin-top:2px">
+              📖 <strong>Phonetic guide:</strong> <em>${p.phonetic}</em>
             </div>
           </div>
         </div>
@@ -251,6 +378,9 @@ const LanguageGame = (() => {
     document.getElementById('reveal-hint').style.display = 'none';
     document.getElementById('lang-target').style.display = '';
     document.getElementById('flash-nav').style.display = '';
+    // Auto-speak the target word after a brief pause so it feels natural
+    const p = state.phrases[state.idx];
+    setTimeout(() => _speak(p.target, state.lang, 'speak-target-btn', p.phonetic, p.audioUrl||''), 350);
   }
 
   function _nextFlash() {
@@ -331,7 +461,9 @@ const LanguageGame = (() => {
                       color:#9ca3af;font-weight:700;margin-bottom:10px">
             What is the ${lang.name} translation?
           </div>
-          <div style="font-size:2rem;font-weight:900;color:#1a1a2e">🇬🇧 ${p.en}</div>
+          <div style="font-size:2rem;font-weight:900;color:#1a1a2e;margin-bottom:12px">🇬🇧 ${p.en}</div>
+          <!-- Hear the English question word -->
+          ${_speakBtn(p.en, 'english', 'speak-q-btn', 'Hear the word', '#6b7280', 'small', '', '')}
         </div>
 
         <!-- Answer options -->
@@ -392,12 +524,19 @@ const LanguageGame = (() => {
       <div style="padding:16px;border-radius:14px;
                   background:${correct ? '#f0fdf4' : '#fff1f2'};
                   border:2px solid ${correct ? '#bbf7d0' : '#fecdd3'}">
-        <div style="font-weight:800;font-size:.97rem;margin-bottom:8px;color:#1a1a2e">
+        <div style="font-weight:800;font-size:.97rem;margin-bottom:10px;color:#1a1a2e">
           ${correct ? '🎉 Correct!' : '❌ The answer was: <strong>' + p.target + '</strong>'}
         </div>
-        <div style="font-size:.92rem;color:#374151">
-          ${lang.flag} <strong style="font-size:1.1rem;color:${col}">${p.target}</strong>
-          &nbsp; 🔊 <em>${p.phonetic}</em>
+        <div style="font-size:.92rem;color:#374151;margin-bottom:12px">
+          ${lang.flag} <strong style="font-size:1.2rem;color:${col}">${p.target}</strong>
+        </div>
+        <!-- Hear the correct answer -->
+        <div style="margin-bottom:10px">
+          ${_speakBtn(p.target, state.lang, 'speak-fb-btn', 'Hear Pronunciation', col, 'normal', p.phonetic, p.audioUrl||'')}
+        </div>
+        <!-- Phonetic guide -->
+        <div style="font-size:.82rem;color:#6b7280;font-style:italic">
+          📖 ${p.phonetic}
         </div>
       </div>
       <div style="text-align:center;margin-top:14px">
@@ -409,6 +548,8 @@ const LanguageGame = (() => {
           ${state.idx + 1 < state.phrases.length ? 'Next →' : '🏆 See Results'}
         </button>
       </div>`;
+    // Auto-speak the correct answer so the learner always hears it
+    setTimeout(() => _speak(p.target, state.lang, 'speak-fb-btn', p.phonetic, p.audioUrl||''), 500);
   }
 
   function _nextQuiz() {
@@ -480,6 +621,31 @@ const LanguageGame = (() => {
           </div>
         </div>
 
+        <!-- Replay words you learned -->
+        <div style="background:#fff;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,.08);
+                    padding:18px 20px;margin-bottom:20px;text-align:left">
+          <div style="font-weight:800;font-size:.88rem;color:#6b7280;text-transform:uppercase;
+                      letter-spacing:.06em;margin-bottom:12px">
+            🔊 Replay what you learned
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            ${state.phrases.map((ph, i) => `
+              <button onclick="LanguageGame._speak('${ph.target.replace(/'/g,"\\'")}','${state.lang}','replay-btn-${i}','${(ph.phonetic||'').replace(/'/g,"\\'")}','${ph.audioUrl||''}')"
+                id="replay-btn-${i}"
+                title="${ph.en} → ${ph.target}"
+                style="display:inline-flex;align-items:center;gap:5px;
+                       background:#f9fafb;border:2px solid #e5e7eb;
+                       border-radius:50px;padding:6px 14px;
+                       font-family:'Nunito',sans-serif;font-size:.85rem;
+                       font-weight:700;cursor:pointer;color:#1a1a2e;
+                       transition:all .15s"
+                onmouseover="this.style.borderColor='${col}';this.style.background='${col}15'"
+                onmouseout="this.style.borderColor='#e5e7eb';this.style.background='#f9fafb'">
+                🔊 ${ph.target}
+              </button>`).join('')}
+          </div>
+        </div>
+
         <!-- Action buttons -->
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
           <button onclick="LanguageGame._selectCat('${state.cat}')"
@@ -525,5 +691,5 @@ const LanguageGame = (() => {
   }
   function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
-  return { init, _selectLang, _selectCat, _revealFlash, _nextFlash, _answerQuiz, _nextQuiz };
+  return { init, _selectLang, _selectCat, _revealFlash, _nextFlash, _answerQuiz, _nextQuiz, _speak };
 })();

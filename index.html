@@ -592,19 +592,7 @@
   </div>
 </div>
 
-<!-- AUTH MODAL -->
-<div class="modal-overlay" id="auth-modal">
-  <div class="modal" style="position:relative">
-    <button class="modal-close" onclick="closeAuthModal()">✕</button>
-    <div class="modal-icon">🔒</div>
-    <div class="modal-title">Login Required</div>
-    <p class="modal-text" id="auth-modal-msg">Please sign in or create a free account to play this game!</p>
-    <div class="modal-buttons">
-      <button class="btn btn-primary"   onclick="goToLogin()">🔑 Login / Sign Up</button>
-      <button class="btn btn-ghost"     onclick="closeAuthModal()">Maybe later</button>
-    </div>
-  </div>
-</div>
+<!-- Auth modal is injected by nav.js (_showGameModal) — no static HTML needed here -->
 
 <!-- LEARNING SECTION -->
 <section class="section" id="learning" style="background:linear-gradient(180deg,#f8faff 0%,#fff 100%)">
@@ -621,7 +609,7 @@
     <div class="games-grid" style="margin-bottom:0">
 
       <!-- Maths -->
-      <div class="game-card maths" onclick="window.location.href='pages/maths.html'">
+      <div class="game-card maths" onclick="openGame('Maths Quiz','pages/maths.html')">
         <span class="game-card-emoji">🔢</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
         <div class="game-card-title">Maths Quiz</div>
@@ -630,7 +618,7 @@
       </div>
 
       <!-- Times Tables -->
-      <div class="game-card" onclick="window.location.href='pages/times-tables.html'">
+      <div class="game-card" onclick="openGame('Times Tables','pages/times-tables.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#f97316,#dc2626);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">✖️</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
@@ -640,7 +628,7 @@
       </div>
 
       <!-- Grammar -->
-      <div class="game-card" onclick="window.location.href='pages/grammar.html'">
+      <div class="game-card" onclick="openGame('Grammar Quiz','pages/grammar.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#7c3aed,#4f46e5);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">📝</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
@@ -650,7 +638,7 @@
       </div>
 
       <!-- Spelling -->
-      <div class="game-card" onclick="window.location.href='pages/spelling.html'">
+      <div class="game-card" onclick="openGame('Spelling Quiz','pages/spelling.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#0ea5e9,#6366f1);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">🔤</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
@@ -660,7 +648,7 @@
       </div>
 
       <!-- Science -->
-      <div class="game-card" onclick="window.location.href='pages/science.html'">
+      <div class="game-card" onclick="openGame('Science Quiz','pages/science.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#0d9488,#0891b2);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">🔬</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
@@ -670,7 +658,7 @@
       </div>
 
       <!-- Bible -->
-      <div class="game-card" onclick="window.location.href='pages/bible.html'">
+      <div class="game-card" onclick="openGame('Bible Quiz','pages/bible.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#d97706,#b45309);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">📖</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
@@ -680,7 +668,7 @@
       </div>
 
       <!-- Language -->
-      <div class="game-card" onclick="window.location.href='pages/language.html'">
+      <div class="game-card" onclick="openGame('Language Game','pages/language.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#7c3aed,#db2777);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">🌍</span>
         <div class="game-card-badge" style="background:#fdf4ff;color:#7c3aed">🗣️ 4 Languages</div>
@@ -690,7 +678,7 @@
       </div>
 
       <!-- English -->
-      <div class="game-card english" onclick="window.location.href='pages/english.html'">
+      <div class="game-card english" onclick="openGame('English Quiz','pages/english.html')">
         <span class="game-card-emoji">📚</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
         <div class="game-card-title">English Quiz</div>
@@ -699,7 +687,7 @@
       </div>
 
       <!-- General Knowledge -->
-      <div class="game-card general" onclick="window.location.href='pages/general.html'">
+      <div class="game-card general" onclick="openGame('General Knowledge','pages/general.html')">
         <span class="game-card-emoji">🌍</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
         <div class="game-card-title">General Knowledge</div>
@@ -708,7 +696,7 @@
       </div>
 
       <!-- Money Quiz -->
-      <div class="game-card" onclick="window.location.href='pages/money.html'">
+      <div class="game-card" onclick="openGame('Money Quiz','pages/money.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#16a34a,#15803d);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">💰</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
@@ -718,7 +706,7 @@
       </div>
 
       <!-- Time Quiz -->
-      <div class="game-card" onclick="window.location.href='pages/time.html'">
+      <div class="game-card" onclick="openGame('Time Quiz','pages/time.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#0ea5e9,#0284c7);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">🕐</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
@@ -728,7 +716,7 @@
       </div>
 
       <!-- Riddle Quiz -->
-      <div class="game-card" onclick="window.location.href='pages/riddles.html'">
+      <div class="game-card" onclick="openGame('Riddle Quiz','pages/riddles.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#7c3aed,#6d28d9);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">🧠</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
@@ -750,7 +738,7 @@
     <div class="games-grid" style="margin-bottom:0">
 
       <!-- Smart Life Hero -->
-      <div class="game-card" onclick="window.location.href='pages/smart-life.html'">
+      <div class="game-card" onclick="openGame('Smart Life Hero','pages/smart-life.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#a855f7,#6366f1,#ec4899);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">🦸</span>
         <div class="game-card-badge" style="background:#faf5ff;color:#6d28d9">✨ 8 Life Skills</div>
@@ -779,7 +767,7 @@
     <div class="games-grid" style="margin-bottom:0">
 
       <!-- XO -->
-      <div class="game-card xo" id="card-xo" onclick="openGame('xo')">
+      <div class="game-card xo" id="card-xo" onclick="openGame('Tic Tac Toe','pages/xo.html')">
         <span class="game-card-emoji">❌⭕</span>
         <div class="game-card-badge badge-multiplayer" id="badge-xo">👥 Multiplayer</div>
         <div class="game-card-title">Tic Tac Toe</div>
@@ -788,7 +776,7 @@
       </div>
 
       <!-- Chess -->
-      <div class="game-card chess" id="card-chess" onclick="openGame('chess')">
+      <div class="game-card chess" id="card-chess" onclick="openGame('Chess','pages/chess.html')">
         <span class="game-card-emoji">♟️</span>
         <div class="game-card-badge badge-multiplayer" id="badge-chess">👥 Multiplayer</div>
         <div class="game-card-title">Chess</div>
@@ -797,7 +785,7 @@
       </div>
 
       <!-- Snakes & Ladders -->
-      <div class="game-card" onclick="window.location.href='pages/snakes-ladders.html'">
+      <div class="game-card" onclick="openGame('Snakes &amp; Ladders','pages/snakes-ladders.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#16a34a,#15803d);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">🐍🪜</span>
         <div class="game-card-badge badge-multiplayer">👥 Multiplayer</div>
@@ -807,7 +795,7 @@
       </div>
 
       <!-- Ludo -->
-      <div class="game-card" onclick="window.location.href='pages/ludo.html'">
+      <div class="game-card" onclick="openGame('Ludo','pages/ludo.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#dc2626,#2563eb);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">🎲</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
@@ -817,7 +805,7 @@
       </div>
 
       <!-- Spot the Difference -->
-      <div class="game-card" onclick="window.location.href='pages/spot-diff.html'">
+      <div class="game-card" onclick="openGame('Spot the Difference','pages/spot-diff.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">🔍</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
@@ -827,7 +815,7 @@
       </div>
 
       <!-- Matching -->
-      <div class="game-card" onclick="window.location.href='pages/matching.html'">
+      <div class="game-card" onclick="openGame('Matching Game','pages/matching.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#f59e0b,#ef4444);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">🎯</span>
         <div class="game-card-badge badge-multiplayer">👥 Multiplayer</div>
@@ -837,7 +825,7 @@
       </div>
 
       <!-- Memory -->
-      <div class="game-card" onclick="window.location.href='pages/memory.html'">
+      <div class="game-card" onclick="openGame('Memory Game','pages/memory.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#a855f7,#ec4899);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">🃏</span>
         <div class="game-card-badge badge-multiplayer">👥 Multiplayer</div>
@@ -847,7 +835,7 @@
       </div>
 
       <!-- Kids Fun Town -->
-      <div class="game-card" onclick="window.location.href='kids-fun-town/index.html'">
+      <div class="game-card" onclick="openGame('Kids Fun Town','kids-fun-town/index.html')">
         <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(135deg,#f59e0b,#ef4444);border-radius:20px 20px 0 0"></div>
         <span class="game-card-emoji">🏙️</span>
         <div class="game-card-badge badge-free">✅ Free to play</div>
@@ -956,9 +944,10 @@
     }
   });
 
-  function openGame(game) {
-    if (!HG.user) { showAuthModal(game === 'xo' ? 'Tic Tac Toe' : 'Chess'); return; }
-    window.location.href = 'pages/' + game + '.html';
+  function openGame(gameName, url) {
+    window.SFX?.play('click');
+    if (!HG.user) { showAuthModal(gameName, url); return; }
+    window.location.href = url;
   }
 
   // ── Home page sound interactions ─────────────────────────────

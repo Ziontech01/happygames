@@ -254,6 +254,8 @@ window.SFX = (() => {
   // re-renders because it's appended to the static HTML container.
   function _insertBtn() {
     if (document.getElementById('sfx-toggle')) return; // already present
+    // Don't add a second mute button on pages that have their own (e.g. Kids Fun Town)
+    if (document.getElementById('mute-btn')) return;
     const nav = document.querySelector('.nav-links');
     if (!nav) return;
     const btn = document.createElement('button');

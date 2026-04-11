@@ -52,7 +52,7 @@
 const gameIcons={xo:'❌⭕',chess:'♟️',maths:'🔢',english:'📚',general:'🌍',all:'🎮'};
 const gameLabels={xo:'XO',chess:'Chess',maths:'Maths',english:'English',general:'GK',all:'All Games'};
 
-softAuth(() => {
+requireAuth(() => {
   // Play a coin sound when the leaderboard loads — feels like an achievement reveal
   setTimeout(() => window.SFX?.play('coin'), 600);
   loadLeaderboard('all');

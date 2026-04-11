@@ -5,6 +5,33 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Happy Games – Language Game</title>
   <link rel="stylesheet" href="../css/style.css"/>
+<style>
+  @keyframes lgSpeakPulse {
+    0%   { transform: scale(1);    }
+    100% { transform: scale(1.35); }
+  }
+  /* Ripple ring behind the big speak button while active */
+  .lg-speak-big {
+    position: relative;
+  }
+  .lg-speak-big::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50px;
+    border: 3px solid currentColor;
+    opacity: 0;
+    animation: none;
+  }
+  .lg-speak-big[disabled]::after {
+    opacity: .35;
+    animation: lgRipple 1s infinite;
+  }
+  @keyframes lgRipple {
+    0%   { transform: scale(1);    opacity:.35; }
+    100% { transform: scale(1.18); opacity:0;   }
+  }
+</style>
 </head>
 <body style="background:linear-gradient(135deg,#fff7ed,#fdf4ff);min-height:100vh">
 
@@ -37,7 +64,7 @@
 <script src="../js/questions/language.js"></script>
 <script src="../js/language.js"></script>
 <script>
-softAuth(() => { LanguageGame.init(); });
+gameAuth('Language Game', () => { LanguageGame.init(); });
 </script>
 </body>
 </html>
