@@ -60,7 +60,7 @@ function cellClick(i){
 function place(i,sym){
   board[i]=sym;
   const c=document.getElementById('c'+i), s=document.getElementById('s'+i);
-  s.textContent=sym==='X'?'❌':'⭕';
+  s.textContent=sym==='X'?'✕':'O';
   s.className='cell-sym show '+sym.toLowerCase();
   c.classList.add('taken');
 }

@@ -98,6 +98,12 @@ const QuizEngine = (() => {
             </div>
           </div>
           <div class="quiz-score-display">⭐ <span id="q-score">0</span></div>
+          ${window.Speech ? `<button class="ra-toggle${window.Speech.isEnabled() ? ' active' : ''}"
+            onclick="Speech.toggle();Speech.syncUI()"
+            title="${window.Speech.isEnabled() ? 'Read Aloud ON — tap to turn off' : 'Read Aloud OFF — tap to turn on'}"
+            aria-pressed="${window.Speech.isEnabled() ? 'true' : 'false'}">
+            <span class="ra-icon">${window.Speech.isEnabled() ? '🔊' : '🔇'}</span> Read Aloud
+          </button>` : ''}
           <button onclick="QuizEngine._quitQuiz()"
             style="background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.4);
                    border-radius:50px;padding:5px 14px;color:inherit;font-weight:800;
@@ -157,6 +163,34 @@ const QuizEngine = (() => {
       setTimeout(() => { const inp = document.getElementById('typed-input'); if (inp) inp.focus(); }, 50);
     }
     startTimer();
+
+    // ── Read Aloud injection ──────────────────────────────────────────────
+    if (window.Speech) {
+      // Wrap question text + speaker button in a flex row
+      const qtEl = area.querySelector('.question-text');
+      if (qtEl) {
+        const row = document.createElement('div');
+        row.className = 'ra-q-row';
+        qtEl.parentNode.insertBefore(row, qtEl);
+        row.appendChild(qtEl);
+        const speakQ = Speech.makeBtn(btn => Speech.speakText(qtEl.innerHTML, btn, qtEl));
+        row.appendChild(speakQ);
+      }
+      // Speaker button on each answer
+      if (!isTyped) {
+        area.querySelectorAll('.answer-btn').forEach(ab => {
+          const letterEl = ab.querySelector('.answer-letter');
+          const label = letterEl ? ab.textContent.replace(letterEl.textContent, '').trim() : ab.textContent.trim();
+          const sp = Speech.makeBtn(btn => Speech.speakText(label, btn, ab), true);
+          ab.appendChild(sp);
+        });
+      }
+      // Auto-read question if enabled
+      if (Speech.isEnabled()) {
+        const readEl = area.querySelector('.question-text');
+        if (readEl) setTimeout(() => Speech.speakText(readEl.innerHTML, null, readEl), 400);
+      }
+    }
   }
 
   // ── Timer ───────────────────────────────────────────────────
@@ -270,6 +304,7 @@ const QuizEngine = (() => {
   }
 
   function showFeedback(correct, msg) {
+    if (window.Speech) Speech.stopSpeech();
     const fb = document.getElementById('feedback');
     if (!fb) return;
     fb.className = 'feedback-bar show ' + (correct ? 'correct' : 'wrong');

@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Privacy Policy | Happy Games</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    body { background:#f8f9fb; }
+    .page-wrap { max-width:800px; margin:0 auto; padding:24px 16px 60px; }
+    .hero { text-align:center; padding:48px 20px 32px; }
+    .hero-title { font-family:'Fredoka One',cursive; font-size:2.4rem; color:#1a1a2e; margin-bottom:8px; }
+    .hero-subtitle { color:#6b7280; font-size:1rem; font-weight:600; }
+    .card { background:#fff; border-radius:16px; padding:24px 28px; margin-bottom:20px; box-shadow:0 2px 12px rgba(0,0,0,.06); }
+    .section-heading { font-size:1.1rem; font-weight:800; color:#1a1a2e; margin-bottom:10px; padding-left:12px; }
+    .body-text { color:#374151; line-height:1.7; font-size:.95rem; }
+    .body-text ul { padding-left:20px; margin:8px 0; }
+    .body-text li { margin-bottom:4px; }
+    .body-text p { margin-bottom:10px; }
+  </style>
+</head>
+<body>
+<div class="loading-overlay hidden" id="loading-overlay">
+  <div class="loading-spinner">
+    <div style="font-size:3rem;margin-bottom:12px">🔒</div>
+    <div class="spinner"></div>
+    <div class="loading-title">Privacy Policy</div>
+  </div>
+</div>
+
+<nav class="navbar">
+  <a class="nav-logo" href="../index.html"><span class="logo-emoji">🎮</span> Happy Games</a>
+  <div class="nav-links">
+    <span class="nav-user" id="nav-username" style="display:none">👤</span>
+    <a href="../index.html" class="btn btn-outline" style="font-size:.85rem">🏠 Home</a>
+    <a href="history.html" class="btn btn-outline" style="font-size:.85rem">📊 Results</a>
+    <a href="../login.html" class="btn btn-secondary" id="nav-login-btn" style="font-size:.85rem">🔑 Login</a>
+    <button class="btn btn-outline" id="nav-logout-btn" style="display:none;font-size:.85rem" onclick="logout()">🚪 Logout</button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="hero">
+    <div class="hero-title">🔒 Privacy Policy</div>
+    <div class="hero-subtitle">Last updated: April 2025</div>
+  </div>
+
+  <!-- Child-friendly summary -->
+  <div class="card" style="background:#faf5ff;border:2px solid #e9d5ff;">
+    <div class="section-heading" style="border-left:4px solid #a855f7;">🧒 Child-Friendly Summary</div>
+    <div class="body-text">
+      <p>In simple words: We only collect your username and a password so you can log in and save your game scores. We don't collect your real name, address, phone number or photos. We don't show you adverts. A parent or guardian can ask us to delete your account and scores at any time by emailing <strong>info@ziontechnologyltd.com</strong>.</p>
+    </div>
+  </div>
+
+  <!-- 1. Who We Are -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #6366f1;">1. Who We Are</div>
+    <div class="body-text">
+      <p>Happy Games is a free online learning platform for children aged 4–11, developed and operated by <strong>Zion Technology LTD</strong> (Company No. 10265734), based in the UK.</p>
+      <p>Company website: <a href="https://www.ziontechnologyltd.co.uk/" target="_blank" rel="noopener" style="color:#6366f1">www.ziontechnologyltd.co.uk</a></p>
+      <p>Contact: <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1">info@ziontechnologyltd.com</a></p>
+    </div>
+  </div>
+
+  <!-- 2. What We Collect -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #06b6d4;">2. What Information We Collect</div>
+    <div class="body-text">
+      <ul>
+        <li><strong>Account information:</strong> A username (letters, numbers, underscores — not your real name), a password (stored as a secure hash via Firebase Authentication), and a display name (the name you choose when signing up).</li>
+        <li><strong>Game progress:</strong> Your quiz scores, game results, and the year/level you select. This is stored so you can see your history.</li>
+        <li><strong>Technical data:</strong> Firebase may log standard technical data such as device type and IP address as part of its security and authentication service. We do not use this data for marketing.</li>
+        <li>We do <strong>NOT</strong> collect: real names (unless the child types one as their display name), email addresses, phone numbers, home addresses, or profile photos.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. Why We Collect It -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #10b981;">3. Why We Collect It</div>
+    <div class="body-text">
+      <ul>
+        <li>To let you log in and keep your account secure</li>
+        <li>To save and display your game scores and progress</li>
+        <li>To show your results on the leaderboard (display name only)</li>
+        <li>To let you pick up where you left off</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. How We Store -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #f59e0b;">4. How We Store Your Data</div>
+    <div class="body-text">
+      <p>Your data is stored securely using Google Firebase (Firebase Authentication and Firestore), a cloud service provided by Google LLC. Firebase stores data in secure data centres. You can read Google's privacy policy at <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:#6366f1">policies.google.com/privacy</a>.</p>
+    </div>
+  </div>
+
+  <!-- 5. How Long -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #ef4444;">5. How Long We Keep It</div>
+    <div class="body-text">
+      <p>We keep your account and progress data for as long as you have an active account. If you request deletion, we will remove your data within 30 days.</p>
+    </div>
+  </div>
+
+  <!-- 6. Who Can See -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #8b5cf6;">6. Who Can See Your Data</div>
+    <div class="body-text">
+      <ul>
+        <li>Only you can see your full results history.</li>
+        <li>The leaderboard shows your display name and scores only — no other personal information.</li>
+        <li>We do not sell or share your data with third parties for marketing.</li>
+        <li>Firebase/Google processes data on our behalf as a data processor.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 7. Parents & Guardians -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #ec4899;">7. Parents & Guardians</div>
+    <div class="body-text">
+      <p>Parents and guardians can:</p>
+      <ul>
+        <li>Request to see what data we hold about their child</li>
+        <li>Request correction of inaccurate data</li>
+        <li>Request deletion of their child's account and all associated data</li>
+      </ul>
+      <p>To exercise any of these rights, email <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1">info@ziontechnologyltd.com</a> with the subject <strong>"Data Request — [Username]"</strong>.</p>
+    </div>
+  </div>
+
+  <!-- 8. Cookies -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #f97316;">8. Cookies & Storage</div>
+    <div class="body-text">
+      <p>We use browser storage (localStorage) only to save your year-level preference locally. Firebase Authentication uses secure session tokens to keep you logged in. We do not use advertising cookies or third-party tracking. See our <a href="cookies.html" style="color:#6366f1">Cookie Policy</a> for full details.</p>
+    </div>
+  </div>
+
+  <!-- 9. Children's Privacy -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #14b8a6;">9. Children's Privacy</div>
+    <div class="body-text">
+      <p>Happy Games is designed for children aged 4–11. We collect the minimum data needed to provide the service. Account creation should be supervised by a parent or guardian. We do not knowingly collect unnecessary personal data from children.</p>
+    </div>
+  </div>
+
+  <!-- 10. Changes -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #6366f1;">10. Changes to This Policy</div>
+    <div class="body-text">
+      <p>If we make significant changes, we will update the date at the top of this page. Continued use of Happy Games after changes means you accept the updated policy.</p>
+    </div>
+  </div>
+
+  <!-- 11. Contact -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #10b981;">11. Contact</div>
+    <div class="body-text">
+      <p>Email: <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1;font-weight:700">info@ziontechnologyltd.com</a></p>
+    </div>
+  </div>
+</div>
+
+<footer style="background:#1a1a2e;color:rgba(255,255,255,.7);text-align:center;padding:28px 20px;font-size:.85rem;font-weight:600;margin-top:60px">
+  <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:#fff;margin-bottom:8px">🎮 Happy Games</div>
+  <p style="margin-bottom:12px">Made for children, with parents and teachers in mind. Safe, ad-free, free forever. ❤️</p>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:12px;font-size:.82rem">
+    <a href="privacy.html" style="color:#a78bfa;text-decoration:none">Privacy Policy</a>
+    <a href="terms.html" style="color:#a78bfa;text-decoration:none">Terms of Service</a>
+    <a href="cookies.html" style="color:#a78bfa;text-decoration:none">Cookie Policy</a>
+    <a href="parent-guide.html" style="color:#a78bfa;text-decoration:none">Parent Guide</a>
+    <a href="safety.html" style="color:#a78bfa;text-decoration:none">Safety & Moderation</a>
+    <a href="contact.html" style="color:#a78bfa;text-decoration:none">Contact Us</a>
+    <a href="delete-account.html" style="color:#a78bfa;text-decoration:none">Delete My Account</a>
+  </div>
+  <p style="opacity:.5;font-size:.78rem">© 2025 Happy Games · UK · info@ziontechnologyltd.com</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/nav.js"></script>
+<script>softAuth(() => {});</script>
+</body>
+</html>

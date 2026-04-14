@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Delete My Account | Happy Games</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    body { background:#f8f9fb; }
+    .page-wrap { max-width:800px; margin:0 auto; padding:24px 16px 60px; }
+    .hero { text-align:center; padding:48px 20px 32px; }
+    .hero-title { font-family:'Fredoka One',cursive; font-size:2.4rem; color:#1a1a2e; margin-bottom:8px; }
+    .hero-subtitle { color:#6b7280; font-size:1rem; font-weight:600; }
+    .card { background:#fff; border-radius:16px; padding:24px 28px; margin-bottom:20px; box-shadow:0 2px 12px rgba(0,0,0,.06); }
+    .section-heading { font-size:1.1rem; font-weight:800; color:#1a1a2e; margin-bottom:10px; padding-left:12px; }
+    .body-text { color:#374151; line-height:1.7; font-size:.95rem; }
+    .body-text ul { padding-left:20px; margin:8px 0; }
+    .body-text li { margin-bottom:6px; }
+    .body-text p { margin-bottom:10px; }
+    .del-input { width:100%; padding:10px 14px; border:2px solid #e5e7eb; border-radius:10px; font-size:.95rem; color:#374151; background:#fff; outline:none; transition:border-color .2s; box-sizing:border-box; font-family:inherit; margin-top:4px; }
+    .del-input:focus { border-color:#ef4444; }
+    .del-label { font-weight:700; color:#374151; font-size:.9rem; margin-top:14px; display:block; }
+    .btn-delete { background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; border:none; border-radius:50px; padding:12px 28px; font-size:1rem; font-weight:800; cursor:pointer; width:100%; margin-top:16px; transition:opacity .2s; }
+    .btn-delete:hover:not(:disabled) { opacity:.9; }
+    .btn-delete:disabled { opacity:.5; cursor:not-allowed; }
+    #delete-status { margin-top:12px; font-weight:700; font-size:.9rem; text-align:center; min-height:20px; }
+    .what-happens li { margin-bottom:8px; }
+  </style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-spinner">
+    <div style="font-size:3rem;margin-bottom:12px">🗑️</div>
+    <div class="spinner"></div>
+    <div class="loading-title">Happy Games</div>
+  </div>
+</div>
+
+<nav class="navbar">
+  <a class="nav-logo" href="../index.html"><span class="logo-emoji">🎮</span> Happy Games</a>
+  <div class="nav-links">
+    <span class="nav-user" id="nav-username" style="display:none">👤</span>
+    <a href="../index.html" class="btn btn-outline" style="font-size:.85rem">🏠 Home</a>
+    <a href="history.html" class="btn btn-outline" style="font-size:.85rem">📊 Results</a>
+    <a href="../login.html" class="btn btn-secondary" id="nav-login-btn" style="font-size:.85rem">🔑 Login</a>
+    <button class="btn btn-outline" id="nav-logout-btn" style="display:none;font-size:.85rem" onclick="logout()">🚪 Logout</button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="hero">
+    <div class="hero-title">🗑️ Delete My Account</div>
+    <div class="hero-subtitle">Account &amp; data deletion — this action is permanent</div>
+  </div>
+
+  <!-- Login prompt (shown when not logged in) -->
+  <div id="login-prompt">
+    <div class="card" style="background:#fefce8;border:2px solid #fde68a;text-align:center;">
+      <div style="font-size:2.5rem;margin-bottom:12px">🔑</div>
+      <div class="section-heading" style="border-left:4px solid #f59e0b;text-align:left;">Login Required</div>
+      <div class="body-text">
+        <p>You need to be logged in to use the self-service account deletion tool. Please log in with the account you want to delete.</p>
+        <a href="../login.html" class="btn btn-primary" style="display:inline-block;margin-top:8px">🔑 Log In to Delete</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Self-service deletion (shown when logged in) -->
+  <div id="delete-section" style="display:none">
+    <!-- Warning -->
+    <div class="card" style="background:#fef2f2;border:2px solid #fecaca;">
+      <div class="section-heading" style="border-left:4px solid #ef4444;">⚠️ Warning — This Cannot Be Undone</div>
+      <div class="body-text">
+        <p>You are about to permanently delete the account for: <strong id="logged-in-username" style="color:#dc2626"></strong></p>
+        <p>Deleting your account will permanently remove:</p>
+        <ul>
+          <li>Your account login credentials</li>
+          <li>Your username reservation</li>
+          <li>All your quiz scores and game history</li>
+        </ul>
+        <p><strong>This cannot be reversed.</strong> If you just want a break, you can simply log out instead.</p>
+      </div>
+    </div>
+
+    <!-- Deletion form -->
+    <div class="card">
+      <div class="section-heading" style="border-left:4px solid #dc2626;">🗑️ Confirm Deletion</div>
+      <div class="body-text">
+        <label class="del-label" for="confirm-input">Type <strong>DELETE</strong> to confirm</label>
+        <input type="text" class="del-input" id="confirm-input" placeholder="Type DELETE here" autocomplete="off"/>
+
+        <label class="del-label" for="confirm-password">Enter your password to verify it's you</label>
+        <input type="password" class="del-input" id="confirm-password" placeholder="Your current password" autocomplete="current-password"/>
+
+        <button class="btn-delete" id="delete-btn" onclick="confirmDelete()">🗑️ Delete My Account Permanently</button>
+        <div id="delete-status"></div>
+
+        <p style="text-align:center;margin-top:16px;font-size:.85rem">
+          Changed your mind? <a href="../index.html" style="color:#6366f1;font-weight:700">Go back home</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- What happens card (always shown) -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #8b5cf6;">ℹ️ What Happens When You Delete</div>
+    <div class="body-text">
+      <ul class="what-happens">
+        <li>✅ Your login credentials are deleted from Firebase Authentication immediately</li>
+        <li>✅ Your username reservation is released immediately</li>
+        <li>✅ All your quiz scores and game history are deleted from our database</li>
+        <li>⏳ Some data may remain in Firebase backups for up to 30 days before being fully purged from all systems</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Email request option (always shown) -->
+  <div class="card" style="background:#f0f9ff;border:2px solid #bae6fd;">
+    <div class="section-heading" style="border-left:4px solid #0ea5e9;">📧 Request Deletion by Email</div>
+    <div class="body-text">
+      <p>Prefer to request deletion by email? That's fine too — parents and guardians can use this method on behalf of their child.</p>
+      <ul>
+        <li>📧 Email: <a href="mailto:info@ziontechnologyltd.com?subject=Delete Account" style="color:#6366f1;font-weight:700">info@ziontechnologyltd.com</a></li>
+        <li>📌 Subject: <strong>Delete Account — [your username]</strong></li>
+        <li>We will process the request within <strong>30 days</strong></li>
+      </ul>
+      <a href="mailto:info@ziontechnologyltd.com?subject=Delete%20Account" class="btn btn-outline" style="display:inline-block;margin-top:10px;font-size:.9rem">📧 Send Deletion Request</a>
+    </div>
+  </div>
+</div>
+
+<footer style="background:#1a1a2e;color:rgba(255,255,255,.7);text-align:center;padding:28px 20px;font-size:.85rem;font-weight:600;margin-top:60px">
+  <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:#fff;margin-bottom:8px">🎮 Happy Games</div>
+  <p style="margin-bottom:12px">Made for children, with parents and teachers in mind. Safe, ad-free, free forever. ❤️</p>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:12px;font-size:.82rem">
+    <a href="privacy.html" style="color:#a78bfa;text-decoration:none">Privacy Policy</a>
+    <a href="terms.html" style="color:#a78bfa;text-decoration:none">Terms of Service</a>
+    <a href="cookies.html" style="color:#a78bfa;text-decoration:none">Cookie Policy</a>
+    <a href="parent-guide.html" style="color:#a78bfa;text-decoration:none">Parent Guide</a>
+    <a href="safety.html" style="color:#a78bfa;text-decoration:none">Safety &amp; Moderation</a>
+    <a href="contact.html" style="color:#a78bfa;text-decoration:none">Contact Us</a>
+    <a href="delete-account.html" style="color:#a78bfa;text-decoration:none">Delete My Account</a>
+  </div>
+  <p style="opacity:.5;font-size:.78rem">© 2025 Happy Games · UK · info@ziontechnologyltd.com</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/nav.js"></script>
+<script>
+// Show/hide sections based on auth state
+auth.onAuthStateChanged(user => {
+  const overlay = document.getElementById('loading-overlay');
+  if (overlay) overlay.classList.add('hidden');
+
+  const deleteSection = document.getElementById('delete-section');
+  const loginPrompt   = document.getElementById('login-prompt');
+
+  if (user) {
+    const nameEl = document.getElementById('logged-in-username');
+    if (nameEl) nameEl.textContent = user.displayName || user.email?.replace('@happygames.app','') || 'your account';
+    if (deleteSection) deleteSection.style.display = 'block';
+    if (loginPrompt)   loginPrompt.style.display   = 'none';
+  } else {
+    if (deleteSection) deleteSection.style.display = 'none';
+    if (loginPrompt)   loginPrompt.style.display   = 'block';
+  }
+});
+
+// Also keep nav updated
+softAuth(() => {});
+
+async function confirmDelete() {
+  const confirmText = document.getElementById('confirm-input').value.trim();
+  const password    = document.getElementById('confirm-password').value;
+  const btn         = document.getElementById('delete-btn');
+  const statusEl    = document.getElementById('delete-status');
+
+  statusEl.textContent = '';
+  if (confirmText !== 'DELETE') {
+    statusEl.textContent = '⚠️ Please type DELETE in the confirmation box.';
+    statusEl.style.color = '#dc2626';
+    return;
+  }
+  if (!password) {
+    statusEl.textContent = '⚠️ Please enter your password.';
+    statusEl.style.color = '#dc2626';
+    return;
+  }
+
+  btn.disabled    = true;
+  btn.textContent = '⏳ Deleting your account…';
+
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error('Not logged in');
+
+    // Re-authenticate first (required by Firebase before sensitive operations)
+    const emailAddr  = user.email || user.displayName + '@happygames.app';
+    const credential = firebase.auth.EmailAuthProvider.credential(emailAddr, password);
+    await user.reauthenticateWithCredential(credential);
+
+    const uid = user.uid;
+
+    // Fetch username from Firestore profile
+    let uname = null;
+    try {
+      const userDoc = await db.collection('users').doc(uid).get();
+      if (userDoc.exists) uname = userDoc.data().username;
+    } catch (_) {}
+
+    // Delete user profile + username reservation in a batch
+    const batch = db.batch();
+    batch.delete(db.collection('users').doc(uid));
+    if (uname) batch.delete(db.collection('usernames').doc(uname));
+    await batch.commit();
+
+    // Delete all results for this user (may be many docs — use batched loop)
+    const results = await db.collection('results').where('uid','==',uid).get();
+    if (!results.empty) {
+      const rBatch = db.batch();
+      results.forEach(doc => rBatch.delete(doc.ref));
+      await rBatch.commit();
+    }
+
+    // Finally delete the Firebase Auth account
+    await user.delete();
+
+    statusEl.textContent = '✅ Your account has been fully deleted. Redirecting to home…';
+    statusEl.style.color = '#16a34a';
+    setTimeout(() => { window.location.href = '../index.html'; }, 3000);
+
+  } catch (err) {
+    btn.disabled    = false;
+    btn.textContent = '🗑️ Delete My Account Permanently';
+    if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+      statusEl.textContent = '❌ Incorrect password. Please try again.';
+    } else if (err.code === 'auth/requires-recent-login') {
+      statusEl.textContent = '❌ For security, please log out and log back in before deleting your account.';
+    } else {
+      statusEl.textContent = '❌ Something went wrong: ' + (err.message || err.code);
+    }
+    statusEl.style.color = '#dc2626';
+  }
+}
+</script>
+</body>
+</html>

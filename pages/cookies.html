@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Cookie Policy | Happy Games</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    body { background:#f8f9fb; }
+    .page-wrap { max-width:800px; margin:0 auto; padding:24px 16px 60px; }
+    .hero { text-align:center; padding:48px 20px 32px; }
+    .hero-title { font-family:'Fredoka One',cursive; font-size:2.4rem; color:#1a1a2e; margin-bottom:8px; }
+    .hero-subtitle { color:#6b7280; font-size:1rem; font-weight:600; }
+    .card { background:#fff; border-radius:16px; padding:24px 28px; margin-bottom:20px; box-shadow:0 2px 12px rgba(0,0,0,.06); }
+    .section-heading { font-size:1.1rem; font-weight:800; color:#1a1a2e; margin-bottom:10px; padding-left:12px; }
+    .body-text { color:#374151; line-height:1.7; font-size:.95rem; }
+    .body-text ul { padding-left:20px; margin:8px 0; }
+    .body-text li { margin-bottom:4px; }
+    .body-text p { margin-bottom:10px; }
+    .cookie-table { width:100%; border-collapse:collapse; font-size:.9rem; margin-top:12px; }
+    .cookie-table th { background:#f3f4f6; color:#1a1a2e; font-weight:800; text-align:left; padding:10px 12px; border:1px solid #e5e7eb; }
+    .cookie-table td { padding:10px 12px; border:1px solid #e5e7eb; color:#374151; vertical-align:top; }
+    .cookie-table tr:nth-child(even) td { background:#fafafa; }
+    .badge-yes { background:#dcfce7; color:#166534; border-radius:20px; padding:2px 10px; font-size:.8rem; font-weight:700; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="../index.html"><span class="logo-emoji">🎮</span> Happy Games</a>
+  <div class="nav-links">
+    <span class="nav-user" id="nav-username" style="display:none">👤</span>
+    <a href="../index.html" class="btn btn-outline" style="font-size:.85rem">🏠 Home</a>
+    <a href="history.html" class="btn btn-outline" style="font-size:.85rem">📊 Results</a>
+    <a href="../login.html" class="btn btn-secondary" id="nav-login-btn" style="font-size:.85rem">🔑 Login</a>
+    <button class="btn btn-outline" id="nav-logout-btn" style="display:none;font-size:.85rem" onclick="logout()">🚪 Logout</button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="hero">
+    <div class="hero-title">🍪 Cookie Policy</div>
+    <div class="hero-subtitle">Last updated: April 2025</div>
+  </div>
+
+  <!-- Summary -->
+  <div class="card" style="background:#f0fdf4;border:2px solid #bbf7d0;">
+    <div class="section-heading" style="border-left:4px solid #22c55e;">🧒 Simple Summary</div>
+    <div class="body-text">
+      <p>We only use essential storage to keep you logged in and remember your settings. <strong>We do not use advertising cookies or tracking cookies.</strong> No cookie consent banner is needed because we only use what is strictly necessary for the site to work.</p>
+    </div>
+  </div>
+
+  <!-- 1 -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #6366f1;">1. What Are Cookies?</div>
+    <div class="body-text">
+      <p>Cookies and similar technologies (like browser storage) are small pieces of data saved on your device by a website. They help websites remember information about you between visits — for example, that you are logged in.</p>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #06b6d4;">2. What We Use</div>
+    <div class="body-text">
+      <p>Happy Games uses only essential storage. Here is exactly what we store and why:</p>
+      <table class="cookie-table">
+        <thead>
+          <tr>
+            <th>Storage Type</th>
+            <th>Purpose</th>
+            <th>Essential?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Firebase Auth session token</strong><br><span style="font-size:.82rem;color:#6b7280">Stored by Firebase in IndexedDB / localStorage</span></td>
+            <td>Keeps you securely logged in so you don't have to enter your password on every page</td>
+            <td><span class="badge-yes">✅ Yes</span></td>
+          </tr>
+          <tr>
+            <td><strong>localStorage: hg_level</strong></td>
+            <td>Remembers your selected year/level (e.g. Year 3) so you don't have to choose it every time</td>
+            <td><span class="badge-yes">✅ Yes</span></td>
+          </tr>
+          <tr>
+            <td><strong>localStorage: hg_feelings_progress</strong></td>
+            <td>Saves your Feelings &amp; Coping Quest badge progress locally</td>
+            <td><span class="badge-yes">✅ Yes</span></td>
+          </tr>
+          <tr>
+            <td><strong>localStorage: hg_sfx</strong></td>
+            <td>Remembers if you have turned sound effects on or off</td>
+            <td><span class="badge-yes">✅ Yes</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #ef4444;">3. What We Do NOT Use</div>
+    <div class="body-text">
+      <ul>
+        <li>❌ No advertising cookies</li>
+        <li>❌ No third-party analytics (e.g. Google Analytics)</li>
+        <li>❌ No marketing trackers or retargeting pixels</li>
+        <li>❌ No social media integration cookies</li>
+        <li>❌ No cross-site tracking</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #f59e0b;">4. Firebase / Google</div>
+    <div class="body-text">
+      <p>Firebase Authentication uses secure session tokens managed by Google Firebase. These are necessary for login to work correctly. Firebase may set its own internal storage as part of this authentication process.</p>
+      <p>You can read more about Firebase's data practices at <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener" style="color:#6366f1">firebase.google.com/support/privacy</a>.</p>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #8b5cf6;">5. Managing Your Storage</div>
+    <div class="body-text">
+      <p>You can clear your browser's localStorage and cookies at any time through your browser settings. Doing so will:</p>
+      <ul>
+        <li>Log you out of Happy Games</li>
+        <li>Reset your local year/level preference and sound setting</li>
+      </ul>
+      <p>Your quiz scores and game history saved in Firestore will <strong>not</strong> be affected — those are stored in the cloud linked to your account.</p>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #10b981;">6. Why No Cookie Banner?</div>
+    <div class="body-text">
+      <p>Under UK and EU privacy law, a cookie consent banner is required when a website uses non-essential cookies (such as advertising or analytics). Because Happy Games only uses storage that is <strong>strictly necessary</strong> for the service to function, we do not currently require a consent banner.</p>
+      <p>If we ever add non-essential cookies or analytics, we will update this policy and add a proper consent mechanism before doing so.</p>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #6366f1;">7. Contact</div>
+    <div class="body-text">
+      <p>Questions about our cookie use? Email: <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1;font-weight:700">info@ziontechnologyltd.com</a></p>
+    </div>
+  </div>
+</div>
+
+<footer style="background:#1a1a2e;color:rgba(255,255,255,.7);text-align:center;padding:28px 20px;font-size:.85rem;font-weight:600;margin-top:60px">
+  <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:#fff;margin-bottom:8px">🎮 Happy Games</div>
+  <p style="margin-bottom:12px">Made for children, with parents and teachers in mind. Safe, ad-free, free forever. ❤️</p>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:12px;font-size:.82rem">
+    <a href="privacy.html" style="color:#a78bfa;text-decoration:none">Privacy Policy</a>
+    <a href="terms.html" style="color:#a78bfa;text-decoration:none">Terms of Service</a>
+    <a href="cookies.html" style="color:#a78bfa;text-decoration:none">Cookie Policy</a>
+    <a href="parent-guide.html" style="color:#a78bfa;text-decoration:none">Parent Guide</a>
+    <a href="safety.html" style="color:#a78bfa;text-decoration:none">Safety &amp; Moderation</a>
+    <a href="contact.html" style="color:#a78bfa;text-decoration:none">Contact Us</a>
+    <a href="delete-account.html" style="color:#a78bfa;text-decoration:none">Delete My Account</a>
+  </div>
+  <p style="opacity:.5;font-size:.78rem">© 2025 Happy Games · UK · info@ziontechnologyltd.com</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/nav.js"></script>
+<script>softAuth(() => {});</script>
+</body>
+</html>

@@ -277,12 +277,12 @@ const FeelingsQuest = (() => {
       '<div style="max-width:640px;margin:0 auto">' +
 
       // Top bar
-      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap">' +
       '<button onclick="FeelingsQuest.init()" ' +
       'style="background:#fff;border:2px solid #e5e7eb;border-radius:50px;padding:6px 14px;' +
       'font-size:.85rem;font-weight:700;cursor:pointer;color:#6b7280;font-family:inherit">' +
       '← Home</button>' +
-      '<div style="flex:1">' +
+      '<div style="flex:1;min-width:120px">' +
       '<div style="display:flex;justify-content:space-between;font-size:.8rem;color:#6b7280;margin-bottom:4px">' +
       '<span>' + section.emoji + ' ' + section.name + '</span>' +
       '<span>Question ' + (state.idx + 1) + ' of ' + state.questions.length + '</span>' +
@@ -292,13 +292,18 @@ const FeelingsQuest = (() => {
       'transition:width .4s ease"></div>' +
       '</div>' +
       '</div>' +
+      (window.Speech ? '<button class="ra-toggle' + (window.Speech.isEnabled() ? ' active' : '') + '" ' +
+        'onclick="Speech.toggle();Speech.syncUI()" ' +
+        'style="font-size:.72rem;padding:4px 10px;background:rgba(0,0,0,.06);border-color:rgba(0,0,0,.18);color:#374151">' +
+        '<span class="ra-icon">' + (window.Speech.isEnabled() ? '🔊' : '🔇') + '</span>' +
+        '</button>' : '') +
       '</div>' +
 
       // Question card
       '<div style="background:#fff;border-radius:24px;box-shadow:0 6px 24px rgba(0,0,0,.09);' +
       'padding:28px;margin-bottom:16px;animation:fqFadeIn .3s ease both">' +
       '<div style="font-size:4rem;text-align:center;margin-bottom:16px">' + q.emoji + '</div>' +
-      '<p style="font-size:1.15rem;font-weight:800;color:#1a1a2e;line-height:1.4;' +
+      '<p id="fq-prompt" style="font-size:1.15rem;font-weight:800;color:#1a1a2e;line-height:1.4;' +
       'margin:0 0 24px;text-align:center">' + q.prompt + '</p>' +
 
       // Choices
@@ -320,6 +325,33 @@ const FeelingsQuest = (() => {
     // Scroll to top
     c.scrollTop = 0;
     window.scrollTo(0, 0);
+
+    // ── Read Aloud injection ────────────────────────────────────────────────
+    if (window.Speech) {
+      const promptEl = document.getElementById('fq-prompt');
+      if (promptEl) {
+        // Wrap prompt in flex row with speaker button
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:flex-start;justify-content:center;gap:8px';
+        promptEl.parentNode.insertBefore(row, promptEl);
+        row.appendChild(promptEl);
+        const sp = Speech.makeBtn(btn => Speech.speakText(promptEl.textContent, btn, promptEl));
+        row.appendChild(sp);
+      }
+      // Speaker button on each choice button
+      c.querySelectorAll('[id^="choice-btn-"]').forEach(ab => {
+        const spans = ab.querySelectorAll('span');
+        const labelSpan = spans[spans.length - 1];
+        const label = labelSpan ? labelSpan.textContent.trim() : ab.textContent.trim();
+        const sp = Speech.makeBtn(btn => Speech.speakText(label, btn, ab), true);
+        ab.appendChild(sp);
+      });
+      // Auto-read question if enabled
+      if (Speech.isEnabled()) {
+        const readEl = document.getElementById('fq-prompt');
+        if (readEl) setTimeout(() => Speech.speakText(readEl.textContent, null, readEl), 400);
+      }
+    }
   }
 
   // ── answer ────────────────────────────────────────────────────────────────
@@ -328,6 +360,8 @@ const FeelingsQuest = (() => {
     const correct = chosenIdx === q.correct;
     const section = FEELINGS_DATA.sections.find(s => s.id === state.section);
     const isLast = state.idx === state.questions.length - 1;
+
+    if (window.Speech) Speech.stopSpeech();
 
     if (correct) {
       state.score++;

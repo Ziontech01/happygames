@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Parent Guide | Happy Games</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    body { background:#f8f9fb; }
+    .page-wrap { max-width:800px; margin:0 auto; padding:24px 16px 60px; }
+    .hero { text-align:center; padding:48px 20px 32px; }
+    .hero-title { font-family:'Fredoka One',cursive; font-size:2.4rem; color:#1a1a2e; margin-bottom:8px; }
+    .hero-subtitle { color:#6b7280; font-size:1rem; font-weight:600; }
+    .card { background:#fff; border-radius:16px; padding:24px 28px; margin-bottom:20px; box-shadow:0 2px 12px rgba(0,0,0,.06); }
+    .section-heading { font-size:1.1rem; font-weight:800; color:#1a1a2e; margin-bottom:10px; padding-left:12px; }
+    .body-text { color:#374151; line-height:1.7; font-size:.95rem; }
+    .body-text ul { padding-left:20px; margin:8px 0; }
+    .body-text li { margin-bottom:6px; }
+    .body-text p { margin-bottom:10px; }
+    .feature-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-top:12px; }
+    .feature-item { background:#f8f9fb; border-radius:12px; padding:14px 16px; font-size:.9rem; color:#374151; font-weight:600; }
+    .feature-item span { display:block; font-size:1.4rem; margin-bottom:6px; }
+    .steps-list { counter-reset:step; padding-left:0; list-style:none; }
+    .steps-list li { counter-increment:step; display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; }
+    .steps-list li::before { content:counter(step); min-width:28px; height:28px; background:linear-gradient(135deg,#6366f1,#a855f7); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:800; flex-shrink:0; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="../index.html"><span class="logo-emoji">🎮</span> Happy Games</a>
+  <div class="nav-links">
+    <span class="nav-user" id="nav-username" style="display:none">👤</span>
+    <a href="../index.html" class="btn btn-outline" style="font-size:.85rem">🏠 Home</a>
+    <a href="history.html" class="btn btn-outline" style="font-size:.85rem">📊 Results</a>
+    <a href="../login.html" class="btn btn-secondary" id="nav-login-btn" style="font-size:.85rem">🔑 Login</a>
+    <button class="btn btn-outline" id="nav-logout-btn" style="display:none;font-size:.85rem" onclick="logout()">🚪 Logout</button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="hero">
+    <div class="hero-title">👨‍👩‍👧 Parent Guide</div>
+    <div class="hero-subtitle">Everything parents and guardians need to know about Happy Games</div>
+  </div>
+
+  <!-- Welcome -->
+  <div class="card" style="background:#fff7ed;border:2px solid #fed7aa;">
+    <div class="section-heading" style="border-left:4px solid #f97316;">👋 Welcome, Parents &amp; Guardians</div>
+    <div class="body-text">
+      <p>Happy Games is a completely <strong>free, ad-free</strong> educational website designed for children aged 4–11. It is built to support the UK primary school curriculum and help children learn through play. This guide explains how it works and how you can keep your child's experience safe.</p>
+    </div>
+  </div>
+
+  <!-- What is Happy Games -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #6366f1;">🎮 What is Happy Games?</div>
+    <div class="body-text">
+      <div class="feature-grid">
+        <div class="feature-item"><span>📚</span>12 quiz subjects aligned to the UK primary curriculum (English, Maths, Science, Grammar, Spelling, and more)</div>
+        <div class="feature-item"><span>🎲</span>Board and arcade games: Chess, Tic-Tac-Toe, Memory, Ludo, Snakes &amp; Ladders, and more</div>
+        <div class="feature-item"><span>🌐</span>Online multiplayer games your child can play with friends using a private room code</div>
+        <div class="feature-item"><span>🧠</span>A Feelings &amp; Coping Quest to support emotional wellbeing and resilience</div>
+        <div class="feature-item"><span>📊</span>Progress tracking — see your child's quiz scores and history</div>
+        <div class="feature-item"><span>🏆</span>Leaderboard to encourage friendly competition</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Is it safe? -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #10b981;">🛡️ Is it Safe for My Child?</div>
+    <div class="body-text">
+      <p>Yes. Happy Games is built with child safety as the priority:</p>
+      <ul>
+        <li>✅ <strong>No adverts</strong> — the site is completely ad-free</li>
+        <li>✅ <strong>No in-app purchases</strong> — it is free, always</li>
+        <li>✅ <strong>No open chat</strong> — players cannot type messages to each other</li>
+        <li>✅ <strong>No real names required</strong> — only a username and display name</li>
+        <li>✅ <strong>No profile photos</strong> — no images of children are uploaded or displayed</li>
+        <li>✅ <strong>No location data</strong> — we never ask for or store locations</li>
+        <li>✅ <strong>Private multiplayer rooms</strong> — joined only with a shared 6-letter code</li>
+        <li>✅ <strong>Minimum data collection</strong> — only what is needed for the service</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Account Creation -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #f59e0b;">📝 Account Creation</div>
+    <div class="body-text">
+      <p>Children under 13 should create an account with their parent or guardian's knowledge. The sign-up process requires:</p>
+      <ul>
+        <li>A <strong>username</strong> (letters, numbers, underscores only — not a real name). We recommend a nickname.</li>
+        <li>A <strong>display name</strong> (the name shown in games — can also be a nickname)</li>
+        <li>A <strong>password</strong> (minimum 6 characters)</li>
+      </ul>
+      <p><strong>Our recommendation:</strong> Help your child choose their username and password. Write it down and keep it somewhere safe.</p>
+    </div>
+  </div>
+
+  <!-- Data Stored -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #8b5cf6;">🗄️ What Data Is Stored?</div>
+    <div class="body-text">
+      <p><strong>We store:</strong></p>
+      <ul>
+        <li>Username and password (password is stored as a secure hash — we cannot read it)</li>
+        <li>Display name (the name your child chose)</li>
+        <li>Quiz scores and game history</li>
+        <li>Year/level selection (Year 1–6)</li>
+      </ul>
+      <p><strong>We do NOT store:</strong> real names, email addresses, phone numbers, home addresses, profile photos, or location data.</p>
+    </div>
+  </div>
+
+  <!-- Multiplayer -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #ec4899;">🌐 Multiplayer Safety</div>
+    <div class="body-text">
+      <p>Some games support online multiplayer. Here is how it works:</p>
+      <ul>
+        <li>One player creates a private room and gets a 6-letter code</li>
+        <li>The other player joins using that code — like a digital playdate</li>
+        <li>There is <strong>no open text chat</strong> — players interact only through gameplay</li>
+        <li>Players are identified by display name only (no real name, no photos)</li>
+        <li>Room codes expire automatically after inactivity</li>
+      </ul>
+      <p>We recommend children only share room codes with friends they know in real life.</p>
+    </div>
+  </div>
+
+  <!-- Delete Account -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #ef4444;">🗑️ How to Delete Your Child's Account</div>
+    <div class="body-text">
+      <p>You can request full account deletion at any time. There are two ways:</p>
+      <ol class="steps-list">
+        <li><strong>Self-service:</strong> If your child knows their password, visit our <a href="delete-account.html" style="color:#6366f1;font-weight:700">Delete Account page</a> and follow the instructions.</li>
+        <li><strong>Email request:</strong> Email <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1;font-weight:700">info@ziontechnologyltd.com</a> with the subject <em>"Delete Account — [Username]"</em>. We will delete the account and all associated data within 30 days.</li>
+      </ol>
+      <p>Deletion removes: the account login, the username reservation, and all quiz scores and game history.</p>
+    </div>
+  </div>
+
+  <!-- Your Rights -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #06b6d4;">⚖️ Your Rights</div>
+    <div class="body-text">
+      <p>As a parent or guardian, you have the right to:</p>
+      <ul>
+        <li>Access the data we hold about your child</li>
+        <li>Request corrections to inaccurate data</li>
+        <li>Request deletion of your child's account and all data</li>
+        <li>Object to how we process your child's data</li>
+      </ul>
+      <p>To exercise any of these rights, email <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1;font-weight:700">info@ziontechnologyltd.com</a> with the subject <em>"Data Request — [Username]"</em>.</p>
+    </div>
+  </div>
+
+  <!-- Screen time -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #14b8a6;">⏱️ Screen Time Recommendation</div>
+    <div class="body-text">
+      <p>Happy Games is most effective in short, focused sessions of <strong>15–30 minutes</strong>. We recommend parental guidance and co-play for younger children (ages 4–6). For older children (ages 7–11), the platform can be used more independently as a homework supplement or revision tool.</p>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #6366f1;">📬 Questions?</div>
+    <div class="body-text">
+      <p>We are happy to help. Email us at <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1;font-weight:700">info@ziontechnologyltd.com</a> and we will respond within 2 working days.</p>
+    </div>
+  </div>
+</div>
+
+<footer style="background:#1a1a2e;color:rgba(255,255,255,.7);text-align:center;padding:28px 20px;font-size:.85rem;font-weight:600;margin-top:60px">
+  <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:#fff;margin-bottom:8px">🎮 Happy Games</div>
+  <p style="margin-bottom:12px">Made for children, with parents and teachers in mind. Safe, ad-free, free forever. ❤️</p>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:12px;font-size:.82rem">
+    <a href="privacy.html" style="color:#a78bfa;text-decoration:none">Privacy Policy</a>
+    <a href="terms.html" style="color:#a78bfa;text-decoration:none">Terms of Service</a>
+    <a href="cookies.html" style="color:#a78bfa;text-decoration:none">Cookie Policy</a>
+    <a href="parent-guide.html" style="color:#a78bfa;text-decoration:none">Parent Guide</a>
+    <a href="safety.html" style="color:#a78bfa;text-decoration:none">Safety &amp; Moderation</a>
+    <a href="contact.html" style="color:#a78bfa;text-decoration:none">Contact Us</a>
+    <a href="delete-account.html" style="color:#a78bfa;text-decoration:none">Delete My Account</a>
+  </div>
+  <p style="opacity:.5;font-size:.78rem">© 2025 Happy Games · UK · info@ziontechnologyltd.com</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/nav.js"></script>
+<script>softAuth(() => {});</script>
+</body>
+</html>

@@ -688,14 +688,21 @@
           <button class="btn btn-outline" style="color:#667eea;border-color:#667eea;font-size:.8rem"
                   onclick="SmartLifeHero.backToMenu()">← Back</button>
           <div style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:#1A1A2E">${cat.emoji} ${cat.name}</div>
-          <div style="font-weight:800;font-size:.9rem;color:#667eea">⭐ ${score}/${current}</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            ${window.Speech ? `<button class="ra-toggle${window.Speech.isEnabled() ? ' active' : ''}"
+              onclick="Speech.toggle();Speech.syncUI()" style="font-size:.72rem;padding:4px 10px"
+              title="${window.Speech.isEnabled() ? 'Read Aloud ON' : 'Read Aloud OFF'}">
+              <span class="ra-icon">${window.Speech.isEnabled() ? '🔊' : '🔇'}</span>
+            </button>` : ''}
+            <div style="font-weight:800;font-size:.9rem;color:#667eea">⭐ ${score}/${current}</div>
+          </div>
         </div>
 
         <div style="background:#fff;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,.08);padding:24px;margin-bottom:16px">
           <div style="font-size:.78rem;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">
             Scenario ${current + 1} of ${questions.length}
           </div>
-          <div style="font-family:'Fredoka One',cursive;font-size:1.35rem;color:#1A1A2E;line-height:1.4">
+          <div id="slh-question-text" style="font-family:'Fredoka One',cursive;font-size:1.35rem;color:#1A1A2E;line-height:1.4">
             ${q.q}
           </div>
         </div>
@@ -709,6 +716,32 @@
         </div>
         <div class="feedback-bar" id="slh-feedback" style="margin-top:12px"></div>
       </div>`;
+
+    // ── Read Aloud injection ────────────────────────────────────────────
+    if (window.Speech) {
+      const qTextEl = document.getElementById('slh-question-text');
+      if (qTextEl) {
+        // Wrap in flex row with speaker button
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:flex-start;gap:8px';
+        qTextEl.parentNode.insertBefore(row, qTextEl);
+        row.appendChild(qTextEl);
+        const sp = Speech.makeBtn(btn => Speech.speakText(qTextEl.textContent, btn, qTextEl));
+        row.appendChild(sp);
+      }
+      // Speaker button on each answer option
+      root.querySelectorAll('.slh-answer-btn').forEach(ab => {
+        const letterEl = ab.querySelector('.slh-answer-letter');
+        const label = letterEl ? ab.textContent.replace(letterEl.textContent, '').trim() : ab.textContent.trim();
+        const sp = Speech.makeBtn(btn => Speech.speakText(label, btn, ab), true);
+        ab.appendChild(sp);
+      });
+      // Auto-read question if enabled
+      if (Speech.isEnabled()) {
+        const readEl = document.getElementById('slh-question-text');
+        if (readEl) setTimeout(() => Speech.speakText(readEl.textContent, null, readEl), 400);
+      }
+    }
   }
 
   // ── Choose Answer ─────────────────────────────────────────────
@@ -725,6 +758,9 @@
     const correctBtn = document.getElementById(`slh-opt-${q.ans}`);
     if (chosenBtn) chosenBtn.classList.add(correct ? 'slh-correct' : 'slh-wrong');
     if (!correct && correctBtn) correctBtn.classList.add('slh-correct');
+
+    // Stop any active read-aloud when answer is chosen
+    if (window.Speech) Speech.stopSpeech();
 
     // Feedback
     const fb = document.getElementById('slh-feedback');

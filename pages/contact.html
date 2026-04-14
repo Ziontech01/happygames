@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Contact Us | Happy Games</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    body { background:#f8f9fb; }
+    .page-wrap { max-width:800px; margin:0 auto; padding:24px 16px 60px; }
+    .hero { text-align:center; padding:48px 20px 32px; }
+    .hero-title { font-family:'Fredoka One',cursive; font-size:2.4rem; color:#1a1a2e; margin-bottom:8px; }
+    .hero-subtitle { color:#6b7280; font-size:1rem; font-weight:600; }
+    .card { background:#fff; border-radius:16px; padding:24px 28px; margin-bottom:20px; box-shadow:0 2px 12px rgba(0,0,0,.06); }
+    .section-heading { font-size:1.1rem; font-weight:800; color:#1a1a2e; margin-bottom:10px; padding-left:12px; }
+    .body-text { color:#374151; line-height:1.7; font-size:.95rem; }
+    .body-text p { margin-bottom:10px; }
+    .reason-grid { display:grid; gap:12px; }
+    .reason-card { background:#f8f9fb; border-radius:12px; padding:16px 18px; display:flex; gap:14px; align-items:flex-start; border:1px solid #e5e7eb; }
+    .reason-emoji { font-size:1.6rem; flex-shrink:0; }
+    .reason-title { font-weight:800; color:#1a1a2e; font-size:.95rem; margin-bottom:4px; }
+    .reason-text { color:#6b7280; font-size:.88rem; line-height:1.6; }
+    .reason-text a { color:#6366f1; font-weight:700; }
+    .contact-form .form-group { margin-bottom:16px; }
+    .contact-form label { display:block; font-weight:700; color:#374151; font-size:.9rem; margin-bottom:6px; }
+    .contact-form input, .contact-form select, .contact-form textarea { width:100%; padding:10px 14px; border:2px solid #e5e7eb; border-radius:10px; font-size:.95rem; color:#374151; background:#fff; outline:none; transition:border-color .2s; box-sizing:border-box; font-family:inherit; }
+    .contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus { border-color:#6366f1; }
+    .contact-form textarea { resize:vertical; min-height:110px; }
+    .btn-send { background:linear-gradient(135deg,#6366f1,#a855f7); color:#fff; border:none; border-radius:50px; padding:12px 28px; font-size:1rem; font-weight:800; cursor:pointer; width:100%; margin-top:4px; transition:opacity .2s; }
+    .btn-send:hover { opacity:.9; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="../index.html"><span class="logo-emoji">🎮</span> Happy Games</a>
+  <div class="nav-links">
+    <span class="nav-user" id="nav-username" style="display:none">👤</span>
+    <a href="../index.html" class="btn btn-outline" style="font-size:.85rem">🏠 Home</a>
+    <a href="history.html" class="btn btn-outline" style="font-size:.85rem">📊 Results</a>
+    <a href="../login.html" class="btn btn-secondary" id="nav-login-btn" style="font-size:.85rem">🔑 Login</a>
+    <button class="btn btn-outline" id="nav-logout-btn" style="display:none;font-size:.85rem" onclick="logout()">🚪 Logout</button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="hero">
+    <div class="hero-title">📬 Contact Us</div>
+    <div class="hero-subtitle">We'd love to hear from you — we aim to respond within 2 working days</div>
+  </div>
+
+  <!-- Main info -->
+  <div class="card" style="background:linear-gradient(135deg,#eef2ff,#faf5ff);border:2px solid #e0e7ff;">
+    <div class="section-heading" style="border-left:4px solid #6366f1;">✉️ Get in Touch</div>
+    <div class="body-text">
+      <p>Email us at <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1;font-weight:800">info@ziontechnologyltd.com</a></p>
+      <p>We are a small team and aim to respond to all messages within <strong>2 working days</strong>. For urgent safety concerns, mark your subject as <strong>URGENT</strong>.</p>
+    </div>
+  </div>
+
+  <!-- Reason cards -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #06b6d4;">💬 What Can We Help With?</div>
+    <div class="reason-grid">
+      <div class="reason-card">
+        <div class="reason-emoji">🔒</div>
+        <div>
+          <div class="reason-title">Privacy &amp; Data Requests</div>
+          <div class="reason-text">To access, correct, or delete personal data — email <a href="mailto:info@ziontechnologyltd.com?subject=Data Request">info@ziontechnologyltd.com</a> with subject: <em>Data Request — [Username]</em></div>
+        </div>
+      </div>
+      <div class="reason-card">
+        <div class="reason-emoji">🗑️</div>
+        <div>
+          <div class="reason-title">Account Deletion</div>
+          <div class="reason-text">To delete an account — email with subject: <em>Delete Account — [Username]</em>, or use our <a href="delete-account.html">Delete Account page</a>.</div>
+        </div>
+      </div>
+      <div class="reason-card">
+        <div class="reason-emoji">🛡️</div>
+        <div>
+          <div class="reason-title">Safety &amp; Abuse Reports</div>
+          <div class="reason-text">To report an inappropriate username or behaviour — email with subject: <em>Safety Report</em>. Urgent reports are prioritised.</div>
+        </div>
+      </div>
+      <div class="reason-card">
+        <div class="reason-emoji">🐛</div>
+        <div>
+          <div class="reason-title">Bug Reports</div>
+          <div class="reason-text">Found something not working? Email with subject: <em>Bug Report</em> and include the page/game name and what happened.</div>
+        </div>
+      </div>
+      <div class="reason-card">
+        <div class="reason-emoji">🏫</div>
+        <div>
+          <div class="reason-title">Schools &amp; Teachers</div>
+          <div class="reason-text">Interested in using Happy Games in your classroom? Email with subject: <em>Schools Enquiry</em> — we'd love to hear from you!</div>
+        </div>
+      </div>
+      <div class="reason-card">
+        <div class="reason-emoji">💡</div>
+        <div>
+          <div class="reason-title">Suggestions</div>
+          <div class="reason-text">Have an idea for a new game, quiz, or subject? Email with subject: <em>Suggestion</em> — we read every one!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact form -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #f59e0b;">📝 Send a Message</div>
+    <form class="contact-form" id="contact-form" onsubmit="sendMessage(event)">
+      <div class="form-group">
+        <label for="c-name">Your Name</label>
+        <input type="text" id="c-name" placeholder="e.g. Jane Smith" required/>
+      </div>
+      <div class="form-group">
+        <label for="c-email">Your Email</label>
+        <input type="email" id="c-email" placeholder="e.g. jane@example.com" required/>
+      </div>
+      <div class="form-group">
+        <label for="c-subject">Subject</label>
+        <select id="c-subject">
+          <option value="General Enquiry">General Enquiry</option>
+          <option value="Data Request">Privacy / Data Request</option>
+          <option value="Delete Account">Account Deletion</option>
+          <option value="Safety Report">Safety Report</option>
+          <option value="Bug Report">Bug Report</option>
+          <option value="Schools Enquiry">Schools &amp; Teachers</option>
+          <option value="Suggestion">Suggestion</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="c-message">Message</label>
+        <textarea id="c-message" placeholder="Tell us how we can help…" required></textarea>
+      </div>
+      <button type="submit" class="btn-send">Send Message 📨</button>
+    </form>
+  </div>
+</div>
+
+<footer style="background:#1a1a2e;color:rgba(255,255,255,.7);text-align:center;padding:28px 20px;font-size:.85rem;font-weight:600;margin-top:60px">
+  <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:#fff;margin-bottom:8px">🎮 Happy Games</div>
+  <p style="margin-bottom:12px">Made for children, with parents and teachers in mind. Safe, ad-free, free forever. ❤️</p>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:12px;font-size:.82rem">
+    <a href="privacy.html" style="color:#a78bfa;text-decoration:none">Privacy Policy</a>
+    <a href="terms.html" style="color:#a78bfa;text-decoration:none">Terms of Service</a>
+    <a href="cookies.html" style="color:#a78bfa;text-decoration:none">Cookie Policy</a>
+    <a href="parent-guide.html" style="color:#a78bfa;text-decoration:none">Parent Guide</a>
+    <a href="safety.html" style="color:#a78bfa;text-decoration:none">Safety &amp; Moderation</a>
+    <a href="contact.html" style="color:#a78bfa;text-decoration:none">Contact Us</a>
+    <a href="delete-account.html" style="color:#a78bfa;text-decoration:none">Delete My Account</a>
+  </div>
+  <p style="opacity:.5;font-size:.78rem">© 2025 Happy Games · UK · info@ziontechnologyltd.com</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/nav.js"></script>
+<script>
+softAuth(() => {});
+
+function sendMessage(e) {
+  e.preventDefault();
+  const name    = document.getElementById('c-name').value.trim();
+  const email   = document.getElementById('c-email').value.trim();
+  const subject = document.getElementById('c-subject').value;
+  const message = document.getElementById('c-message').value.trim();
+
+  const mailBody = encodeURIComponent(
+    'Name: ' + name + '\n' +
+    'Email: ' + email + '\n\n' +
+    message
+  );
+  const mailSubject = encodeURIComponent('[Happy Games] ' + subject);
+  window.location.href = 'mailto:info@ziontechnologyltd.com?subject=' + mailSubject + '&body=' + mailBody;
+}
+</script>
+</body>
+</html>

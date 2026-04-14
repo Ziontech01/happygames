@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Safety &amp; Moderation | Happy Games</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    body { background:#f8f9fb; }
+    .page-wrap { max-width:800px; margin:0 auto; padding:24px 16px 60px; }
+    .hero { text-align:center; padding:48px 20px 32px; }
+    .hero-title { font-family:'Fredoka One',cursive; font-size:2.4rem; color:#1a1a2e; margin-bottom:8px; }
+    .hero-subtitle { color:#6b7280; font-size:1rem; font-weight:600; }
+    .card { background:#fff; border-radius:16px; padding:24px 28px; margin-bottom:20px; box-shadow:0 2px 12px rgba(0,0,0,.06); }
+    .section-heading { font-size:1.1rem; font-weight:800; color:#1a1a2e; margin-bottom:10px; padding-left:12px; }
+    .body-text { color:#374151; line-height:1.7; font-size:.95rem; }
+    .body-text ul { padding-left:20px; margin:8px 0; }
+    .body-text li { margin-bottom:6px; }
+    .body-text p { margin-bottom:10px; }
+    .commit-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-top:12px; }
+    .commit-item { background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:14px 16px; font-size:.9rem; color:#166534; font-weight:700; display:flex; align-items:flex-start; gap:8px; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="../index.html"><span class="logo-emoji">🎮</span> Happy Games</a>
+  <div class="nav-links">
+    <span class="nav-user" id="nav-username" style="display:none">👤</span>
+    <a href="../index.html" class="btn btn-outline" style="font-size:.85rem">🏠 Home</a>
+    <a href="history.html" class="btn btn-outline" style="font-size:.85rem">📊 Results</a>
+    <a href="../login.html" class="btn btn-secondary" id="nav-login-btn" style="font-size:.85rem">🔑 Login</a>
+    <button class="btn btn-outline" id="nav-logout-btn" style="display:none;font-size:.85rem" onclick="logout()">🚪 Logout</button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="hero">
+    <div class="hero-title">🛡️ Safety &amp; Moderation</div>
+    <div class="hero-subtitle">How we keep Happy Games safe for every child</div>
+  </div>
+
+  <!-- Intro -->
+  <div class="card" style="background:#f0fdf4;border:2px solid #86efac;">
+    <div class="section-heading" style="border-left:4px solid #22c55e;">🌟 Our Safety-First Promise</div>
+    <div class="body-text">
+      <p>Happy Games is built with child safety as the absolute top priority. Every feature has been designed to protect children aged 4–11. This page explains the safety measures we have in place.</p>
+    </div>
+  </div>
+
+  <!-- Commitments -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #6366f1;">✅ Our Safety Commitments</div>
+    <div class="body-text">
+      <div class="commit-grid">
+        <div class="commit-item">✅ No open text chat in any game</div>
+        <div class="commit-item">✅ No user profile photos</div>
+        <div class="commit-item">✅ No real names required</div>
+        <div class="commit-item">✅ No third-party advertising</div>
+        <div class="commit-item">✅ No social media integration</div>
+        <div class="commit-item">✅ No in-app purchases</div>
+        <div class="commit-item">✅ Private rooms with code access only</div>
+        <div class="commit-item">✅ Room codes expire after inactivity</div>
+        <div class="commit-item">✅ Usernames: letters, numbers, underscores only</div>
+        <div class="commit-item">✅ Leaderboard shows display name only</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multiplayer -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #f59e0b;">🌐 Multiplayer Safety</div>
+    <div class="body-text">
+      <p>Our multiplayer games (Chess, Tic-Tac-Toe, Memory, Matching, Ludo, Snakes &amp; Ladders, and Spot the Difference) allow two players to connect online.</p>
+      <ul>
+        <li><strong>Private rooms only</strong> — Players join using a private 6-letter code. No random matchmaking.</li>
+        <li><strong>No open chat</strong> — Players cannot type messages to each other. All interaction happens through gameplay.</li>
+        <li><strong>Display name only</strong> — Players are shown only by the display name they chose (e.g. "HappyLion"). No real names, emails, or photos.</li>
+        <li><strong>Auto-expiry</strong> — Rooms close automatically after a period of inactivity.</li>
+      </ul>
+      <p><em>We recommend children only share room codes with friends they know personally.</em></p>
+    </div>
+  </div>
+
+  <!-- Usernames -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #ec4899;">👤 Usernames &amp; Display Names</div>
+    <div class="body-text">
+      <p>All usernames must follow our rules:</p>
+      <ul>
+        <li>Letters, numbers, and underscores only (no spaces or special characters)</li>
+        <li>Minimum 3 characters</li>
+        <li>No offensive, inappropriate, or personal information (e.g. no real surnames, no phone numbers)</li>
+      </ul>
+      <p>We monitor for inappropriate usernames and may suspend accounts that violate our rules. If you notice an inappropriate username, please report it to <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1;font-weight:700">info@ziontechnologyltd.com</a>.</p>
+    </div>
+  </div>
+
+  <!-- Reporting -->
+  <div class="card" style="background:#fef2f2;border:2px solid #fecaca;">
+    <div class="section-heading" style="border-left:4px solid #ef4444;">🚨 Reporting Inappropriate Behaviour</div>
+    <div class="body-text">
+      <p>If you experience or witness anything inappropriate on Happy Games, please report it immediately:</p>
+      <ul>
+        <li>📧 Email: <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1;font-weight:700">info@ziontechnologyltd.com</a></li>
+        <li>📌 Subject: <strong>Safety Report</strong></li>
+        <li>Please include the username involved (if known) and a brief description of what happened</li>
+      </ul>
+      <p>We aim to review all safety reports within <strong>2 working days</strong>. For urgent concerns, please mark your subject as <strong>URGENT</strong>.</p>
+    </div>
+  </div>
+
+  <!-- Parents & Teachers -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #8b5cf6;">🏫 For Parents &amp; Teachers</div>
+    <div class="body-text">
+      <ul>
+        <li>We recommend children aged <strong>4–7</strong> use Happy Games with adult supervision, especially for multiplayer games.</li>
+        <li>Teachers may use Happy Games in the classroom as a supplementary learning and engagement tool.</li>
+        <li>If you have safety concerns about any content or feature, contact <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1;font-weight:700">info@ziontechnologyltd.com</a>.</li>
+      </ul>
+      <p>For a full overview of what the platform collects and how it works, see our <a href="parent-guide.html" style="color:#6366f1;font-weight:700">Parent Guide</a>.</p>
+    </div>
+  </div>
+
+  <!-- Account suspension -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #dc2626;">🚫 Account Suspension</div>
+    <div class="body-text">
+      <p>We reserve the right to suspend or permanently remove accounts that:</p>
+      <ul>
+        <li>Use offensive or inappropriate usernames or display names</li>
+        <li>Attempt to misuse, exploit, or cheat on the platform</li>
+        <li>Behave in a way that makes the experience unsafe or unpleasant for others</li>
+      </ul>
+      <p>Suspended accounts may appeal by emailing <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1;font-weight:700">info@ziontechnologyltd.com</a>.</p>
+    </div>
+  </div>
+
+  <!-- Content safety -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #06b6d4;">📚 Content Safety</div>
+    <div class="body-text">
+      <p>All quiz questions and game content on Happy Games are reviewed to be age-appropriate for children aged 4–11. Questions are based on the UK primary school curriculum. Topics include: English, Maths, Science, Grammar, Spelling, Money, Time, and General Knowledge.</p>
+      <p>If you find any content you believe is inappropriate or inaccurate, please report it to <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1;font-weight:700">info@ziontechnologyltd.com</a> with the subject <strong>Content Report</strong>.</p>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="card">
+    <div class="section-heading" style="border-left:4px solid #10b981;">📬 Contact for Safety Concerns</div>
+    <div class="body-text">
+      <p>Email: <a href="mailto:info@ziontechnologyltd.com" style="color:#6366f1;font-weight:700">info@ziontechnologyltd.com</a></p>
+      <p>Response time: within 2 working days (urgent reports prioritised).</p>
+    </div>
+  </div>
+</div>
+
+<footer style="background:#1a1a2e;color:rgba(255,255,255,.7);text-align:center;padding:28px 20px;font-size:.85rem;font-weight:600;margin-top:60px">
+  <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:#fff;margin-bottom:8px">🎮 Happy Games</div>
+  <p style="margin-bottom:12px">Made for children, with parents and teachers in mind. Safe, ad-free, free forever. ❤️</p>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:12px;font-size:.82rem">
+    <a href="privacy.html" style="color:#a78bfa;text-decoration:none">Privacy Policy</a>
+    <a href="terms.html" style="color:#a78bfa;text-decoration:none">Terms of Service</a>
+    <a href="cookies.html" style="color:#a78bfa;text-decoration:none">Cookie Policy</a>
+    <a href="parent-guide.html" style="color:#a78bfa;text-decoration:none">Parent Guide</a>
+    <a href="safety.html" style="color:#a78bfa;text-decoration:none">Safety &amp; Moderation</a>
+    <a href="contact.html" style="color:#a78bfa;text-decoration:none">Contact Us</a>
+    <a href="delete-account.html" style="color:#a78bfa;text-decoration:none">Delete My Account</a>
+  </div>
+  <p style="opacity:.5;font-size:.78rem">© 2025 Happy Games · UK · info@ziontechnologyltd.com</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/nav.js"></script>
+<script>softAuth(() => {});</script>
+</body>
+</html>
